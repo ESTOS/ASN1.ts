@@ -39,7 +39,7 @@ export class LocalSidValueBlock extends HexBlock(ValueBlock) implements ILocalSi
     }
     const inputView = pvtsutils.BufferSourceConverter.toUint8Array(inputBuffer);
 
-    // Basic check for parameters
+    /** Basic check for parameters */
     if (!utils.checkBufferParams(this, inputView, inputOffset, inputLength)) {
       return -1;
     }

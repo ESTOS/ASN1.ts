@@ -1,66 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
 import * as asn1js from "../src";
-
-/**
- * Converts an array buffer to hex notation
- *
- * @param buffer - the buffer to convert
- * @returns the buffer in hex string notation
- */
-function buf2hex(buffer: ArrayBuffer): string {
-	return [...new Uint8Array(buffer)]
-		.map(x => x.toString(16).padStart(2, "0"))
-		.join(" ");
-}
-
-/**
- * Converts a hex string to an array buffer
- *
- * @param hex - the hex string (with our without spaces)
- * @returns the converted hex buffer as array
- */
-function hex2buf(hex: string): Uint8Array {
-    const bytes = new Array<number>();
-    hex = hex.replace(/ /g, "");
-    hex.replace(/../g, (pair: string) => {
-        bytes.push(parseInt(pair, 16));
-        return "";
-    });
-
-    return new Uint8Array(bytes);
-}
-
-/**
- * Returns a random integer between 0 and max-1
- *
- * @param max - the (exclusive) max value to return
- * @returns a random integer between 0 and max-1
- */
-function getRandomInt(max: number): number {
-  return Math.floor(Math.random() * max);
-}
+import * as pvtsutils from "pvtsutils";
 
 /**
  * Encodes a number value as real and returns the BER hex notation of it
  *
- * @param value - the value to encode
+ * @param value the value to encode
  * @returns the hex BER encoded value
  */
 function encodeReal(value: number): string {
     const real = new asn1js.Real({value});
     const data = real.toBER();
-    return buf2hex(data);
+    return pvtsutils.Convert.ToHex(data);
 }
 
 /**
  * Decodes a BER hex encoded number and returns the number value or undefined on failure
  *
- * @param value - the hex BER encoded value
+ * @param value the hex BER encoded value
  * @returns the number value or undefined on error
  */
 function decodeReal(value: string): number | undefined {
-    const data = hex2buf(value);
+    const data = pvtsutils.Convert.FromHex(value);
     const result = asn1js.fromBER(data);
     if(result.result instanceof asn1js.Real)
         return result.result.valueBlock.value;
@@ -272,11 +233,11 @@ context("Asn1Real implementation tests", () => {
     /*
         it("encode & decode asnreal random 1.000.000 iterations", () => {
             for(let iCount = 0; iCount < 1000000; iCount++) {
-                let testValue = getRandomInt(Number.MAX_SAFE_INTEGER);
-                if(getRandomInt(2) === 0)
+                let testValue = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+                if(Math.floor(Math.random() * 2) === 0)
                     testValue *= -1;
-                if(getRandomInt(2) === 0) {
-                    const divider = getRandomInt(Number.MAX_SAFE_INTEGER);
+                if(Math.floor(Math.random() * 2) === 0) {
+                    const divider = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
                         testValue /= divider;
                 }
                 const encoded = encodeReal(testValue);

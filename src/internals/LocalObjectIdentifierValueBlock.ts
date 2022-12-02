@@ -74,7 +74,7 @@ export class LocalObjectIdentifierValueBlock extends ValueBlock implements IStri
   }
 
   public fromString(string: string): void {
-    this.value = []; // Clear existing SID values
+    this.value = []; /** Clear existing SID values */
 
     let pos1 = 0;
     let pos2 = 0;
@@ -83,10 +83,10 @@ export class LocalObjectIdentifierValueBlock extends ValueBlock implements IStri
 
     let flag = false;
 
-    // const sids = string.split(".");
-    // for (const sid of sids) {
-
-    // }
+    /** const sids = string.split(".");
+      for (const sid of sids) {
+      }
+    */
     do {
       pos2 = string.indexOf(".", pos1);
       if (pos2 === -1)
@@ -112,7 +112,7 @@ export class LocalObjectIdentifierValueBlock extends ValueBlock implements IStri
             plus = 80;
             break;
           default:
-            this.value = []; // clear SID array
+            this.value = []; /** clear SID array */
 
             return;
         }
@@ -126,7 +126,7 @@ export class LocalObjectIdentifierValueBlock extends ValueBlock implements IStri
         flag = false;
       } else {
         const sidBlock = new LocalSidValueBlock();
-        if ((sid as any) > Number.MAX_SAFE_INTEGER) { // TODO remove as any
+        if ((sid as any) > Number.MAX_SAFE_INTEGER) { /** TODO remove as any */
           utils.assertBigInt();
           const sidValue = BigInt(sid);
           sidBlock.valueBigInt = sidValue;

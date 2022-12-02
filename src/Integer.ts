@@ -58,7 +58,7 @@ export class Integer extends BaseBlock<LocalIntegerValueBlock, LocalIntegerValue
     const view = new Uint8Array(pvtsutils.Convert.FromHex(hex));
 
     if (bigIntValue < 0) {
-      // a negative number
+      /** a negative number */
       const first = new Uint8Array(view.length + (view[0] & 0x80 ? 1 : 0));
       first[0] |= 0x80;
 
@@ -69,7 +69,7 @@ export class Integer extends BaseBlock<LocalIntegerValueBlock, LocalIntegerValue
 
       writer.write(second);
     } else {
-      // a positive number
+      /** a positive number */
       if (view[0] & 0x80) {
         writer.write(new Uint8Array([0]));
       }
@@ -109,6 +109,9 @@ export class Integer extends BaseBlock<LocalIntegerValueBlock, LocalIntegerValue
 
   /**
    * A typeguard that allows to validate if a certain asn1.js object is of our type
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   public static typeGuard(obj: unknown | undefined): obj is Integer {
     return this.matches(obj);

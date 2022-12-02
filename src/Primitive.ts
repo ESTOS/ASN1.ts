@@ -23,7 +23,6 @@ export class Primitive extends BaseBlock<LocalPrimitiveValueBlock, LocalPrimitiv
     return null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public setValue(value: number): void {
   }
 

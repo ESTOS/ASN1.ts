@@ -50,12 +50,12 @@ export class LocalBooleanValueBlock extends HexBlock(ValueBlock) implements ILoc
 
   public override fromBER(inputBuffer: ArrayBuffer | Uint8Array, inputOffset: number, inputLength: number): number {
     const inputView = pvtsutils.BufferSourceConverter.toUint8Array(inputBuffer);
-    // Basic check for parameters
+    /** Basic check for parameters */
     if (!checkBufferParams(this, inputView, inputOffset, inputLength)) {
       return -1;
     }
 
-    // Getting Uint8Array
+    /** Getting Uint8Array */
     this.valueHexView = inputView.subarray(inputOffset, inputOffset + inputLength);
 
     if (inputLength > 1)

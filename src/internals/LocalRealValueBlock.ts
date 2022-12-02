@@ -132,13 +132,13 @@ export interface LocalRealValueBlockJson extends HexBlockJson, ValueBlockJson {
 }
 
 enum ASN1RealBaseType {
-  // Encoding X.690 (02/2021) - 8.5.7 binary encoding
+  /** Encoding X.690 (02/2021) - 8.5.7 binary encoding */
   base2 = 0,
-  // Encoding X.690 (02/2021) - 8.5.7 binary encoding
+  /** Encoding X.690 (02/2021) - 8.5.7 binary encoding */
   base8 = 1,
-  // Encoding X.690 (02/2021) - 8.5.7 binary encoding
+  /** Encoding X.690 (02/2021) - 8.5.7 binary encoding */
   base16 = 2,
-  // For future use
+  /** For future use */
   reserved = 3
 }
 
@@ -148,23 +148,23 @@ export class LocalRealValueBlock extends HexBlock(ValueBlock) implements IDerCon
       this._value = 0;
 
       if (this.valueHexView.length > 0) {
-        // Decoding goes here...
+        /** Decoding goes here... */
         const info = this.valueHexView[0];
 
-        // First octet
-        // XSBBFFEE
-        // X Encoding, 1 = binary encoding
-        // S Sign,0 ) positiv 1 = negativ
-        // B base
-        // B base
-        // F scaling factor high
-        // F scaling factor low
-        // E Exponent size high
-        // E Exponent size low
+        /** First octet */
+        /** XSBBFFEE */
+        /** X Encoding, 1 = binary encoding */
+        /** S Sign,0 ) positiv 1 = negativ */
+        /** B base */
+        /** B base */
+        /** F scaling factor high */
+        /** F scaling factor low */
+        /** E Exponent size high */
+        /** E Exponent size low */
 
-        // Following octets:
-        // Exponent (E value, defined by the exponent size above)
-        // Mantissa (N value)
+        /** Following octets: */
+        /** Exponent (E value, defined by the exponent size above) */
+        /** Mantissa (N value) */
 
         if ((info & 0x80) === 0x80)
           this.decodeBinary();
@@ -215,7 +215,7 @@ export class LocalRealValueBlock extends HexBlock(ValueBlock) implements IDerCon
       exponentSize = this.valueHexView[1];
     }
 
-    // Read the exponent, if we have more than one value we shift the values to the left and add the next integer
+    /** Read the exponent, if we have more than one value we shift the values to the left and add the next integer */
     for (let iPos = 0; iPos < exponentSize; iPos++) {
         if (iPos > 0)
           exponent <<= BigInt(8);
@@ -223,7 +223,7 @@ export class LocalRealValueBlock extends HexBlock(ValueBlock) implements IDerCon
     }
     valueOffset += exponentSize;
 
-    // Read the mantissa
+    /** Read the mantissa */
     const iMax = this.valueHexView.length - valueOffset;
     for (let iPos = 0; iPos < iMax; iPos++) {
         if (iPos > 0)
@@ -314,8 +314,8 @@ export class LocalRealValueBlock extends HexBlock(ValueBlock) implements IDerCon
       return;
     }
 
-    // Separate mantissa and exponent
-    // We do only encode in base 2 binary notation
+    /** Separate mantissa and exponent */
+    /** We do only encode in base 2 binary notation */
 
     const parts = getNumberParts(v);
     let exponent = parts.exponent;
@@ -346,13 +346,13 @@ export class LocalRealValueBlock extends HexBlock(ValueBlock) implements IDerCon
     const encodedExponent = new Uint8Array(pvutils.utilEncodeTC(exponent));
     const exponentLength = encodedExponent.length;
 
-    // Binary encoded Real
+    /** Binary encoded Real */
     let firstOctet = 0x80;
-    // Negative value
+    /** Negative value */
     if(parts.sign == -1)
         firstOctet |= 0x40;
 
-    // How long is the exponent value?
+    /** How long is the exponent value? */
     switch (exponentLength)
     {
         case 1:

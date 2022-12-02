@@ -35,7 +35,7 @@ export class LocalRelativeSidValueBlock extends HexBlock(LocalBaseBlock) impleme
 
     const inputView = pvtsutils.BufferSourceConverter.toUint8Array(inputBuffer);
 
-    // Basic check for parameters
+    /** Basic check for parameters */
     if (!checkBufferParams(this, inputView, inputOffset, inputLength))
       return -1;
 

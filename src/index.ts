@@ -1,6 +1,6 @@
 export * from "./types";
 
-// basic
+/** basic */
 export * from "./ViewWriter";
 export * from "./HexBlock";
 export * from "./ValueBlock";
@@ -11,7 +11,7 @@ export * from "./Primitive";
 export * from "./Constructed";
 export * from "./EndOfContent";
 
-// common
+/** common */
 export * from "./Null";
 export * from "./Boolean";
 export * from "./OctetString";
@@ -24,7 +24,7 @@ export * from "./RelativeObjectIdentifier";
 export * from "./Sequence";
 export * from "./Set";
 
-// strings
+/** strings */
 export * from "./Utf8String";
 export * from "./BmpString";
 export * from "./UniversalString";
@@ -38,7 +38,7 @@ export * from "./VisibleString";
 export * from "./GeneralString";
 export * from "./CharacterString";
 
-// date and time
+/** date and time */
 export * from "./UTCTime";
 export * from "./GeneralizedTime";
 export * from "./DATE";
@@ -47,12 +47,12 @@ export * from "./DateTime";
 export * from "./Duration";
 export * from "./TIME";
 
-// schema types
+/** schema types */
 export * from "./Any";
 export * from "./Choice";
 export * from "./Repeated";
 
-// special
+/** special */
 export * from "./RawData";
 
 export { FromBerResult, fromBER } from "./parser";

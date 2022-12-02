@@ -1,44 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
 import * as asn1js from "../src";
+import * as pvtsutils from "pvtsutils";
 import { SchemaContext } from "../src";
 import { ILocalIdentificationBlockParams } from "../src/internals/LocalIdentificationBlock";
 import { localFromBER } from "../src/parser";
 import { ETagClass } from "../src/TypeStore";
 
-/**
- * Converts an array buffer to hex notation
- *
- * @param buffer - the buffer to convert
- * @returns the buffer in hex string notation
- */
-function buf2hex(buffer: ArrayBuffer): string {
-	return [...new Uint8Array(buffer)]
-		.map(x => x.toString(16).padStart(2, "0"))
-		.join(" ");
-}
-
-/**
- * Converts a hex string to an array buffer
- *
- * @param hex - the hex string (with our without spaces)
- * @returns the converted hex buffer as array
- */
-function hex2buf(hex: string): Uint8Array {
-    const bytes = new Array<number>();
-    hex = hex.replace(/ /g, "");
-    hex.replace(/../g, (pair: string) => {
-        bytes.push(parseInt(pair, 16));
-        return "";
-    });
-
-    return new Uint8Array(bytes);
-}
 
 /**
  * Gets a repeated schema
  *
- * @param type - the type of object we want to get a repeated schema for
+ * @param type the type of object we want to get a repeated schema for
  * @returns the repeated schema
  */
 function getRepeatedSchema(type: asn1js.AsnType, params: asn1js.RepeatedParams): asn1js.Repeated {
@@ -51,7 +24,7 @@ function getRepeatedSchema(type: asn1js.AsnType, params: asn1js.RepeatedParams):
 /**
  * Gets a repeated value
  *
- * @param type - the value we want to get a repeated sequence for
+ * @param type the value we want to get a repeated sequence for
  * @returns the repeated schema
  */
 function getRepeatedValue(type: asn1js.AsnType, params: asn1js.SequenceParams | undefined, amount: number): asn1js.Sequence {

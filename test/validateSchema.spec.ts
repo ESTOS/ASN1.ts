@@ -1,25 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
 import * as asn1js from "../src";
+import * as pvtsutils from "pvtsutils";
 import { HexBlockParams } from "../src";
 import { ILocalIdentificationBlock } from "../src/internals/LocalIdentificationBlock";
 
 /**
  * Converts an array buffer to hex notation
  *
- * @param buffer - the buffer to convert
- * @returns the buffer in hex string notation
- */
-function buf2hex(buffer: ArrayBuffer): string {
-	return [...new Uint8Array(buffer)]
-		.map(x => x.toString(16).padStart(2, "0"))
-		.join(" ");
-}
-
-/**
- * Converts an array buffer to hex notation
- *
- * @param buffer - the array to convert
+ * @param buffer the array to convert
  * @returns the ArrayBuffer in hex string notation
  */
 function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
@@ -27,29 +16,12 @@ function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
 }
 
 /**
- * Converts a hex string to an array buffer
- *
- * @param hex - the hex string (with our without spaces)
- * @returns the converted hex buffer as array
- */
-function hex2buf(hex: string): Uint8Array {
-    const bytes = new Array<number>();
-    hex = hex.replace(/ /g, "");
-    hex.replace(/../g, (pair: string) => {
-        bytes.push(parseInt(pair, 16));
-        return "";
-    });
-
-    return new Uint8Array(bytes);
-}
-
-/**
  * Gets a sample sequence with some optional parmeters for tests
  *
- * @param getschema - true to get the schema for the verification
- * @param addoptionals - true to add optionals to the sequence
- * @param recursive - the sequence is embedded as sequence into another if you specify a recurive amount (1 means the root sequence contains another in the valueblock, if the value is negative the sequence is added optionally)
- * @param idblock - the idblock if we are recursing and the sequence shall get added optionally
+ * @param getschema true to get the schema for the verification
+ * @param addoptionals true to add optionals to the sequence
+ * @param recursive the sequence is embedded as sequence into another if you specify a recurive amount (1 means the root sequence contains another in the valueblock, if the value is negative the sequence is added optionally)
+ * @param idblock the idblock if we are recursing and the sequence shall get added optionally
  * @returns the asn1 sequence object
  */
 function getSequence(getschema: boolean, addoptionals?: boolean, recurive?: number, idBlock?: Partial<ILocalIdentificationBlock> & HexBlockParams): asn1js.Sequence {
@@ -85,15 +57,17 @@ function getSequence(getschema: boolean, addoptionals?: boolean, recurive?: numb
     return seq;
 }
 
-// Sequence with optionals with child optional Child Sequence in two iterations
-const sampleSequence = "30 61 0c 06 73 74 72 69 6e 67 02 01 01 01 01 ff 80 09 6f 70 74 69 6f 6e 61 6c 30 81 01 02 82 01 00 a3 40 0c 06 73 74 72 69 6e 67 02 01 01 01 01 ff 80 09 6f 70 74 69 6f 6e 61 6c 30 81 01 02 82 01 00 a3 1f 0c 06 73 74 72 69 6e 67 02 01 01 01 01 ff 80 09 6f 70 74 69 6f 6e 61 6c 30 81 01 02 82 01 00";
+/** Sequence with optionals with child optional Child Sequence in two iterations */
+const sampleSequence1 = "30610c06737472696e670201010101ff80096f7074696f6e616c30810102820100a3400c06737472696e670201010101ff80096f7074696f6e616c30810102820100a31f0c06737472696e670201010101ff80096f7074696f6e616c30810102820100";
+/** Sequence with embedded value for an any schema compare */
+const sampleSequence2 = "300e0c06737472696e670201010101ff";
 
 context("validateSchema implementation tests", () => {
     it ("ensure getSequence consistency", () => {
         const seq = getSequence(false, true, -2);
         const ber = seq.toBER();
-        const hex = buf2hex(ber);
-        assert.equal(hex, sampleSequence);
+        const hex = pvtsutils.Convert.ToHex(ber);
+        assert.equal(hex, sampleSequence1);
     });
 
     it ("validate plain object against schema with optional params", () => {
@@ -214,7 +188,7 @@ context("validateSchema implementation tests", () => {
     });
 
     it ("validate an object with a schema with multiple errors, continueOnError = true", () => {
-        // Create a sequence with two childs
+        /** Create a sequence with two childs */
         const seq = getSequence(false);
         const seqChild1 = getSequence(false);
         seqChild1.name = "child1";
@@ -224,7 +198,7 @@ context("validateSchema implementation tests", () => {
         seq.valueBlock.value.push(seqChild2);
         const ber = seq.toBER();
 
-        // Create a matching schema but remove elements in child1 and child2
+        /** Create a matching schema but remove elements in child1 and child2 */
         const schema = getSequence(false);
         const schemaChild1 = getSequence(false);
         schemaChild1.name = "child1";
@@ -252,7 +226,7 @@ context("validateSchema implementation tests", () => {
 
 
     it ("validate an object with a schema with multiple errors, continueOnError = false", () => {
-        // Create a sequence with two childs
+        /** Create a sequence with two childs */
         const seq = getSequence(false);
         const seqChild1 = getSequence(false);
         seqChild1.name = "child1";
@@ -262,7 +236,7 @@ context("validateSchema implementation tests", () => {
         seq.valueBlock.value.push(seqChild2);
         const ber = seq.toBER();
 
-        // Create a matching schema but remove elements in child1 and child2
+        /** Create a matching schema but remove elements in child1 and child2 */
         const schema = getSequence(false);
         const schemaChild1 = getSequence(false);
         schemaChild1.name = "child1";
@@ -320,8 +294,8 @@ context("validateSchema implementation tests", () => {
             assert.ok(int, "missing int value in result");
             assert.ok(any, "missing any value in result");
             assert.equal(int.getValue(), 1, "Wrong value");
-            const data = buf2hex(typedArrayToBuffer(any.valueBeforeDecodeView));
-            assert.equal(data, "30 0e 0c 06 73 74 72 69 6e 67 02 01 01 01 01 ff");
+            const data = pvtsutils.Convert.ToHex(typedArrayToBuffer(any.valueBeforeDecodeView));
+            assert.equal(data, sampleSequence2);
         }
     });
 

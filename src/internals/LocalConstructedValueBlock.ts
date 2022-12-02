@@ -43,21 +43,21 @@ export class LocalConstructedValueBlock extends ValueBlock implements ILocalCons
   }: LocalConstructedValueBlockParams = {}) {
     super(parameters);
 
-    this.value = value as BaseBlock[]; // It's possible to set Any type for Schema declaration
+    this.value = value as BaseBlock[]; /** It's possible to set Any type for Schema declaration */
     this.isIndefiniteForm = isIndefiniteForm;
   }
 
   public override fromBER(inputBuffer: ArrayBuffer | Uint8Array, inputOffset: number, inputLength: number): number {
     const view = pvtsutils.BufferSourceConverter.toUint8Array(inputBuffer);
 
-    // Basic check for parameters
+    /** Basic check for parameters */
     if (!checkBufferParams(this, view, inputOffset, inputLength)) {
       return -1;
     }
 
     this.valueBeforeDecodeView = view.subarray(inputOffset, inputOffset + inputLength);
 
-    // Initial checks
+    /** Initial checks */
     if (this.valueBeforeDecodeView.length === 0) {
       this.warnings.push("Zero buffer length");
 

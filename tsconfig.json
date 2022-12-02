@@ -9,7 +9,6 @@
     "importHelpers": true,
     "noImplicitOverride": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "noErrorTruncation": true,
     "experimentalDecorators": true
   }

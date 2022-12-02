@@ -1,45 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
 import * as asn1js from "../src";
+import * as pvtsutils from "pvtsutils";
 import { SchemaContext } from "../src";
 import { ETagClass } from "../src/TypeStore";
 
 /**
- * Converts an array buffer to hex notation
- *
- * @param buffer - the buffer to convert
- * @returns the buffer in hex string notation
- */
-function buf2hex(buffer: ArrayBuffer): string {
-	return [...new Uint8Array(buffer)]
-		.map(x => x.toString(16).padStart(2, "0"))
-		.join(" ");
-}
-
-/**
- * Converts a hex string to an array buffer
- *
- * @param hex - the hex string (with our without spaces)
- * @returns the converted hex buffer as array
- */
-function hex2buf(hex: string): Uint8Array {
-    const bytes = new Array<number>();
-    hex = hex.replace(/ /g, "");
-    hex.replace(/../g, (pair: string) => {
-        bytes.push(parseInt(pair, 16));
-        return "";
-    });
-
-    return new Uint8Array(bytes);
-}
-
-/**
  * Get a sequence with optional parameters
  *
- * @param getschema - true to get the schema for the verification
- * @param bAddString - true to set the string to the choice
- * @param bAddBoolean - true to set the boolean to the choice
- * @param bAddInteger - true to set the integer to the choice
+ * @param getschema true to get the schema for the verification
+ * @param bAddString true to set the string to the choice
+ * @param bAddBoolean true to set the boolean to the choice
+ * @param bAddInteger true to set the integer to the choice
  * @returns an asn1 sequence object containing the choice
  */
 function getChoice(getschema: boolean, bAddString: boolean, bAddBoolean: boolean, bAddInteger: boolean): asn1js.Sequence {
@@ -100,8 +72,8 @@ context("Asn1Choice implementation tests", () => {
     });
 
     it("test choice on root level (using a constructed item that embeds the choice)", () => {
-        // All choices would match the asn1 type but the type exposed the optional context-specific
-        // Thus the context needs to be found by id and not by matching schema
+        /** All choices would match the asn1 type but the type exposed the optional context-specific */
+        /** Thus the context needs to be found by id and not by matching schema */
         const schema = new asn1js.Constructed({
             name: "constructed",
             idBlock: {
@@ -144,7 +116,7 @@ context("Asn1Choice implementation tests", () => {
             ]
         });
         const data = seq.toBER();
-        const hex = buf2hex(data);
+        const hex = pvtsutils.Convert.ToHex(data);
 
         const context = new SchemaContext();
         context.debug = true;

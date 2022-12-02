@@ -39,14 +39,14 @@ export class LocalBitStringValueBlock extends HexBlock(LocalConstructedValueBloc
   }
 
   public override fromBER(inputBuffer: ArrayBuffer | Uint8Array, inputOffset: number, inputLength: number): number {
-    // Ability to decode zero-length BitString value
+    /** Ability to decode zero-length BitString value */
     if (!inputLength) {
       return inputOffset;
     }
 
     let resultOffset = -1;
 
-    // If the BIT STRING supposed to be a constructed value
+    /** If the BIT STRING supposed to be a constructed value */
     if (this.isConstructed) {
       resultOffset = LocalConstructedValueBlock.prototype.fromBER.call(this, inputBuffer, inputOffset, inputLength);
       if (resultOffset === -1)
@@ -111,11 +111,11 @@ export class LocalBitStringValueBlock extends HexBlock(LocalConstructedValueBloc
           }
         }
       } catch (e) {
-        // nothing
+        /** nothing */
       }
     }
 
-    // Copy input buffer to internal buffer
+    /** Copy input buffer to internal buffer */
     this.valueHexView = intBuffer.subarray(1);
     this.blockLength = intBuffer.length;
 

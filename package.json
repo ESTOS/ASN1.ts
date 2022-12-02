@@ -1,9 +1,13 @@
 {
   "author": {
-    "email": "yury@strozhevsky.com",
-    "name": "Yury Strozhevsky"
+    "email": "jan@estos.de",
+    "name": "Jan Fellner"
   },
   "contributors": [
+    {
+      "email": "yury@strozhevsky.com",
+      "name": "Yury Strozhevsky"
+    },
     {
       "email": "rmh@unmitigatedrisk.com",
       "name": "Ryan Hurst"
@@ -31,20 +35,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/PeculiarVentures/asn1.js.git"
+    "url": "git://github.com/ESTOS/ASN1.ts.git"
   },
   "dependencies": {
     "pvtsutils": "^1.3.2",
     "pvutils": "^1.1.3",
     "tslib": "^2.4.0"
   },
-  "description": "asn1js is a pure JavaScript library implementing this standard. ASN.1 is the basis of all X.509 related data structures and numerous other protocols used on the web",
+  "description": "ASN1.ts is a cross platform ASN1 library written in typescript. It supports encoding and (schema supported) decoding of ber encoded asn1 structures.",
   "keywords": [
     "asn1",
+    "encoder",
+    "decoder",
+    "schema",
+    "validation",
     "parser",
     "asn.1",
     "ber",
-    "der",
     "sequence",
     "set",
     "bitstring",
@@ -72,6 +79,6 @@
     "lint:fix": "eslint --fix . --ext .ts",
     "coverage": "nyc npm test"
   },
-  "version": "3.0.5",
+  "version": "3.1.0",
   "license": "BSD-3-Clause"
 }

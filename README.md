@@ -1,22 +1,15 @@
-## ASN1js
+## ASN1.ts
 
-[![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/PeculiarVentures/ASN1.js/master/LICENSE) [![Test](https://github.com/PeculiarVentures/ASN1.js/actions/workflows/test.yml/badge.svg)](https://github.com/PeculiarVentures/ASN1.js/actions/workflows/test.yml) [![NPM version](https://badge.fury.io/js/asn1js.svg)](http://badge.fury.io/js/asn1js) [![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/ASN1.js/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/ASN1.js?branch=master)
+[![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/ESTOS/ASN1.ts/master/LICENSE) [![Test](https://github.com/estos/ASN1.js/actions/workflows/test.yml/badge.svg)](https://github.com/estos/ASN1.js/actions/workflows/test.yml) [![NPM version](https://badge.fury.io/js/ASN1.ts.svg)](http://badge.fury.io/js/ASN1.ts) [![Coverage Status](https://coveralls.io/repos/github/estos/ASN1.js/badge.svg?branch=master)](https://coveralls.io/github/ESTOS/ASN1.ts?branch=master)
 
-[![NPM](https://nodei.co/npm-dl/asn1js.png?months=3&height=2)](https://nodei.co/npm/asn1js/)
-
-Abstract Syntax Notation One (ASN.1) is a standard and notation that describes rules and structures for representing, encoding, transmitting, and decoding data in telecommunications and computer networking. [ASN1js] is a pure JavaScript library implementing this standard.  ASN.1 is the basis of all X.509 related data structures and numerous other protocols used on the web.
-
-## Important Information for ASN1.js V1 Users
-ASN1.js V2 (ES2015 version) is **incompatible** with ASN1.js V1 code.
+Abstract Syntax Notation One (ASN.1) is a standard and notation that describes rules and structures for representing, encoding, transmitting, and decoding data in telecommunications and computer networking. [ASN1.ts] is a cross platform ASN1 library written in typescript. It supports encoding and (schema supported) decoding of ber encoded asn1 structures. ASN.1 is the basis of all X.509 related data structures and numerous other protocols used on the web.
+Yury Strozhevsky, GMO GlobalSign and Peculiar Ventures are the authors of the library. estos extends this library as some bits and pieces have been missing. To get to know the additions see [What has been added by estos] below
 
 ## Introduction
-
-[ASN1js] is the first library for [BER] encoding/decoding in Javascript designed for browser use. [BER] is the basic encoding rules for [ASN.1] that all others are based on, [DER] is the encoding rules used by PKI applications - it is a subset of [BER]. The [ASN1js] library was tested against [freely available ASN.1:2008 test suite], with some limitations related to JavaScript language. 
+[ASN1.ts] is the first library for [BER] encoding/decoding in Javascript designed for browser use. [BER] is the basic encoding rules for [ASN.1] that all others are based on, [DER] is the encoding rules used by PKI applications - it is a subset of [BER]. The [ASN1.ts] library was tested against [freely available ASN.1:2008 test suite], with some limitations related to JavaScript language. 
 
 ## Features of the library
-
 * Based on latest features of JavaScript language from ES2015 standard;
-* [ASN1js] is a "base layer" for full-featured JS library [PKIjs], which is using Web Cryptography API and has all classes, necessary to work with PKI-related data;
 * Fully object-oriented library. Inheritance is using everywhere inside the lib;
 * Working with HTML5 data objects (ArrayBuffer, Uint8Array etc.);
 * Working with all ASN.1:2008 types;
@@ -36,142 +29,176 @@ ASN1.js V2 (ES2015 version) is **incompatible** with ASN1.js V1 code.
 * Ability to parse internal data inside a primitively encoded data types and automatically validate it against special schema;
 * All types inside library are dynamic;
 * All types can be initialized in static or dynamic ways.
-* [ASN1js] fully tested against [ASN.1:2008 TestSuite].
+* [ASN1.ts] fully tested against [ASN.1:2008 TestSuite].
+
+## What has been added by estos
+* Support for asn1 real
+* Support for implicit properties (The ber encoded data points to the scheme to tell the decoder what it is)
+* Schema validation of repeated values
+* While validating data aginst a scheme: Take over attributes from the scheme into the parsed data e.g. the value name to be able to access those later by name)
+* Getter methods to get values by name and to ensure that they are of a certain type (getValueByName, getTypeValueByName)
+* The schema validation returns an array of errors with context to get to know where an error has occured
+* Typeguard methods that ensure that an object is of a certain type (based on tagclass and tagnumber)
+* Improved test coverage by usecases (not only based on generic test data) (e.g. choice, repeated, optionals, schema validation)
 
 ## Examples
 
-### How to create new ASN. structures
-```javascript
-var sequence = new asn1js.Sequence();
-sequence.valueBlock.value.push(new asn1js.Integer({ value: 1 }));
+When playing around an online asn1 ber decoder is a helpfull tool to have on hand.
+e.g. https://lapo.it/asn1js
 
-var sequence_buffer = sequence.toBER(false); // Encode current sequence to BER (in ArrayBuffer)
-var current_size = sequence_buffer.byteLength;
-
-var integer_data = new ArrayBuffer(8);
-var integer_view = new Uint8Array(integer_data);
-integer_view[0] = 0x01;
-integer_view[1] = 0x01;
-integer_view[2] = 0x01;
-integer_view[3] = 0x01;
-integer_view[4] = 0x01;
-integer_view[5] = 0x01;
-integer_view[6] = 0x01;
-integer_view[7] = 0x01;
-
-sequence.valueBlock.value.push(new asn1js.Integer({
-  isHexOnly: true,
-  valueHex: integer_data,
-})); // Put too long for decoding Integer value
-
-sequence_buffer = sequence.toBER();
-current_size = sequence_buffer.byteLength;
-```
-
-### How to create new ASN.1 structures by calling constructors with parameters
-```javascript
-var sequence2 = new asn1js.Sequence({
-  value: [
-    new asn1js.Integer({ value: 1 }),
-    new asn1js.Integer({
-      isHexOnly: true,
-      valueHex: integer_data
-    }),
-  ]
-});
-```
-
-### How to validate ASN.1 against pre-defined schema 
-```javascript
-var asn1_schema = new asn1js.Sequence({
-  name: "block1",
-  value: [
-    new asn1js.Null({
-      name: "block2"
-    }),
-    new asn1js.Integer({
-      name: "block3",
-      optional: true // This block is absent inside data, but it's "optional". Hence verification against the schema will be passed.
-    })
-  ]
+### How to create a simple ASN structures
+```typescript
+// Creating a simple asn1 sequence
+const seq = new asn1ts.Sequence({
+	value: [
+		new asn1ts.Utf8String({ value: "string" }),
+		new asn1ts.Integer({ value: 1 }),
+		new asn1ts.Boolean({ value: true })
+   ]
 });
 
-var variant1 = org.pkijs.verifySchema(encoded_sequence, asn1_schema); // Verify schema together with decoding of raw data
-var variant1_verified = variant1.verified;
-var variant1_result = variant1.result; // Verified decoded data with all block names inside
+// Encode the data into an ArrayBuffer
+const encoded = seq.toBER();
+
+// 300e0c06737472696e670201010101ff
+console.log(Buffer.from(new Uint8Array(encoded)).toString("hex"));
 ```
 
-### How to use "internal schemas" for primitively encoded data types
-```javascript 
-var primitive_octetstring = new asn1js.OctetString({ valueHex: encoded_sequence }); // Create a primitively encoded OctetString where internal data is an encoded Sequence
-
-var asn1_schema_internal = new asn1js.OctetString({
-  name: "outer_block",
-  primitiveSchema: new asn1js.Sequence({
-    name: "block1",
-    value: [
-      new asn1js.Null({
-        name: "block2"
-      })
-    ]
-  })
+### How to validate data against a scheme
+```typescript
+// Creating a simple asn1 sequence
+const seq = new asn1ts.Sequence({
+	value: [
+		new asn1ts.Utf8String({ value: "string" }),
+		new asn1ts.Integer({ value: 1 }),
+		new asn1ts.Boolean({ value: true })
+   ]
 });
 
-var variant6 = org.pkijs.compareSchema(primitive_octetstring, primitive_octetstring, asn1_schema_internal);
-var variant6_verified = variant4.verified;
-var variant6_block1_tag_num = variant6.result.block1.idBlock.tagNumber;
-var variant6_block2_tag_num = variant6.result.block2.idBlock.tagNumber;
+// Encode the data into an ArrayBuffer
+const encoded = seq.toBER();
+
+// Create the scheme we want to validate against
+const scheme = new asn1ts.Sequence({
+	name: "sequence",
+	value: [
+		new asn1ts.Utf8String({name: "string_value"}),
+		new asn1ts.Integer({name: "integer_value"}),
+		new asn1ts.Boolean({name: "boolean_value"}),
+	]
+});
+
+// Verify the data against the schema
+const result = asn1ts.verifySchema(encoded, scheme);
+if (result.verified) {
+	// Schema has been verified, let´s get the property "integer_value"
+	const asn1tsInteger = result.result.getTypedValueByName(asn1ts.Integer, "integer_value");
+	if (asn1tsInteger) {
+		// 1
+		console.log(asn1tsInteger.getValue());
+	}
+} else {
+	console.log(result.errors);
+}
 ```
 
-More examples could be found in "examples" directory or inside [PKIjs] library.
+### How to use implicit optional properties (smaller footprint when asn1 encoded, the schema tells the decoder what it shall decode)
+```typescript
+// Creating a simple asn1 sequence with an implicitly encoded integer
+const seq = new asn1ts.Sequence({
+	value: [
+		new asn1ts.Utf8String({ value: "string" }),
+		new asn1ts.Integer({ value: 2, idBlock: { optionalID: 0 } }),
+   ]
+});
+
+// Encode the data into an ArrayBuffer
+const encoded = seq.toBER();
+
+// 300b0c06737472696e67800101
+console.log(Buffer.from(new Uint8Array(encoded)).toString("hex"));
+
+// Create the scheme we want to validate against
+const scheme = new asn1ts.Sequence({
+	name: "sequence",
+	value: [
+		new asn1ts.Utf8String({name: "string_value"}),
+		new asn1ts.Integer({name: "integer_value", idBlock: { optionalID: 0 }}),
+	]
+});
+
+// Verify the data against the schema
+const result = asn1ts.verifySchema(encoded, scheme);
+if (result.verified) {
+	// Schema has been verified, let´s get the property "integer_value"
+	const asn1tsInteger = result.result.getTypedValueByName(asn1ts.Integer, "integer_value");
+	if (asn1tsInteger) {
+		// 2
+		console.log(asn1tsInteger.getValue());
+	}
+} else {
+	console.log(result.errors);
+}
+```
+
+Check the test directory as these contain use case driven tests for different scenarios.
+
+## Developing
+* Use Visual Studio Code, have the "Mocha Test Explorer" installed
 
 ## Related source code 
-
+* [asn1.js](https://github.com/PeculiarVentures/ASN1.js) - the "father" of [ASN1js] project;
 * [C++ ASN1:2008 BER coder/decoder](https://github.com/YuryStrozhevsky/C-plus-plus-ASN.1-2008-coder-decoder) - the "father" of [ASN1js] project;
 * [Freely available ASN.1:2008 test suite](https://github.com/YuryStrozhevsky/ASN1-2008-free-test-suite) - the suite which can help you to validate (and better understand) any ASN.1 coder/decoder;
 * [NPM package for ASN.1:2008 test suite](https://github.com/YuryStrozhevsky/asn1-test-suite)
 
 ## Suitability
+We are using asn1ts in combination with other asn1 ber encoders decoders. Interoperability is our daily business between different communication systems and devices. We are using a mixed product ecosystem where asn1 ber data is encoded decoded by the [esnacc] compiler as well as products from [Objective Systems].
+
 There are several commercial products, enterprise solutions as well as open source project based on versions of ASN1js. You should, however, do your own code and security review before utilization in a production application before utilizing any open source library to ensure it will meet your needs.
 
 ## License
-
-Copyright (c) 2014, [GMO GlobalSign](http://www.globalsign.com/)
-Copyright (c) 2015-2022, [Peculiar Ventures](http://peculiarventures.com/)
+Copyright (c) 2014, [GMO GlobalSign](https://www.globalsign.com/)
+Copyright (c) 2015-2022, [Peculiar Ventures](https://peculiarventures.com/)
+Copyright (c) 2022, [estos GmbH](https://www.estos.de) for extensions and missing features (see README.md)
 All rights reserved.
 
-Author 2014-2018, [Yury Strozhevsky](http://www.strozhevsky.com/).
+Author 2014-2018, [Yury Strozhevsky](https://www.strozhevsky.com/)
+Author 2019-2022, [Peculiar Ventures](https://peculiarventures.com/)
+Author from 2022, [estos GmbH](https://www.estos.de)
 
-Redistribution and use in source and binary forms, with or without modification, 
+estos created a fork of the library, mainly written by Yury Strozhevsky and
+Peculiar Ventures, in 2022 to add extensions, missing features. Details about those in the README.md
+
+Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice, 
-   this list of conditions and the following disclaimer.
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
 
-2. Redistributions in binary form must reproduce the above copyright notice, 
-   this list of conditions and the following disclaimer in the documentation 
-   and/or other materials provided with the distribution.
+* Redistributions in binary form must reproduce the above copyright notice, this
+  list of conditions and the following disclaimer in the documentation and/or
+  other materials provided with the distribution.
 
-3. Neither the name of the copyright holder nor the names of its contributors 
-   may be used to endorse or promote products derived from this software without 
-   specific prior written permission.
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
-OF SUCH DAMAGE. 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-[ASN.1]: http://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One
-[ASN1js]: http://asn1js.org/
-[PKIjs]: http://pkijs.org/
-[BER]: http://en.wikipedia.org/wiki/X.690#BER_encoding
-[DER]: http://en.wikipedia.org/wiki/X.690#DER_encoding
-[freely available ASN.1:2008 test suite]: http://www.strozhevsky.com/free_docs/free_asn1_testsuite_descr.pdf
+[ASN.1]: https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One
+[PKIjs]: https://pkijs.org/
+[BER]: https://en.wikipedia.org/wiki/X.690#BER_encoding
+[freely available ASN.1:2008 test suite]: https://www.strozhevsky.com/free_docs/free_asn1_testsuite_descr.pdf
 [ASN.1:2008 TestSuite]: https://github.com/YuryStrozhevsky/asn1-test-suite
+[esnacc]: http://esnacc.org/
+[Objective Systems]: https://obj-sys.com/

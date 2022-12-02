@@ -24,7 +24,7 @@ export abstract class LocalStringValueBlock extends HexBlock(ValueBlock) impleme
     super(parameters);
 
     this.isHexOnly = true;
-    this.value = EMPTY_STRING; // String representation of decoded ArrayBuffer
+    this.value = EMPTY_STRING; /** String representation of decoded ArrayBuffer */
   }
 
   public override toJSON(): LocalUtf8StringValueBlockJson {

@@ -118,9 +118,9 @@ export class GeneralizedTime extends UTCTime {
     //#endregion
 
     //#region Get position of fraction point
-    let fractionPointPosition = timeString.indexOf("."); // Check for "full stop" symbol
+    let fractionPointPosition = timeString.indexOf("."); /** Check for "full stop" symbol */
     if (fractionPointPosition === -1)
-      fractionPointPosition = timeString.indexOf(","); // Check for "comma" symbol
+      fractionPointPosition = timeString.indexOf(","); /** Check for "comma" symbol */
     //#endregion
 
     //#region Get fraction part
@@ -140,12 +140,12 @@ export class GeneralizedTime extends UTCTime {
 
     //#region Parse internal date
     switch (true) {
-      case (dateTimeString.length === 8): // "YYYYMMDD"
+      case (dateTimeString.length === 8): /** "YYYYMMDD" */
         parser = /(\d{4})(\d{2})(\d{2})/ig;
         if (fractionPointPosition !== -1)
-          throw new Error("Wrong input string for conversion"); // Here we should not have a "fraction point"
+          throw new Error("Wrong input string for conversion"); /** Here we should not have a "fraction point" */
         break;
-      case (dateTimeString.length === 10): // "YYYYMMDDHH"
+      case (dateTimeString.length === 10): /** "YYYYMMDDHH" */
         parser = /(\d{4})(\d{2})(\d{2})(\d{2})/ig;
 
         if (fractionPointPosition !== -1) {
@@ -159,7 +159,7 @@ export class GeneralizedTime extends UTCTime {
           this.millisecond = Math.floor(fractionResult);
         }
         break;
-      case (dateTimeString.length === 12): // "YYYYMMDDHHMM"
+      case (dateTimeString.length === 12): /** "YYYYMMDDHHMM" */
         parser = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/ig;
 
         if (fractionPointPosition !== -1) {
@@ -170,7 +170,7 @@ export class GeneralizedTime extends UTCTime {
           this.millisecond = Math.floor(fractionResult);
         }
         break;
-      case (dateTimeString.length === 14): // "YYYYMMDDHHMMSS"
+      case (dateTimeString.length === 14): /** "YYYYMMDDHHMMSS" */
         parser = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/ig;
 
         if (fractionPointPosition !== -1) {
@@ -260,6 +260,9 @@ export class GeneralizedTime extends UTCTime {
 
   /**
    * A typeguard that allows to validate if a certain asn1.js object is of our type
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   public static override typeGuard(obj: unknown | undefined): obj is GeneralizedTime {
     return this.matches(obj);

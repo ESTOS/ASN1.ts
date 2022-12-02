@@ -72,7 +72,7 @@ export class LocalRelativeObjectIdentifierValueBlock extends ValueBlock implemen
   }
 
   public fromString(string: string): boolean {
-    this.value = []; // Clear existing SID values
+    this.value = []; /** Clear existing SID values */
 
     let pos1 = 0;
     let pos2 = 0;

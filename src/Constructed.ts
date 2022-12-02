@@ -56,14 +56,14 @@ export class Constructed extends BaseBlock<LocalConstructedValueBlock, LocalCons
       : (this.constructor as typeof Constructed).NAME;
 
     return values.length
-      ? `${blockName} :\n${values.join("\n")}` // items
-      : `${blockName} :`; // empty
+      ? `${blockName} :\n${values.join("\n")}` /** items */
+      : `${blockName} :`; /** empty */
   }
 
   /**
    * Queries a value from the valueBlock by name
    *
-   * @param name - the property we are looking for
+   * @param name the property we are looking for
    * @returns the property if found or undefined
    */
   public getValueByName(name: string): AsnType | undefined {
@@ -78,8 +78,8 @@ export class Constructed extends BaseBlock<LocalConstructedValueBlock, LocalCons
   /**
    * Queries a value from the valueBlock by name and ensures it is of the given type
    *
-   * @param type - the property type we are looking for e.g. asn1js.UTF8String
-   * @param name - the property we are looking for
+   * @param type the property type we are looking for e.g. asn1js.UTF8String
+   * @param name the property we are looking for
    * @returns the property if found and of type T (e.g. asn1js.UTF8String) or undefined
    */
   public getTypedValueByName<T extends LocalBaseBlock>(c: new () => T, name: string): T | undefined {
@@ -100,7 +100,6 @@ export class Constructed extends BaseBlock<LocalConstructedValueBlock, LocalCons
     return this.valueBlock.value;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public setValue(value: BaseBlock[]): void {
     this.valueBlock.value = value;
   }

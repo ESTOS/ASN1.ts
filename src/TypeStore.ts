@@ -88,15 +88,15 @@ export enum EUniversalTagNumber {
   OctetString = 4,
   Null = 5,
   ObjectIdentifier = 6,
-  // 7 - ObjectDescriptor
-  // 8 - INSTANCE OF, EXTERNAL
+  /** 7 - ObjectDescriptor */
+  /** 8 - INSTANCE OF, EXTERNAL */
   Real = 9,
   Enumerated = 10,
-  // 11 - EMBEDDED PDV
+  /** 11 - EMBEDDED PDV */
   Utf8String = 12,
   RelativeObjectIdentifier = 13,
   TIME = 14,
-  // 15
+  /** 15 */
   Sequence = 16,
   Set = 17,
   NumericString = 18,

@@ -59,7 +59,7 @@ export class BaseBlock<T extends ValueBlock = ValueBlock, J extends ValueBlockJs
 
     this.name = name;
     this.optional = optional;
-    // If the property is not explicitly defined as optional it may also be defined as optional with defining of the optionalID
+    /** If the property is not explicitly defined as optional it may also be defined as optional with defining of the optionalID */
     if(parameters.idBlock?.optionalID !== undefined && parameters.idBlock.optionalID >= 0)
       this.optional = true;
     if (primitiveSchema)
@@ -151,14 +151,16 @@ export class BaseBlock<T extends ValueBlock = ValueBlock, J extends ValueBlockJs
 
   /**
    * Determines whether two object instances are equal
+   *
    * @param other Object to compare with the current object
+   * @returns true if the two objects are equal
    */
   public isEqual(other: unknown): other is this {
     if (this === other) {
       return true;
     }
 
-    // Check input type
+    /** Check input type */
     if (!(other instanceof this.constructor)) {
       return false;
     }
@@ -182,6 +184,8 @@ export class BaseBlock<T extends ValueBlock = ValueBlock, J extends ValueBlockJs
 
   /**
    * Merges baseID tagClass and tagNumber into params if they have not been already set
+   * @param params the baseblock we want to merge the baseIDS into
+   * @param baseIDS the baseIDS (tagClass, tagNumber) to merge into the params
    */
   public static mergeIDBlock(params: BaseBlockParams, baseIDs: IBaseIDs): void {
     if (!params.idBlock)
@@ -194,6 +198,9 @@ export class BaseBlock<T extends ValueBlock = ValueBlock, J extends ValueBlockJs
 
   /**
    * Implements the core typeguard check function
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   protected static matches(obj: unknown): boolean {
     if (!obj)
@@ -210,6 +217,7 @@ export class BaseBlock<T extends ValueBlock = ValueBlock, J extends ValueBlockJs
 
 /**
  * Recursive function which checks and enables isIndefiniteForm flag for constructed blocks if any child has that flag enabled
+ *
  * @param baseBlock Base ASN.1 block
  * @returns Returns `true` if incoming block is `indefinite form`
  */

@@ -14,14 +14,17 @@ export class Boolean extends BaseBlock<LocalBooleanValueBlock, LocalBooleanValue
 
   /**
    * Gets value
+   *
    * @since 3.0.0
+   * @returns the boolean value
    */
   public getValue(): boolean {
     return this.valueBlock.value;
   }
   /**
    * Sets value
-   * @param value Boolean value
+   *
+   * @param value Boolean value to set
    * @since 3.0.0
    */
   public setValue(value: boolean): void {
@@ -42,6 +45,9 @@ export class Boolean extends BaseBlock<LocalBooleanValueBlock, LocalBooleanValue
 
   /**
    * A typeguard that allows to validate if a certain asn1.js object is of our type
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   // eslint-disable-next-line @typescript-eslint/ban-types
   public static typeGuard(obj: unknown | undefined): obj is Boolean {

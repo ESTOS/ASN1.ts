@@ -36,7 +36,7 @@ export class BitString extends BaseBlock<LocalBitStringValueBlock, LocalBitStrin
     if (this.valueBlock.isConstructed || (this.valueBlock.value && this.valueBlock.value.length)) {
       return Constructed.prototype.onAsciiEncoding.call(this);
     } else {
-      // convert bytes to bits
+      /** convert bytes to bits */
       const bits = [];
       const valueHex = this.valueBlock.valueHexView;
       for (const byte of valueHex) {
@@ -51,6 +51,9 @@ export class BitString extends BaseBlock<LocalBitStringValueBlock, LocalBitStrin
 
   /**
    * A typeguard that allows to validate if a certain asn1.js object is of our type
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   public static typeGuard(obj: unknown | undefined): obj is BitString {
     return this.matches(obj);

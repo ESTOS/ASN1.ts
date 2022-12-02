@@ -104,10 +104,12 @@ export function getTypeForIDBlock(idBlock: ILocalIdentificationBlock & IHexBlock
         return undefined;
     }
   } else {
-    // All other tag classes
-    // APPLICATION
-    // CONTEXT-SPECIFIC
-    // PRIVATE
+    /**
+      All other tag classes
+      APPLICATION
+      CONTEXT-SPECIFIC
+      PRIVATE
+    */
     return idBlock.isConstructed ? typeStore.Constructed : typeStore.Primitive;
   }
 }
@@ -120,12 +122,12 @@ export function getTypeForIDBlock(idBlock: ILocalIdentificationBlock & IHexBlock
  * @returns
  */
 export function localFromBER(inputBuffer: Uint8Array, inputOffset = 0, inputLength = inputBuffer.length): FromBerResult {
-  const incomingOffset = inputOffset; // Need to store initial offset since "inputOffset" is changing in the function
+  const incomingOffset = inputOffset; /** Need to store initial offset since "inputOffset" is changing in the function */
 
-  // Create a basic ASN.1 type since we need to return errors and warnings from the function
+  /** Create a basic ASN.1 type since we need to return errors and warnings from the function */
   let returnObject = new BaseBlock({}, ValueBlock);
 
-  // Basic check for parameters
+  /** Basic check for parameters */
   const baseBlock = new LocalBaseBlock();
   if (!checkBufferParams(baseBlock, inputBuffer, inputOffset, inputLength)) {
     returnObject.error = baseBlock.error;
@@ -136,10 +138,10 @@ export function localFromBER(inputBuffer: Uint8Array, inputOffset = 0, inputLeng
     };
   }
 
-  // Getting Uint8Array subarray
+  /** Getting Uint8Array subarray */
   const intBuffer = inputBuffer.subarray(inputOffset, inputOffset + inputLength);
 
-  // Initial checks
+  /** Initial checks */
   if (!intBuffer.length) {
     returnObject.error = "Zero buffer length";
 
@@ -149,8 +151,8 @@ export function localFromBER(inputBuffer: Uint8Array, inputOffset = 0, inputLeng
     };
   }
 
-  // Decode identification block of ASN.1 BER structure
-  // console.time("idBlock");
+  /** Decode identification block of ASN.1 BER structure */
+  /** console.time("idBlock"); */
   let resultOffset = returnObject.idBlock.fromBER(inputBuffer, inputOffset, inputLength);
   if (returnObject.idBlock.warnings.length) {
     returnObject.warnings.concat(returnObject.idBlock.warnings);
@@ -163,13 +165,13 @@ export function localFromBER(inputBuffer: Uint8Array, inputOffset = 0, inputLeng
       result: returnObject
     };
   }
-  // console.timeEnd("idBlock");
+  /** console.timeEnd("idBlock"); */
 
   inputOffset = resultOffset;
   inputLength -= returnObject.idBlock.blockLength;
 
-  // Decode length block of ASN.1 BER structure
-  // console.time("lengthBlock");
+  /** Decode length block of ASN.1 BER structure */
+  /** console.time("lengthBlock"); */
   resultOffset = returnObject.lenBlock.fromBER(inputBuffer, inputOffset, inputLength);
   if (returnObject.lenBlock.warnings.length) {
     returnObject.warnings.concat(returnObject.lenBlock.warnings);
@@ -182,12 +184,12 @@ export function localFromBER(inputBuffer: Uint8Array, inputOffset = 0, inputLeng
       result: returnObject
     };
   }
-  // console.timeEnd("lengthBlock");
+  /** console.timeEnd("lengthBlock"); */
 
   inputOffset = resultOffset;
   inputLength -= returnObject.lenBlock.blockLength;
 
-  // Check for using indefinite length form in encoding for primitive types
+  /** Check for using indefinite length form in encoding for primitive types */
   if (!returnObject.idBlock.isConstructed &&
     returnObject.lenBlock.isIndefiniteForm) {
     returnObject.error = "Indefinite length form used for primitive encoding form";
@@ -229,14 +231,14 @@ export function localFromBER(inputBuffer: Uint8Array, inputOffset = 0, inputLeng
       returnObject = newASN1Type as BaseBlock;
   }
 
-  // Change type and perform BER decoding
+  /** Change type and perform BER decoding */
   returnObject = localChangeType(returnObject, newASN1Type);
-  // console.time("valueBlock");
+  /** console.time("valueBlock"); */
   resultOffset = returnObject.fromBER(inputBuffer, inputOffset, returnObject.lenBlock.isIndefiniteForm ? inputLength : returnObject.lenBlock.length);
 
-  // Coping incoming buffer for entire ASN.1 block
+  /** Coping incoming buffer for entire ASN.1 block */
   returnObject.valueBeforeDecodeView = inputBuffer.subarray(incomingOffset, incomingOffset + returnObject.blockLength);
-  // console.timeEnd("valueBlock");
+  /** console.timeEnd("valueBlock"); */
 
   return {
     offset: resultOffset,

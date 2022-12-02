@@ -21,12 +21,18 @@
   "rules": {
     "no-prototype-builtins": 0,
     "no-unused-vars": 0,
+    "semi": 0,
+    "quotes": 0,
+    "no-duplicate-imports": 2,
+    "no-trailing-spaces": 2,
+    "deprecation/deprecation": 2,
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
         "args": "none"
       }
     ],
+    "@typescript-eslint/no-empty-function": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/explicit-function-return-type": 1,
@@ -40,14 +46,9 @@
     ],
     "@typescript-eslint/interface-name-prefix": 0,
     "@typescript-eslint/no-explicit-any": 0,
-    "semi": 0,
     "@typescript-eslint/semi": 2,
-    "quotes": 0,
     "@typescript-eslint/quotes": 2,
-    "no-duplicate-imports": 2,
     "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/triple-slash-reference": 0,
-    "no-trailing-spaces": 2,
-    "deprecation/deprecation": 2
+    "@typescript-eslint/triple-slash-reference": 0
   }
 }

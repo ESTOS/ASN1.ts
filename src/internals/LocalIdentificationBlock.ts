@@ -8,14 +8,14 @@ import { LocalBaseBlock, LocalBaseBlockJson } from "./LocalBaseBlock";
 import { checkBufferParams } from "./utils";
 
 export interface IBaseIDs {
-  // The class of the asn1 object
+  /** The class of the asn1 object */
   tagClass: ETagClass;
-  // The tag number inside the class for the asn1 object
+  /** The tag number inside the class for the asn1 object */
   tagNumber: EUniversalTagNumber;
 }
 
 export interface ILocalIdentificationBlock extends IBaseIDs {
-  // True if this is a constructed object
+  /** True if this is a constructed object */
   isConstructed: boolean;
   /**
    * In case a property is transported optionally the property may contain an id to specify it among a list of optionals
@@ -82,8 +82,8 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
   /**
    * Encodes the localID block into ber
    *
-   * @param sizeOnly - Do only provide the buffer (and with it the size) required to encode the inputData
-   * @param ignoreOptionalID - calculate the idBlock and ignore the optionalID flag if provided (this is needed when we map back the optional attribute into the original parameter, the mapped idBlock contains the optionaID for reference but should not have an effect on the size calculation)
+   * @param sizeOnly Do only provide the buffer (and with it the size) required to encode the inputData
+   * @param ignoreOptionalID calculate the idBlock and ignore the optionalID flag if provided (this is needed when we map back the optional attribute into the original parameter, the mapped idBlock contains the optionaID for reference but should not have an effect on the size calculation)
    */
   public override toBER(sizeOnly = false, ignoreOptionalID = false): ArrayBuffer {
     let firstOctet = 0;
@@ -97,16 +97,16 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
 
     switch (tagClass) {
       case ETagClass.UNIVERSAL:
-        firstOctet |= 0x00; // UNIVERSAL
+        firstOctet |= 0x00; /** UNIVERSAL */
         break;
       case ETagClass.APPLICATION:
-        firstOctet |= 0x40; // APPLICATION
+        firstOctet |= 0x40; /** APPLICATION */
         break;
       case ETagClass.CONTEXT_SPECIFIC:
-        firstOctet |= 0x80; // CONTEXT-SPECIFIC
+        firstOctet |= 0x80; /** CONTEXT-SPECIFIC */
         break;
       case ETagClass.PRIVATE:
-        firstOctet |= 0xC0; // PRIVATE
+        firstOctet |= 0xC0; /** PRIVATE */
         break;
       default:
         this.error = "Unknown tag class";
@@ -167,15 +167,15 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
   public override fromBER(inputBuffer: ArrayBuffer | Uint8Array, inputOffset: number, inputLength: number): number {
     const inputView = pvtsutils.BufferSourceConverter.toUint8Array(inputBuffer);
 
-    // Basic check for parameters
+    /** Basic check for parameters */
     if (!checkBufferParams(this, inputView, inputOffset, inputLength)) {
       return -1;
     }
 
-    // Getting Uint8Array from ArrayBuffer
+    /** Getting Uint8Array from ArrayBuffer */
     const intBuffer = inputView.subarray(inputOffset, inputOffset + inputLength);
 
-    // Initial checks
+    /** Initial checks */
     if (intBuffer.length === 0) {
       this.error = "Zero buffer length";
 
@@ -187,35 +187,35 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
 
     switch (tagClassMask) {
       case 0x00:
-        this.tagClass = ETagClass.UNIVERSAL; // UNIVERSAL
+        this.tagClass = ETagClass.UNIVERSAL; /** UNIVERSAL */
         break;
       case 0x40:
-        this.tagClass = ETagClass.APPLICATION; // APPLICATION
+        this.tagClass = ETagClass.APPLICATION; /** APPLICATION */
         break;
       case 0x80:
-        this.tagClass = ETagClass.CONTEXT_SPECIFIC; // CONTEXT-SPECIFIC
+        this.tagClass = ETagClass.CONTEXT_SPECIFIC; /** CONTEXT-SPECIFIC */
         break;
       case 0xC0:
-        this.tagClass = ETagClass.PRIVATE; // PRIVATE
+        this.tagClass = ETagClass.PRIVATE; /** PRIVATE */
         break;
       default:
         this.error = "Unknown tag class";
         return -1;
     }
     //#endregion
-    // Find it's constructed or not
+    /** Find it's constructed or not */
     this.isConstructed = (intBuffer[0] & 0x20) === 0x20;
 
-    // Find tag number
+    /** Find tag number */
     this.isHexOnly = false;
     const tagNumberMask = intBuffer[0] & 0x1F;
 
     if (tagNumberMask !== 0x1F) {
-      // Simple case (tag number < 31)
+      /** Simple case (tag number < 31) */
       this.tagNumber = (tagNumberMask);
       this.blockLength = 1;
     } else {
-      // Tag number bigger or equal to 31
+      /** Tag number bigger or equal to 31 */
       let count = 1;
 
       let intTagNumberBuffer = this.valueHexView = new Uint8Array(255);
@@ -231,7 +231,7 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
           return -1;
         }
 
-        // In case if tag number length is greater than 255 bytes (rare but possible case)
+        /** In case if tag number length is greater than 255 bytes (rare but possible case) */
         if (count === tagNumberBufferMaxLength) {
           tagNumberBufferMaxLength += 255;
 
@@ -245,7 +245,7 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
       }
 
       this.blockLength = (count + 1);
-      intTagNumberBuffer[count - 1] = intBuffer[count] & 0x7F; // Write last byte to buffer
+      intTagNumberBuffer[count - 1] = intBuffer[count] & 0x7F; /** Write last byte to buffer */
 
 
       //#region Cut buffer
@@ -272,13 +272,13 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
     if (((this.tagClass === 1)) &&
       (this.isConstructed)) {
       switch (this.tagNumber) {
-        case 1: // Boolean
-        case 2: // REAL
-        case 5: // Null
-        case 6: // OBJECT IDENTIFIER
-        case 9: // REAL
-        case 13: // RELATIVE OBJECT IDENTIFIER
-        case 14: // Time
+        case 1: /** Boolean */
+        case 2: /** REAL */
+        case 5: /** Null */
+        case 6: /** OBJECT IDENTIFIER */
+        case 9: /** REAL */
+        case 13: /** RELATIVE OBJECT IDENTIFIER */
+        case 14: /** Time */
         case 23:
         case 24:
         case 31:
@@ -293,7 +293,7 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
     }
     //#endregion
 
-    return (inputOffset + this.blockLength); // Return current offset in input buffer
+    return (inputOffset + this.blockLength); /** Return current offset in input buffer */
   }
 
   public override toJSON(): LocalIdentificationBlockJson {
@@ -309,7 +309,7 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
   /**
    * Checks whether two LocalIdentificationBlock are of the same type
    *
-   * @param other - the object to compare against
+   * @param other the object to compare against
    * @returns true in case other and this is from the same type
    */
   public isIdenticalType(other: IBaseIDs): boolean {
@@ -321,13 +321,13 @@ export interface LocalIdentificationBlock {
   /**
    * @deprecated since version 3.0.0
    */
-  // @ts-ignore
+  /** @ts-ignore */
   valueBeforeDecode: ArrayBuffer;
   /**
    * Binary data in ArrayBuffer representation
    *
    * @deprecated since version 3.0.0
    */
-  // @ts-ignore
+  /** @ts-ignore */
   valueHex: ArrayBuffer;
 }

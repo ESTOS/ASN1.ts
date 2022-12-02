@@ -23,14 +23,14 @@ export class Repeated extends Any {
   }: RepeatedParams = {}) {
     super(parameters);
 
-    // If the property is not explicitly defined as optional it may also be defined as optional with defining of the optionalID
+    /** If the property is not explicitly defined as optional it may also be defined as optional with defining of the optionalID */
     if(parameters.idBlock?.optionalID !== undefined && parameters.idBlock.optionalID >= 0)
       this.optional = true;
 
     this.idBlock = new LocalIdentificationBlock(parameters);
 
     this.value = value;
-    this.local = local; // Could local or global array to store elements
+    this.local = local; /** Could local or global array to store elements */
   }
 
 }

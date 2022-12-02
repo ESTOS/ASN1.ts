@@ -1,4 +1,4 @@
-// Declaration of global variables
+/** Declaration of global variables */
 
 export const powers2 = [new Uint8Array([1])];
 export const digitsString = "0123456789";

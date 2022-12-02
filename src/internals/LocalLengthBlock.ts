@@ -42,7 +42,7 @@ export class LocalLengthBlock extends LocalBaseBlock implements ILocalLengthBloc
 
   public fromBER(inputBuffer: ArrayBuffer | Uint8Array, inputOffset: number, inputLength: number): number {
     const view = pvtsutils.BufferSourceConverter.toUint8Array(inputBuffer);
-    // Basic check for parameters
+    /** Basic check for parameters */
     if (!checkBufferParams(this, view, inputOffset, inputLength)) {
       return -1;
     }
@@ -86,7 +86,7 @@ export class LocalLengthBlock extends LocalBaseBlock implements ILocalLengthBloc
     //#region Calculate length value in case of long form
     const count = intBuffer[0] & 0x7F;
 
-    if (count > 8) // Too big length value
+    if (count > 8) /** Too big length value */
     {
       this.error = "Too big integer";
 
@@ -113,7 +113,7 @@ export class LocalLengthBlock extends LocalBaseBlock implements ILocalLengthBloc
     this.blockLength = count + 1;
     //#endregion
 
-    return (inputOffset + this.blockLength); // Return current offset in input buffer
+    return (inputOffset + this.blockLength); /** Return current offset in input buffer */
   }
 
   public toBER(sizeOnly = false): ArrayBuffer {

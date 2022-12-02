@@ -23,12 +23,14 @@ export class EndOfContent extends BaseBlock<LocalEndOfContentValueBlock> {
     return null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public setValue(value: number): void {
   }
 
   /**
    * A typeguard that allows to validate if a certain asn1.js object is of our type
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   public static typeGuard(obj: unknown | undefined): obj is EndOfContent {
     return this.matches(obj);

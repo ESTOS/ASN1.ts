@@ -17,7 +17,7 @@ export class Null extends BaseBlock<ValueBlock, ValueBlockJson> {
 
   constructor(parameters: NullParams = {}) {
     Null.mergeIDBlock(parameters, Null.defaultIDs);
-    super(parameters, ValueBlock); // We will not have a call to "Null value block" because of specified FROM_BER and TO_BER functions
+    super(parameters, ValueBlock); /** We will not have a call to "Null value block" because of specified FROM_BER and TO_BER functions */
 
   }
 
@@ -25,7 +25,6 @@ export class Null extends BaseBlock<ValueBlock, ValueBlockJson> {
     return null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public setValue(value: number): void {
   }
 
@@ -72,6 +71,9 @@ export class Null extends BaseBlock<ValueBlock, ValueBlockJson> {
 
   /**
    * A typeguard that allows to validate if a certain asn1.js object is of our type
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   public static typeGuard(obj: unknown | undefined): obj is Null {
     return this.matches(obj);

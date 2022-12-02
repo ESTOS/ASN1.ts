@@ -56,7 +56,7 @@ export function HexBlock<T extends LocalBaseBlockConstructor>(BaseClass: T) {
     }
 
     public fromBER(inputBuffer: ArrayBuffer | Uint8Array, inputOffset: number, inputLength: number): number {
-      // Basic check for parameters
+      /** Basic check for parameters */
       const view = inputBuffer instanceof ArrayBuffer ? new Uint8Array(inputBuffer) : inputBuffer;
       if (!checkBufferParams(this, view, inputOffset, inputLength)) {
         return -1;
@@ -64,7 +64,7 @@ export function HexBlock<T extends LocalBaseBlockConstructor>(BaseClass: T) {
 
       const endLength = inputOffset + inputLength;
 
-      // Initial checks
+      /** Initial checks */
       this.valueHexView = view.subarray(inputOffset, endLength);
       if (!this.valueHexView.length) {
         this.warnings.push("Zero buffer length");
@@ -88,7 +88,7 @@ export function HexBlock<T extends LocalBaseBlockConstructor>(BaseClass: T) {
         return new ArrayBuffer(this.valueHexView.byteLength);
       }
 
-      // Don't copy data if View is not offset
+      /** Don't copy data if View is not offset */
       return (this.valueHexView.byteLength === this.valueHexView.buffer.byteLength)
         ? this.valueHexView.buffer
         : this.valueHexView.slice().buffer;

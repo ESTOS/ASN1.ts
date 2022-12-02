@@ -1,4 +1,4 @@
-// Utility functions
+/** Utility functions */
 
 import type { LocalBaseBlock } from "./LocalBaseBlock";
 
@@ -21,7 +21,7 @@ export function concat(buffers: ArrayBuffer[]): ArrayBuffer {
   let outputLength = 0;
   let prevLength = 0;
 
-  // Calculate output length
+  /** Calculate output length */
   for (let i = 0; i < buffers.length; i++) {
     const buffer = buffers[i];
     outputLength += buffer.byteLength;
@@ -98,7 +98,7 @@ interface INumberParts {
  * Taken from:
  * https://stackoverflow.com/questions/9383593/extracting-the-exponent-and-mantissa-of-a-javascript-number
  *
- * @param x - the number to get the values from
+ * @param x the number to get the values from
  * @returns - the structs containing the extracted values
  */
 export function getNumberParts(x: number): INumberParts
@@ -132,7 +132,7 @@ export function getNumberParts(x: number): INumberParts
   bytes[7] = 0x3f;
   bytes[6] |= 0xf0;
 
-  // Return mantissa lower than 1
+  /** Return mantissa lower than 1 */
   let mantissa = float[0];
   while (mantissa >= 1) {
     mantissa /= 2;
@@ -149,7 +149,7 @@ export function getNumberParts(x: number): INumberParts
 /**
  * Converts an unsigned number to a signed one
  *
- * @param x - the unsigned number to get the signed from
+ * @param x the unsigned number to get the signed from
  * @returns - the signed number value
  */
 export function getSignedFromUnsigned(x: number): number

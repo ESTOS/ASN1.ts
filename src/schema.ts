@@ -33,9 +33,9 @@ export class VerifyOptions {
     this.continueOnError = continueOnError;
     this.allowLargerThanSchema = allowLargerThanSchema;
   }
-  // Parsing continues on an error, the errorlist contains all errors
+  /** Parsing continues on an error, the errorlist contains all errors */
   public continueOnError: boolean;
-  // If the asn1 object is larger than the schema, this is not an error
+  /** If the asn1 object is larger than the schema, this is not an error */
   public allowLargerThanSchema: boolean;
 }
 
@@ -43,15 +43,15 @@ export class VerifyOptions {
  * A helper object that is carried around while recursing through the schema
  */
 export class SchemaContext {
-  // The path within the structure we are parsing (object:subobject:element)
+  /** The path within the structure we are parsing (object:subobject:element) */
   public path = "";
-  // Allows to specify an outer id from a context-specific element and is then used in recursion to find the proper option (constructed->tag points to schema option)
+  /** Allows to specify an outer id from a context-specific element and is then used in recursion to find the proper option (constructed->tag points to schema option) */
   public contextID?: number;
-  // Debug helper in the schema validation (test) to stop at a certain recursion level if (context.debug && context.recursion === 2)
+  /** Debug helper in the schema validation (test) to stop at a certain recursion level if (context.debug && context.recursion === 2) */
   public recursion = 0;
-  // Debug helper in the schema validation (test) to stop at a certain recursion level if (context.debug && context.recursion === 2)
+  /** Debug helper in the schema validation (test) to stop at a certain recursion level if (context.debug && context.recursion === 2) */
   public debug = false;
-  // We are recusring into a sub element and adopt the SchemaContext accordingly, we return a new schema to be used for recursion
+  /** We are recusring into a sub element and adopt the SchemaContext accordingly, we return a new schema to be used for recursion */
   public recurse(schema: AsnSchemaType | undefined): SchemaContext {
     const result = new SchemaContext();
     result.path = this.path;
@@ -76,41 +76,41 @@ export class SchemaContext {
 
 export enum ESchemaError {
   NO_ERROR = 0,
-  // The provided asn1data is invalid
+  /** The provided asn1data is invalid */
   INVALID_ASN1DATA = 1,
-  // The provided schema data is invalid
+  /** The provided schema data is invalid */
   INVALID_SCHEMADATA = 2,
-  // The schema attribute has no tag class
+  /** The schema attribute has no tag class */
   MISSING_TAG_CLASS_IN_SCHEMA = 3,
-  // Mismatching tag class between asn1 and schema
+  /** Mismatching tag class between asn1 and schema */
   MISMATCHING_TAG_CLASS = 4,
-  // The schema attribute has no tag number
+  /** The schema attribute has no tag number */
   MISSING_TAG_NUMBER_IN_SCHEMA = 5,
-  // Mismatching tag number between asn1 and schema
+  /** Mismatching tag number between asn1 and schema */
   MISMATCHING_TAG_NUMBER = 6,
-  // The schema attribute has no constructed flag
+  /** The schema attribute has no constructed flag */
   MISSING_CONSTRUCTED_FLAG_IN_SCHEMA = 7,
-  // Mismatching constructed flag between asn1 and schema
+  /** Mismatching constructed flag between asn1 and schema */
   MISMATCHING_CONSTRUCTED_FLAG = 8,
-  // The schema attribute has no constructed flag
+  /** The schema attribute has no constructed flag */
   MISSING_ISHEXONLY_FLAG_IN_SCHEMA = 9,
-  // Mismatching constructed flag between asn1 and schema
+  /** Mismatching constructed flag between asn1 and schema */
   MISMATCHING_ISHEXONLY_FLAG = 10,
-  // The schema attribute has hexview flag
+  /** The schema attribute has hexview flag */
   MISSING_HEXVIEW_IN_SCHEMA = 11,
-  // The hex view length is not matching between the asn1 and the schema
+  /** The hex view length is not matching between the asn1 and the schema */
   MISMATCHING_HEX_VIEW_LENGTH = 12,
-  // The hex view data is not matching between the asn1 and the schema
+  /** The hex view data is not matching between the asn1 and the schema */
   MISMATCHING_HEX_VIEW_DATA = 13,
-  // The object length is mismatching between the asn1 and the schema
+  /** The object length is mismatching between the asn1 and the schema */
   MISMATCHING_OBJECT_LENGTH = 14,
-  // Failed to decode primitive data
+  /** Failed to decode primitive data */
   FAILED_TO_BER_DECODE_PRIMITIVE_DATA = 16,
-  // Failed to match asn1 data with choice from the schema
+  /** Failed to match asn1 data with choice from the schema */
   NO_MATCHING_DATA_FOR_CHOICE = 17,
-  // The ASN1 structure is larger than the schema
+  /** The ASN1 structure is larger than the schema */
   ASN1_IS_LARGER_THAN_SCHEMA = 18
-  // If you add new Values !!! Add them to the getTextForError as well !!!
+  /** If you add new Values !!! Add them to the getTextForError as well !!! */
 }
 
 function getTextForError(error: ESchemaError): string {
@@ -165,11 +165,11 @@ export class SchemaError {
     this.errorText = getTextForError(error);
     this.context = context.path;
   }
-  // The schema error (check enum for details)
+  /** The schema error (check enum for details) */
   public error: ESchemaError;
-  // The human readable error string (based on the error value)
+  /** The human readable error string (based on the error value) */
   public errorText: string;
-  // Context in the tree (which parameter caused the issue)
+  /** Context in the tree (which parameter caused the issue) */
   public context: string;
 }
 
@@ -213,7 +213,7 @@ export function compareSchema(root: AsnType, inputSchema: AsnSchemaType, options
 function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, options = new VerifyOptions(), context = new SchemaContext(), inputData = root): SchemaErrors {
   const errors = new SchemaErrors();
 
-  // First call, let´s add some root information if this is our first call
+  /** First call, let´s add some root information if this is our first call */
   if (!context.path)
     context = context.recurse(inputSchema);
 
@@ -293,7 +293,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
   //#endregion
   //#region Comparing idBlock properties in ASN.1 data and ASN.1 schema
   //#region Encode and decode ASN.1 schema idBlock
-  /// <remarks>This encoding/decoding is necessary because could be an errors in schema definition</remarks>
+  //** <remarks>This encoding/decoding is necessary because could be an errors in schema definition</remarks> */
   if (!(FROM_BER in inputSchema.idBlock)) {
     errors.push(new SchemaError(ESchemaError.INVALID_SCHEMADATA, context));
     return errors;
@@ -367,7 +367,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
   if (inputSchema.idBlock.tagNumber !== inputData.idBlock.tagNumber) {
     const failed = true;
     if(inputData.idBlock.tagClass === ETagClass.CONTEXT_SPECIFIC) {
-      // Only works if the constructed has a single value
+      /** Only works if the constructed has a single value */
       const schemaValue = (inputSchema.valueBlock as ILocalConstructedValueBlock).value;
       if (schemaValue.length !== 1) {
         errors.push(new SchemaError(ESchemaError.INVALID_SCHEMADATA, context));
@@ -376,18 +376,18 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
       const schemaChoice = schemaValue[0];
       if (schemaChoice instanceof Choice) {
         const requestedOptionID = inputData.idBlock.tagNumber;
-        // The schema holds a choice, let´s see if we find the choice option based on the tagnumber
+        /** The schema holds a choice, let´s see if we find the choice option based on the tagnumber */
         for (const schemaChoiceOption of schemaChoice.value) {
           if (schemaChoiceOption.idBlock.optionalID !== undefined && requestedOptionID === schemaChoiceOption.idBlock.optionalID) {
-            // Choice option found -> thus we did not fail we can now validate the schema
-            // We take over tagclass and tagnumber from the scheme and overwrite the current choice tagnumber and class
+            /** Choice option found -> thus we did not fail we can now validate the schema */
+            /** We take over tagclass and tagnumber from the scheme and overwrite the current choice tagnumber and class */
             const savedTagClass = inputData.idBlock.tagClass;
             const savedTagNumebr = inputData.idBlock.tagNumber;
             inputData.idBlock.tagClass = schemaChoiceOption.idBlock.tagClass;
             inputData.idBlock.tagNumber = schemaChoiceOption.idBlock.tagNumber;            const newContext = context.recurse(schemaChoiceOption);
             const errors = compareSchemaInternal(root, schemaChoiceOption, options, newContext, inputData);
             if (errors.failed) {
-              // On fail we restore the old values
+              /** On fail we restore the old values */
               inputData.idBlock.tagClass = savedTagClass;
               inputData.idBlock.tagNumber = savedTagNumebr;
             }
@@ -405,7 +405,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
   //#endregion
   //#region valueHex
   if (inputSchema.idBlock.isHexOnly) {
-    if (!inputSchema.idBlock.hasOwnProperty(VALUE_HEX_VIEW)) // Since 'valueHex' is an inherited property
+    if (!inputSchema.idBlock.hasOwnProperty(VALUE_HEX_VIEW)) /** Since 'valueHex' is an inherited property */
     {
       errors.push(new SchemaError(ESchemaError.MISSING_HEXVIEW_IN_SCHEMA, context));
       return errors;
@@ -430,13 +430,13 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
   //#endregion
 
   //#region Add named component of ASN.1 schema
-  /*
+  /**
     Urgs, what coding style is that? A consumer of the api chooses a specific name e.g. "optional" or "name" and overwrites
     internal structures. I don´t think it´s ment to work like that...
     In case someone wants to acces certain properties by name a getter should get used and that searches in the valueblock
     Furthermore this idea is not typescript compatible, you need to cast this object here to write to it and the consumer also needs to cast it to be able to access the properties...
     -> not ideal, therefore commented out.... (also removed the delete methods below that removed it in case of an error)
-    -> use getValueByName("nam"") from the Sequence and Set objects
+    -> use getValueByName("name") from a Sequence or Set object
     if (inputSchema.name) {
       inputSchema.name = inputSchema.name.replace(/^\s+|\s+$/g, EMPTY_STRING);
       if (inputSchema.name)
@@ -446,18 +446,18 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
   //#endregion
   //#region Getting next ASN.1 block for comparison
   if (inputSchema instanceof typeStore.Constructed) {
-    // TODO not clear how it works for OctetString and BitString
+    /** TODO not clear how it works for OctetString and BitString */
     //* if (inputSchema.idBlock.isConstructed) {
     let admission = 0;
 
-    // Get rid of ts-ignore and cast the input object properly one time in advance
+    /** Get rid of ts-ignore and cast the input object properly one time in advance */
     const inputValue = (inputData.valueBlock as ILocalConstructedValueBlock).value as AsnType[];
 
     let maxLength = Math.max(inputSchema.valueBlock.value.length, inputValue.length);
 
     if (maxLength > 0) {
       if (inputSchema.valueBlock.value[0] instanceof Repeated) {
-        maxLength = inputValue.length; // TODO debug it
+        maxLength = inputValue.length; /** TODO debug it */
       }
     }
 
@@ -467,7 +467,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
 
     //#endregion
     //#region Special case when "inputData" has no values and "inputSchema" has all optional values
-    // TODO debug it
+    /** TODO debug it */
     if ((inputValue.length === 0) &&
       (inputSchema.valueBlock.value.length !== 0)) {
       let _optional = true;
@@ -481,8 +481,8 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
       errors.push(new SchemaError(ESchemaError.MISMATCHING_OBJECT_LENGTH, context));
       return errors;
     }
-    // Helper variable to improve searching for context specific optional attributes
-    // The variable stores the last value where we found the last optional param
+    /** Helper variable to improve searching for context specific optional attributes */
+    /** The variable stores the last value where we found the last optional param */
     let nextOptional = 0;
     //#endregion
     for (let i = 0; i < maxLength; i++) {
@@ -500,9 +500,9 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
 
         const newContext = context.recurse(schema);
         if (!schema) {
-          // The input object exists but is not reference in the schema.
+          /** The input object exists but is not reference in the schema. */
           if (!options.allowLargerThanSchema) {
-            // This is not allowed, let´s throw an error
+            /** This is not allowed, let´s throw an error */
             newContext.path += inputObject.idBlock.getDebug("-");
             errors.push(new SchemaError(ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA, newContext));
           }
@@ -513,44 +513,44 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
           let maxOptional = maxLength;
           let bFound = false;
 
-          // Maximum two loops if we start from nextOptional > 0 as we do not cover the region 0 to nextOptional - 1 with it
-          // This is needed if the optionals are not perfectly sorted from 0-n in the schema.
+          /** Maximum two loops if we start from nextOptional > 0 as we do not cover the region 0 to nextOptional - 1 with it */
+          /** This is needed if the optionals are not perfectly sorted from 0-n in the schema. */
           const iMax = nextOptional > 0 ? 2 : 1;
           for(let iLoop = 0; iLoop < iMax; iLoop++) {
-            // This is a context specific property (optional property)
-            // the type comes from the target field with optionalID === tagNumber
+            /** This is a context specific property (optional property) */
+            /** the type comes from the target field with optionalID === tagNumber */
             for (let j = nextOptional; j < maxOptional; j++) {
               const check = inputSchema.valueBlock.value[j];
               if (check.idBlock.optionalID === inputObject.idBlock.tagNumber) {
                 nextOptional = j + 1;
                 bFound = true;
                 schema = check;
-                // As we have a context specific attribute the type comes from the schema field
+                /** As we have a context specific attribute the type comes from the schema field */
                 let newType: TnewAsnType | undefined;
                 if (schema instanceof Repeated)
                   newType = typeStore.Sequence;
                 else
                   newType = getTypeForIDBlock(schema.idBlock);
                 if (newType) {
-                  // Create the new object matching the type of the scheme for the context spcific parameter from the input
+                  /** Create the new object matching the type of the scheme for the context spcific parameter from the input */
                   const contextualElement = new newType();
-                  // Take over the name for reference
+                  /** Take over the name for reference */
                   contextualElement.name = schema.name;
-                  // Create the id block based on the schema information
+                  /** Create the id block based on the schema information */
                   if (schema.idBlock.tagClass !== ETagClass.UNKNOWN)
                     contextualElement.idBlock = new LocalIdentificationBlock(schema);
-                  // The id block may be different for this value especially if the context specific with a higer id used more than one byte.
-                  // So we calculate the required block length by converting to BER and ignoring the optionalID flag in the toBER calculation
+                  /** The id block may be different for this value especially if the context specific with a higer id used more than one byte. */
+                  /** So we calculate the required block length by converting to BER and ignoring the optionalID flag in the toBER calculation */
                   contextualElement.idBlock.blockLength = contextualElement.idBlock.toBER(true, true).byteLength;
-                  // The len block is the same as from the source, create a copy and set the same blockLength
+                  /** The len block is the same as from the source, create a copy and set the same blockLength */
                   contextualElement.lenBlock = new LocalLengthBlock(inputObject);
-                  // The blocklength is not taken over from the input but is the same as in the original object so we just take it over
+                  /** The blocklength is not taken over from the input but is the same as in the original object so we just take it over */
                   contextualElement.lenBlock.blockLength = inputObject.lenBlock.blockLength;
-                  // Let´s take over the payload from the input parameter into the final parameter
+                  /** Let´s take over the payload from the input parameter into the final parameter */
                   contextualElement.valueBeforeDecodeView = new Uint8Array(inputObject.valueBeforeDecodeView);
-                  // We need to tune the first byte as the type information has now changed from context specific + optionalID to universal + tag number (type)
+                  /** We need to tune the first byte as the type information has now changed from context specific + optionalID to universal + tag number (type) */
                   contextualElement.valueBeforeDecodeView[0] = contextualElement.idBlock.tagNumber;
-                  // Now we need to calculate the offset of the payload inside the source elements, It´s the source idblock length + the source len block length
+                  /** Now we need to calculate the offset of the payload inside the source elements, It´s the source idblock length + the source len block length */
                   const offset = inputObject.lenBlock.blockLength + inputObject.idBlock.blockLength;
                   const decoded = contextualElement.fromBER(contextualElement.valueBeforeDecodeView, offset, contextualElement.valueBeforeDecodeView.length);
                   if (decoded) {
@@ -565,12 +565,12 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
               break;
             else {
               if(nextOptional > 0) {
-                // Optional was not found -> if we started from nextOptional == 0 we are done (then we made the whole loop)
-                // If we started from nextOptional > 0 we need to cover the area from 0 to nextoptional -1
+                /** Optional was not found -> if we started from nextOptional == 0 we are done (then we made the whole loop) */
+                /** If we started from nextOptional > 0 we need to cover the area from 0 to nextoptional -1 */
                 maxOptional = nextOptional - 1;
                 nextOptional = 0;
               } else {
-                // We looped from the beginning to the end
+                /** We looped from the beginning to the end */
                 break;
               }
             }
@@ -595,7 +595,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
     if(errors.failed)
       return errors;
 
-    // Here we are done with iterating over all objects (including recursion, stepping in) and we step out to the next higher element in the structure
+    /** Here we are done with iterating over all objects (including recursion, stepping in) and we step out to the next higher element in the structure */
     inputData.name = inputSchema.name;
     inputData.optional = inputSchema.optional;
 
@@ -622,9 +622,9 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
 
 /**
  * ASN.1 schema verification for ArrayBuffer data
- * @param inputBuffer - Input BER-encoded ASN.1 data
- * @param inputSchema - Input ASN.1 schema to verify against to
- * @param verifyOptions - Options to control how the object is beeing verified
+ * @param inputBuffer Input BER-encoded ASN.1 data
+ * @param inputSchema Input ASN.1 schema to verify against to
+ * @param verifyOptions Options to control how the object is beeing verified
  * @return
  */
 export function verifySchema(inputBuffer: pvtsutils.BufferSource, inputSchema: AsnSchemaType, options = new VerifyOptions(), context = new SchemaContext()): CompareSchemaResult {

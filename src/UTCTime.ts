@@ -81,7 +81,7 @@ export class UTCTime extends VisibleString implements IUTCTime, IDateConvertible
    * @returns
    */
   public toBuffer(): ArrayBuffer {
-    const str = this.toString(); // TODO use this.valueBlock.value and update toString
+    const str = this.toString(); /** TODO use this.valueBlock.value and update toString */
 
     const buffer = new ArrayBuffer(str.length);
     const view = new Uint8Array(buffer);
@@ -171,6 +171,9 @@ export class UTCTime extends VisibleString implements IUTCTime, IDateConvertible
 
   /**
    * A typeguard that allows to validate if a certain asn1.js object is of our type
+   *
+   * @param obj The object we want to match against the type of this class
+   * @returns true if obj is of the same type as our class
    */
   public static override typeGuard(obj: unknown | undefined): obj is UTCTime {
     return this.matches(obj);

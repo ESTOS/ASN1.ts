@@ -222,28 +222,6 @@ context("ASN types", () => {
         assert.strictEqual(asn.toBigInt(), num);
       });
     });
-
-    context("convert to/from DER", () => {
-      it("positive", () => {
-        const asn = asn1js.Integer.fromBigInt("18591708106338011145");
-
-        const der = asn.convertToDER();
-        assert.strictEqual(der.toString("hex"), "0209010203040506070809");
-
-        const fromDer = der.convertFromDER();
-        assert.strictEqual(fromDer.toString("hex"), "0209010203040506070809");
-      });
-      it("negative", () => {
-        const asn = asn1js.Integer.fromBigInt("-9150748177064392952");
-
-        const der = asn.convertToDER();
-        assert.strictEqual(der.toString("hex"), "0209008102030405060708");
-
-        const fromDer = der.convertFromDER();
-        assert.strictEqual(fromDer.toString("hex"), "02088102030405060708");
-      });
-    });
-
   });
 
   context("CharacterString", () => {

@@ -5,9 +5,7 @@ import { LocalBaseBlock } from "./internals/LocalBaseBlock";
 import { AsnType, ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
 import { checkBufferParams } from "./internals/utils";
 import { ILocalIdentificationBlock } from "./internals/LocalIdentificationBlock";
-import { Constructed } from "./Constructed";
 import { IHexBlock } from "./HexBlock";
-import { Primitive } from "./Primitive";
 
 export interface FromBerResult {
   offset: number;
@@ -224,7 +222,7 @@ export function localFromBER(inputBuffer: Uint8Array, inputOffset = 0, inputLeng
       result: returnObject
     };
   }
-  if ((newASN1Type instanceof Constructed || newASN1Type instanceof Primitive) && returnObject.idBlock.tagClass === ETagClass.UNIVERSAL) {
+  if ((newASN1Type instanceof typeStore.Constructed || newASN1Type instanceof typeStore.Primitive) && returnObject.idBlock.tagClass === ETagClass.UNIVERSAL) {
       newASN1Type.idBlock = returnObject.idBlock;
       newASN1Type.lenBlock = returnObject.lenBlock;
       newASN1Type.warnings = returnObject.warnings;

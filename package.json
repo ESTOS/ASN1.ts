@@ -65,7 +65,7 @@
   "main": "build/index.js",
   "module": "build/index.es.js",
   "types": "build/index.d.ts",
-  "name": "asn1ts",
+  "name": "@estos/asn1ts",
   "files": [
     "build",
     "LICENSE",

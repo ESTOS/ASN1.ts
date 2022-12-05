@@ -208,7 +208,7 @@ export class BaseBlock<T extends ValueBlock = ValueBlock, J extends ValueBlockJs
     const comp = (obj as BaseBlock);
     try {
       return comp.idBlock.tagClass === this.defaultIDs.tagClass && comp.idBlock.tagNumber === this.defaultIDs.tagNumber;
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       return false;
     }
   }

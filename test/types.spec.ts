@@ -24,6 +24,7 @@ context("ASN types", () => {
 
       const asnParsed = asn1js.fromBER(ber);
       assert.ok(asnParsed.result instanceof asn1js.Boolean);
+      assert.ok(asn1js.Boolean.typeGuard(asnParsed.result));
       assert.strictEqual(asnParsed.result.getValue(), testValue);
     });
 
@@ -82,6 +83,7 @@ context("ASN types", () => {
       assert.strictEqual(pvtsutils.Convert.ToHex(ber), pvtsutils.Convert.ToHex(testBER));
 
       const asnParsed = asn1js.fromBER(ber);
+      assert.ok(asn1js.BmpString.typeGuard(asnParsed.result));
       assert.ok(asnParsed.result instanceof asn1js.BmpString);
       assert.strictEqual(asnParsed.result.valueBlock.value, testValue);
     });
@@ -92,6 +94,7 @@ context("ASN types", () => {
     it("parse zero-length", () => {
       const asn = asn1js.fromBER(pvtsutils.Convert.FromHex("0300"));
       assert.ok(asn.result instanceof asn1js.BitString);
+      assert.ok(asn1js.BitString.typeGuard(asn.result));
     });
     it("incorrect unused bits", () => {
       const asn = asn1js.fromBER(pvtsutils.Convert.FromHex("030208ff"));
@@ -165,6 +168,7 @@ context("ASN types", () => {
 
       const asn2 = asn1js.fromBER(asn.toBER());
       assert.ok(asn2.result instanceof asn1js.Integer);
+      assert.ok(asn1js.Integer.typeGuard(asn2.result));
       assert.strictEqual(asn2.result.valueBlock.value, 97196);
     });
 
@@ -248,6 +252,7 @@ context("ASN types", () => {
       const asn = new asn1js.CharacterString({
         value: testString,
       });
+      assert.ok(asn1js.CharacterString.typeGuard(asn));
       assert.strictEqual(asn.getValue(), testString);
       assert.strictEqual(asn.toString("hex"), "1d0b736f6d6520737472696e67");
       assert.strictEqual(asn.toString(), `CharacterString : '${testString}'`);
@@ -267,6 +272,7 @@ context("ASN types", () => {
       assert.strictEqual(asn.toString(), `UniversalString : '${testString}'`);
 
       const parsedAsn = asn1js.fromBER(pvtsutils.Convert.FromHex(testHex));
+      assert.ok(asn1js.UniversalString.typeGuard(parsedAsn.result));
       assert.ok(parsedAsn.result instanceof asn1js.UniversalString);
       assert.strictEqual(parsedAsn.result.getValue(), testString);
     });
@@ -285,6 +291,7 @@ context("ASN types", () => {
       assert.strictEqual(asn.toString(), `UTF8String : '${testString}'`);
 
       const parsedAsn = asn1js.fromBER(pvtsutils.Convert.FromHex(testHex));
+      assert.ok(asn1js.Utf8String.typeGuard(parsedAsn.result));
       assert.ok(parsedAsn.result instanceof asn1js.Utf8String);
       assert.strictEqual(parsedAsn.result.getValue(), testString);
     });
@@ -296,6 +303,7 @@ context("ASN types", () => {
       const asn = new asn1js.DATE({
         value: testString,
       });
+      assert.ok(asn1js.DATE.typeGuard(asn));
       assert.strictEqual(asn.getValue(), testString);
       assert.strictEqual(asn.toString("hex"), "1f1f0a323030302d30312d3032");
       assert.strictEqual(asn.toString(), `DATE : '${testString}'`);
@@ -308,6 +316,7 @@ context("ASN types", () => {
       const asn = new asn1js.DateTime({
         value: testString,
       });
+      assert.ok(asn1js.DateTime.typeGuard(asn));
       assert.strictEqual(asn.getValue(), testString);
       assert.strictEqual(asn.toString("hex"), "1f2110323030302d30312d30322031323a3030");
       assert.strictEqual(asn.toString(), `DateTime : '${testString}'`);
@@ -320,6 +329,7 @@ context("ASN types", () => {
       const asn = new asn1js.Duration({
         value: testString,
       });
+      assert.ok(asn1js.Duration.typeGuard(asn));
       assert.strictEqual(asn.getValue(), testString);
       assert.strictEqual(asn.toString("hex"), "1f220431303030");
       assert.strictEqual(asn.toString(), `Duration : '${testString}'`);
@@ -332,6 +342,7 @@ context("ASN types", () => {
       const asn = new asn1js.GeneralString({
         value: testString,
       });
+      assert.ok(asn1js.GeneralString.typeGuard(asn));
       assert.strictEqual(asn.getValue(), testString);
       assert.strictEqual(asn.toString("hex"), "1b09736f6d652074657874");
       assert.strictEqual(asn.toString(), `GeneralString : '${testString}'`);
@@ -348,6 +359,7 @@ context("ASN types", () => {
       assert.strictEqual(asn.toString("hex"), "181332303030303130323132313131302e3130305a");
       assert.ok(asn.toString("ascii").startsWith("GeneralizedTime : 2000"));
       assert.ok(asn.toString().startsWith, "2000");
+      assert.ok(asn1js.GeneralizedTime.typeGuard(asn));
     });
 
     context("fromString", () => {
@@ -450,6 +462,7 @@ context("ASN types", () => {
       const asn = new asn1js.GraphicString({
         value: testString,
       });
+      assert.ok(asn1js.GraphicString.typeGuard(asn));
       assert.strictEqual(asn.getValue(), testString);
       assert.strictEqual(asn.toString("hex"), "1909736f6d652074657874");
       assert.strictEqual(asn.toString(), `GraphicString : '${testString}'`);
@@ -462,6 +475,7 @@ context("ASN types", () => {
       const asn = new asn1js.NumericString({
         value: testString,
       });
+      assert.ok(asn1js.NumericString.typeGuard(asn));
       assert.strictEqual(asn.getValue(), testString);
       assert.strictEqual(asn.toString("hex"), "120a31323334353637383930");
       assert.strictEqual(asn.toString(), `NumericString : '${testString}'`);
@@ -490,7 +504,7 @@ context("ASN types", () => {
         const asn = new asn1js.ObjectIdentifier({
           value,
         });
-
+        assert.ok(asn1js.ObjectIdentifier.typeGuard(asn));
         assert.strictEqual(asn.toString("hex"), "060402030405");
         assert.strictEqual(asn.toString("ascii"), "OBJECT IDENTIFIER : 0.2.3.4.5");
       });
@@ -540,6 +554,7 @@ context("ASN types", () => {
           value,
         });
 
+        assert.ok(asn1js.RelativeObjectIdentifier.typeGuard(asn));
         assert.strictEqual(asn.toString("hex"), "0d07e03989527b0c01");
         assert.strictEqual(asn.toString("ascii"), `RelativeObjectIdentifier : ${value}`);
 
@@ -570,6 +585,7 @@ context("ASN types", () => {
   context("OctetString", () => {
     it("parse zero-length", () => {
       const asn = asn1js.fromBER(pvtsutils.Convert.FromHex("0400"));
+      assert.ok(asn1js.OctetString.typeGuard(asn.result));
       assert.ok(asn.result instanceof asn1js.OctetString);
     });
     context("to BER", () => {
@@ -618,6 +634,83 @@ context("ASN types", () => {
 
     });
 
+  });
+
+  context("Enumerated", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.Enumerated();
+      assert.ok(asn1js.Enumerated.typeGuard(asn));
+    });
+  });
+
+  context("EndOfContent", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.EndOfContent();
+      assert.ok(asn1js.EndOfContent.typeGuard(asn));
+    });
+  });
+
+  context("IA5String", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.IA5String();
+      assert.ok(asn1js.IA5String.typeGuard(asn));
+    });
+  });
+
+  context("Null", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.Null();
+      assert.ok(asn1js.Null.typeGuard(asn));
+    });
+  });
+
+context("PrintableString", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.PrintableString();
+      assert.ok(asn1js.PrintableString.typeGuard(asn));
+    });
+  });
+
+  context("Real", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.Real();
+      assert.ok(asn1js.Real.typeGuard(asn));
+    });
+  });
+
+  context("Set", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.Set();
+      assert.ok(asn1js.Set.typeGuard(asn));
+    });
+  });
+
+  context("TeletexString", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.TeletexString();
+      assert.ok(asn1js.TeletexString.typeGuard(asn));
+    });
+  });
+
+  context("UTCTime", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.UTCTime();
+      assert.ok(asn1js.UTCTime.typeGuard(asn));
+    });
+  });
+
+context("VideotexString", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.VideotexString();
+      assert.ok(asn1js.VideotexString.typeGuard(asn));
+    });
+  });
+
+context("VisibleString", () => {
+    it("typeguard", () => {
+      const asn = new asn1js.VisibleString();
+      assert.ok(asn1js.VisibleString.typeGuard(asn));
+    });
   });
 
 });

@@ -84,26 +84,6 @@ export class Real extends BaseBlock<LocalRealValueBlock, LocalRealValueBlockJson
     return res;
   }
 
-  public convertToDER(): Real {
-    const real = new Real({ valueHex: this.valueBlock.valueHexView });
-
-    real.valueBlock.toDER();
-
-    return real;
-  }
-
-  /**
-   * Convert current Integer value from DER to BER format
-   * @returns
-   */
-  public convertFromDER(): Real {
-    return new Real({
-      valueHex: this.valueBlock.valueHexView[0] === 0
-        ? this.valueBlock.valueHexView.subarray(1)
-        : this.valueBlock.valueHexView,
-    });
-  }
-
   protected override onAsciiEncoding(): string {
     return `${(this.constructor as typeof Real).NAME} : ${this.valueBlock.toString()}`;
   }

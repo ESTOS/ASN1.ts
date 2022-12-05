@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as pvutils from "pvutils";
 import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { IDerConvertible } from "../types";
 import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock";
 import { powers2, digitsString } from "./constants";
 import { getNumberParts, getSignedFromUnsigned } from "./utils";
@@ -142,7 +141,7 @@ enum ASN1RealBaseType {
   reserved = 3
 }
 
-export class LocalRealValueBlock extends HexBlock(ValueBlock) implements IDerConvertible {
+export class LocalRealValueBlock extends HexBlock(ValueBlock) {
   protected setValueHex(): void {
     if (this.valueHexView.length > 0) {
       this._value = 0;
@@ -383,55 +382,6 @@ export class LocalRealValueBlock extends HexBlock(ValueBlock) implements IDerCon
 
   public get value(): number {
     return this._value;
-  }
-
-  public fromDER(inputBuffer: ArrayBuffer, inputOffset: number, inputLength: number, expectedLength = 0): number {
-    const offset = this.fromBER(inputBuffer, inputOffset, inputLength);
-    if (offset === -1)
-      return offset;
-
-    const view = this.valueHexView;
-
-    if ((view[0] === 0x00) && ((view[1] & 0x80) !== 0)) {
-      this.valueHexView = view.subarray(1);
-    }
-    else {
-      if (expectedLength !== 0) {
-        if (view.length < expectedLength) {
-          if ((expectedLength - view.length) > 1)
-            expectedLength = view.length + 1;
-
-          this.valueHexView = view.subarray(expectedLength - view.length);
-        }
-      }
-    }
-
-    return offset;
-  }
-
-  public toDER(sizeOnly = false): ArrayBuffer {
-    const view = this.valueHexView;
-
-    switch (true) {
-      case ((view[0] & 0x80) !== 0):
-        {
-          const updatedView = new Uint8Array(this.valueHexView.length + 1);
-
-          updatedView[0] = 0x00;
-          updatedView.set(view, 1);
-
-          this.valueHexView = updatedView;
-        }
-        break;
-      case ((view[0] === 0x00) && ((view[1] & 0x80) === 0)):
-        {
-          this.valueHexView = this.valueHexView.subarray(1);
-        }
-        break;
-      default:
-    }
-
-    return this.toBER(sizeOnly);
   }
 
   public override fromBER(inputBuffer: ArrayBuffer, inputOffset: number, inputLength: number): number {

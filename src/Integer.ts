@@ -83,26 +83,6 @@ export class Integer extends BaseBlock<LocalIntegerValueBlock, LocalIntegerValue
     return res;
   }
 
-  public convertToDER(): Integer {
-    const integer = new Integer({ valueHex: this.valueBlock.valueHexView });
-
-    integer.valueBlock.toDER();
-
-    return integer;
-  }
-
-  /**
-   * Convert current Integer value from DER to BER format
-   * @returns
-   */
-  public convertFromDER(): Integer {
-    return new Integer({
-      valueHex: this.valueBlock.valueHexView[0] === 0
-        ? this.valueBlock.valueHexView.subarray(1)
-        : this.valueBlock.valueHexView,
-    });
-  }
-
   protected override onAsciiEncoding(): string {
     return `${(this.constructor as typeof Integer).NAME} : ${this.valueBlock.toString()}`;
   }

@@ -118,6 +118,7 @@ export enum EUniversalTagNumber {
   Duration = 34
 }
 
+/* istanbul ignore next */
 export function getTagClassAsText(tagClass: ETagClass): string {
   switch(tagClass) {
   case ETagClass.UNIVERSAL:
@@ -133,6 +134,7 @@ export function getTagClassAsText(tagClass: ETagClass): string {
   }
 }
 
+/* istanbul ignore next */
 export function getTagNumberAsText(tagNumber: EUniversalTagNumber): string {
   switch(tagNumber) {
     case EUniversalTagNumber.EndOfContent:

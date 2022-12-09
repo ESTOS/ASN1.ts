@@ -222,15 +222,30 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
     /**
      * We iterate over the choice fields and validate whether the inputData matches the choice data
      * If that is the case we take over name and the optional from the choice attribute
+     *
+     * If the data has been encoded context_specific we use exactly that context specific schema to match to the data
      */
+    const bContextSpecific = inputData.idBlock.tagClass === ETagClass.CONTEXT_SPECIFIC && inputData.idBlock.tagNumber >= 0;
+
     for (let j = 0; j < inputSchema.value.length; j++) {
       const schema = inputSchema.value[j];
-      const newContext = context.recurse(schema);
-      const errors = compareSchemaInternal(root, schema, options, newContext, inputData);
-      if (errors.ok) {
-        inputData.name = inputSchema.name;
-        inputData.optional = inputSchema.optional;
-        return errors;
+      if ((bContextSpecific && inputData.idBlock.tagNumber === schema.idBlock.optionalID) || !bContextSpecific) {
+        const savedTagClass = inputData.idBlock.tagClass;
+        const savedTagNumebr = inputData.idBlock.tagNumber;
+        if (bContextSpecific) {
+            inputData.idBlock.tagClass = schema.idBlock.tagClass;
+            inputData.idBlock.tagNumber = schema.idBlock.tagNumber;
+        }
+        const newContext = context.recurse(schema);
+        const errors = compareSchemaInternal(root, schema, options, newContext, inputData);
+        if (errors.ok) {
+          inputData.name = schema.name;
+          inputData.optional = schema.optional;
+          return errors;
+        } else if (bContextSpecific) {
+            inputData.idBlock.tagClass = savedTagClass;
+            inputData.idBlock.tagNumber = savedTagNumebr;
+        }
       }
     }
 

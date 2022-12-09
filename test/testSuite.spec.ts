@@ -2,13 +2,13 @@
 import * as assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
-import * as asn1js from "../src";
+import * as asn1ts from "../src";
 
 context("ASN.1:2008 TestSuite Tests", () => {
   const testDir = `${__dirname}/../node_modules/asn1-test-suite/suite`;
 
   it("Test Case #1", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc1.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc1.ber")));
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
     assert.equal(asn1.result.idBlock.tagNumber, -1, "Tag number must be set to default value -1");
     assert.equal(asn1.result.idBlock.valueHexView.byteLength, 10, "Hexadecimal representation of ID block must has 10 in length");
@@ -17,7 +17,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #2", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc2.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc2.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -25,7 +25,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #3", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc3.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc3.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -35,7 +35,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #4", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc4.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc4.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -45,7 +45,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #5", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc5.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc5.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
     assert.equal(asn1.result.lenBlock.length, 1, "Length must be equal to 1");
@@ -55,89 +55,89 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #6", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc6.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc6.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #7", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc7.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc7.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #8", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc8.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc8.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #9", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc9.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc9.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #10", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc10.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc10.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #11", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc11.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc11.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #12", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc12.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc12.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #13", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc13.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc13.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #14", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc14.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc14.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #15", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc15.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc15.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #16", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc16.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc16.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #17", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc17.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc17.ber")));
 
     /** Tests for "REAL" type at the moment should just parse data */
   });
 
   it("Test Case #18", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc18.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc18.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.Integer, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.Integer, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.valueBlock.value, -4095, "Value block value must be equal to -4095");
     assert.equal(asn1.result.valueBlock.warnings.length, 1, "Should just one warning in value block");
     assert.equal(asn1.result.valueBlock.warnings[0], "Needlessly long format", "Text of the warning in length block does not match");
   });
 
   it("Test Case #19", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc19.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc19.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -147,10 +147,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #20", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc20.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc20.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.Integer, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.Integer, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     /*
       ASN1 does not define a max length for integer values, so the testcase is rather
       assert.equal(asn1.result.valueBlock.isHexOnly, true, "Value block value must be \"hex only\"");
@@ -161,10 +161,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #21", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc21.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc21.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.ObjectIdentifier, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.ObjectIdentifier, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.valueBlock.value[0].warnings.length, 1, "Should just one warning in value block");
     assert.equal(asn1.result.valueBlock.value[0].warnings[0], "Needlessly long format of SID encoding", "Text of the warning in SID block does not match");
     assert.equal(asn1.result.valueBlock.value[0].valueDec, 81, "First SID block must has value 81");
@@ -174,10 +174,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #22", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc22.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc22.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.ObjectIdentifier, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.ObjectIdentifier, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.valueBlock.value[0].warnings.length, 1, "Should just one warning in value block");
     assert.equal(asn1.result.valueBlock.value[0].warnings[0], "Too big SID for decoding, hex only", "Text of the warning in SID block does not match");
     assert.equal(asn1.result.valueBlock.value[0].valueHexView.byteLength, 11, "Hex buffer for first SID value must be 11 in length");
@@ -185,7 +185,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #23", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc23.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc23.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -195,7 +195,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #24", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc24.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc24.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
@@ -203,10 +203,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #25", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc25.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc25.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.valueBlock.warnings.length, 2, "Should just two warnings in value block");
     assert.equal(asn1.result.valueBlock.warnings[0], "Boolean value encoded in more then 1 octet", "Text of the warning value block does not match");
     assert.equal(asn1.result.valueBlock.warnings[1], "Needlessly long format", "Text of the warning value block does not match");
@@ -214,10 +214,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #26", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc26.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc26.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.valueBlock.warnings.length, 2, "Should just two warnings in value block");
     assert.equal(asn1.result.valueBlock.warnings[0], "Boolean value encoded in more then 1 octet", "Text of the warning value block does not match");
     assert.equal(asn1.result.valueBlock.warnings[1], "Needlessly long format", "Text of the warning value block does not match");
@@ -225,7 +225,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #27", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc27.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc27.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -235,36 +235,36 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #28", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc28.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc28.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.valueBlock.value, true, "Boolean value must be \"true\"");
   });
 
   it("Test Case #29", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc29.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc29.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.Boolean, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.valueBlock.value, false, "Boolean value must be \"false\"");
   });
 
   it("Test Case #30", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc30.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc30.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.Null, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.Null, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 1, "Should just one warning");
     assert.equal(asn1.result.warnings[0], "Non-zero length of value block for Null type", "Text of the warning does not match");
   });
 
   it("Test Case #31", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc31.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc31.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -272,7 +272,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #32", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc32.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc32.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
@@ -280,7 +280,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #33", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc33.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc33.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -288,7 +288,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #34", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc34.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc34.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -296,7 +296,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #35", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc35.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc35.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -306,7 +306,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #36", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc36.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc36.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -316,30 +316,30 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #37", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc37.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc37.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.valueBlock.isIndefiniteForm, false, "Form of encoding for value block must be \"indefinite = false\"");
   });
 
   it("Test Case #38", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc38.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc38.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.valueBlock.isIndefiniteForm, true, "Form of encoding for value block must be \"indefinite\"");
   });
 
   it("Test Case #39", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc39.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc39.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.idBlock.isConstructed, true, "Constructed form of encoding must be found");
@@ -347,10 +347,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #40", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc40.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc40.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.idBlock.isConstructed, false, "Primitive form of encoding must be found");
@@ -358,7 +358,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #41", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc41.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc41.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -368,10 +368,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #42", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc42.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc42.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
-    assert.ok(asn1.result instanceof asn1js.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
     assert.equal(asn1.result.error, "End of input reached before message was fully decoded (inconsistent offset and length values)", "Error message does not match");
     assert.equal("error" in asn1.result.valueBlock, true, "Error information must exists inside ASN.1 value block");
@@ -382,10 +382,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #43", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc43.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc43.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
-    assert.ok(asn1.result instanceof asn1js.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
     assert.equal(asn1.result.error, "End of input reached before message was fully decoded (inconsistent offset and length values)", "Error message does not match");
     assert.equal("error" in asn1.result.valueBlock, true, "Error information must exists inside ASN.1 value block");
@@ -396,10 +396,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #44", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc44.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc44.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.idBlock.isConstructed, false, "Primitive form of encoding must be found");
@@ -407,10 +407,10 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #45", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc45.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc45.ber")));
 
     assert.notEqual(asn1.offset, -1, "Initial ASN.1 parsed unsuccessfully");
-    assert.ok(asn1.result instanceof asn1js.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.OctetString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal(asn1.result.warnings.length, 0, "Should be no warnings");
     assert.equal(asn1.result.error.length, 0, "Should be no errors");
     assert.equal(asn1.result.idBlock.isConstructed, true, "Constructive form of encoding must be found");
@@ -418,7 +418,7 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #46", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc46.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc46.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
@@ -428,24 +428,24 @@ context("ASN.1:2008 TestSuite Tests", () => {
   });
 
   it("Test Case #47", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc47.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc47.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
-    assert.ok(asn1.result instanceof asn1js.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
     assert.equal(asn1.result.error, "EndOfContent is unexpected, BIT STRING may consists of BIT STRINGs only", "Error message does not match");
     assert.equal("error" in asn1.result.valueBlock, true, "Error information must exists inside ASN.1 value block");
     assert.equal(asn1.result.valueBlock.error, "EndOfContent is unexpected, BIT STRING may consists of BIT STRINGs only", "Error message inside value block does not match");
 
     assert.equal(asn1.result.valueBlock.value.length, 4, "Value block must have 4 values");
-    assert.equal((asn1.result.valueBlock.value[1].constructor as typeof asn1js.EndOfContent).NAME, asn1js.EndOfContent.blockName(), "Second value in value block must be \"EndOfContent\"");
+    assert.equal((asn1.result.valueBlock.value[1].constructor as typeof asn1ts.EndOfContent).NAME, asn1ts.EndOfContent.blockName(), "Second value in value block must be \"EndOfContent\"");
   });
 
   it("Test Case #48", () => {
-    const asn1 = asn1js.fromBER(fs.readFileSync(path.join(testDir, "tc48.ber")));
+    const asn1 = asn1ts.fromBER(fs.readFileSync(path.join(testDir, "tc48.ber")));
 
     assert.equal(asn1.offset, -1, "Initial ASN.1 should be parsed with error");
-    assert.ok(asn1.result instanceof asn1js.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
+    assert.ok(asn1.result instanceof asn1ts.BitString, `asn1.result type is incorrect '${asn1.result.constructor.name}'`);
     assert.equal("error" in asn1.result, true, "Error information must exists inside ASN.1 result");
     assert.equal(asn1.result.error, "Unused bits for BitString must be in range 0-7", "Error message does not match");
     assert.equal("error" in asn1.result.valueBlock, true, "Error information must exists inside ASN.1 value block");

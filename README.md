@@ -6,7 +6,7 @@ Abstract Syntax Notation One (ASN.1) is a standard and notation that describes r
 Yury Strozhevsky, GMO GlobalSign and Peculiar Ventures are the authors of the library. estos extends this library as some bits and pieces have been missing. To get to know the additions see [What has been added by estos] below
 
 ## Introduction
-[ASN1.ts] is the first library for [BER] encoding/decoding in Javascript designed for browser use. [BER] is the basic encoding rules for [ASN.1] that all others are based on, [DER] is the encoding rules used by PKI applications - it is a subset of [BER]. The [ASN1.ts] library was tested against [freely available ASN.1:2008 test suite], with some limitations related to JavaScript language. 
+[ASN1.ts] is the first library for [BER] encoding/decoding in Javascript designed for browser use. [BER] is the basic encoding rules for [ASN.1] that all others are based on, [DER] is the encoding rules used by PKI applications - it is a subset of [BER]. The [ASN1.ts] library was tested against [freely available ASN.1:2008 test suite], with some limitations related to JavaScript language.
 
 ## Features of the library
 * Based on latest features of JavaScript language from ES2015 standard;
@@ -24,7 +24,7 @@ Yury Strozhevsky, GMO GlobalSign and Peculiar Ventures are the authors of the li
 * Has special types to work with ASN.1 schemas:
   * Any
   * Choice
-  * Repeated 
+  * Repeated
 * User can name any block inside ASN.1 schema and easily get information by name;
 * Ability to parse internal data inside a primitively encoded data types and automatically validate it against special schema;
 * All types inside library are dynamic;
@@ -44,7 +44,7 @@ Yury Strozhevsky, GMO GlobalSign and Peculiar Ventures are the authors of the li
 ## Examples
 
 When playing around an online asn1 ber decoder is a helpfull tool to have on hand.
-e.g. https://lapo.it/asn1js
+e.g. https://lapo.it/asn1ts
 
 ### How to create a simple ASN structures
 ```typescript
@@ -146,7 +146,7 @@ Check the test directory as these contain use case driven tests for different sc
 ## Developing
 * Use Visual Studio Code, have the "Mocha Test Explorer" installed
 
-## Related source code 
+## Related source code
 * [asn1.js](https://github.com/PeculiarVentures/ASN1.js) - the "father" of [ASN1js] project;
 * [C++ ASN1:2008 BER coder/decoder](https://github.com/YuryStrozhevsky/C-plus-plus-ASN.1-2008-coder-decoder) - the "father" of [ASN1js] project;
 * [Freely available ASN.1:2008 test suite](https://github.com/YuryStrozhevsky/ASN1-2008-free-test-suite) - the suite which can help you to validate (and better understand) any ASN.1 coder/decoder;

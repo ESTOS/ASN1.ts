@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import * as asn1js from "../src";
+import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
 
 /**
@@ -9,7 +9,7 @@ import * as pvtsutils from "pvtsutils";
  * @returns the hex BER encoded value
  */
 function encodeReal(value: number): string {
-    const real = new asn1js.Real({value});
+    const real = new asn1ts.Real({value});
     const data = real.toBER();
     return pvtsutils.Convert.ToHex(data);
 }
@@ -22,8 +22,8 @@ function encodeReal(value: number): string {
  */
 function decodeReal(value: string): number | undefined {
     const data = pvtsutils.Convert.FromHex(value);
-    const result = asn1js.fromBER(data);
-    if(result.result instanceof asn1js.Real)
+    const result = asn1ts.fromBER(data);
+    if(result.result instanceof asn1ts.Real)
         return result.result.valueBlock.value;
     return undefined;
 }

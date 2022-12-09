@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
-import * as asn1js from "../src";
+import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
 import { HexBlockParams } from "../src";
 import { ILocalIdentificationBlock } from "../src/internals/LocalIdentificationBlock";
@@ -24,23 +24,23 @@ function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
  * @param idblock the idblock if we are recursing and the sequence shall get added optionally
  * @returns the asn1 sequence object
  */
-function getSequence(getschema: boolean, addoptionals?: boolean, recurive?: number, idBlock?: Partial<ILocalIdentificationBlock> & HexBlockParams): asn1js.Sequence {
-    const seq = new asn1js.Sequence({
+function getSequence(getschema: boolean, addoptionals?: boolean, recurive?: number, idBlock?: Partial<ILocalIdentificationBlock> & HexBlockParams): asn1ts.Sequence {
+    const seq = new asn1ts.Sequence({
         name: "sequence",
         idBlock: idBlock,
         value: [
-            new asn1js.Utf8String({name: "string", ...(!getschema && { value: "string" }) }),
-            new asn1js.Integer({name: "integer", ...(!getschema && { value: 1 }) }),
-            new asn1js.Boolean({name: "boolean", ...(!getschema && { value: true }) }),
+            new asn1ts.Utf8String({name: "string", ...(!getschema && { value: "string" }) }),
+            new asn1ts.Integer({name: "integer", ...(!getschema && { value: 1 }) }),
+            new asn1ts.Boolean({name: "boolean", ...(!getschema && { value: true }) }),
         ]
     });
 
     const value = seq.valueBlock.value;
 
     if(addoptionals) {
-        value.push(new asn1js.Utf8String({name: "optional0",  ...(!getschema && { value: "optional0" }), idBlock: {optionalID: 0}}));
-        value.push(new asn1js.Integer({name: "optional1",  ...(!getschema && { value: 2 }), idBlock: {optionalID: 1}}));
-        value.push(new asn1js.Boolean({name: "optional2",  ...(!getschema && { value: false }), idBlock: {optionalID: 2}}));
+        value.push(new asn1ts.Utf8String({name: "optional0",  ...(!getschema && { value: "optional0" }), idBlock: {optionalID: 0}}));
+        value.push(new asn1ts.Integer({name: "optional1",  ...(!getschema && { value: 2 }), idBlock: {optionalID: 1}}));
+        value.push(new asn1ts.Boolean({name: "optional2",  ...(!getschema && { value: false }), idBlock: {optionalID: 2}}));
     }
 
     if (recurive) {
@@ -74,7 +74,7 @@ context("validateSchema implementation tests", () => {
         const seq = getSequence(false, true, -2);
         const ber = seq.toBER();
         const schema = getSequence(true, true, -2);
-        const result = asn1js.verifySchema(ber, schema);
+        const result = asn1ts.verifySchema(ber, schema);
         assert.equal(result.verified, true, "Schema validation failed");
     });
 
@@ -82,7 +82,7 @@ context("validateSchema implementation tests", () => {
         const seq = getSequence(false, true, -2);
         const ber = seq.toBER();
         const schema = getSequence(true, false, -2);
-        const result = asn1js.verifySchema(ber, schema, new asn1js.VerifyOptions(true, true));
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true, true));
         assert.equal(result.verified, true, "Schema validation failed but should have succeeded");
     });
 
@@ -90,7 +90,7 @@ context("validateSchema implementation tests", () => {
         const seq = getSequence(false, true, -2);
         const ber = seq.toBER();
         const schema = getSequence(true, false, -2);
-        const result = asn1js.verifySchema(ber, schema, new asn1js.VerifyOptions(true, false));
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true, false));
         assert.equal(result.verified, false, "Schema validation succeeded but should have failed");
         if (!result.verified) {
             assert.equal(result.errors?.length, 1, "Should contain one error");
@@ -105,27 +105,27 @@ context("validateSchema implementation tests", () => {
         const seq = getSequence(false, true, -1);
         const ber = seq.toBER();
         const schema = getSequence(true, true, -1);
-        const result = asn1js.verifySchema(ber, schema);
+        const result = asn1ts.verifySchema(ber, schema);
         assert.ok(result.verified, "Schema validation failed");
         const sequence = result.result;
-        if(!asn1js.Sequence.typeGuard(sequence)) {
+        if(!asn1ts.Sequence.typeGuard(sequence)) {
             assert("Result is not a sequence");
             return;
         }
         assert.ok(sequence, "Schema validation result is not a sequence");
         if (sequence) {
-            const child = sequence.getTypedValueByName(asn1js.Sequence, "sequence");
+            const child = sequence.getTypedValueByName(asn1ts.Sequence, "sequence");
             assert.ok(child, "Child not found");
             if (child) {
-                const string = child.getTypedValueByName(asn1js.Utf8String, "string");
-                const integer = child.getTypedValueByName(asn1js.Integer, "integer");
-                const boolean = child.getTypedValueByName(asn1js.Boolean, "boolean");
+                const string = child.getTypedValueByName(asn1ts.Utf8String, "string");
+                const integer = child.getTypedValueByName(asn1ts.Integer, "integer");
+                const boolean = child.getTypedValueByName(asn1ts.Boolean, "boolean");
                 assert.equal(string?.getValue(), "string");
                 assert.equal(integer?.getValue(), 1);
                 assert.equal(boolean?.getValue(), true);
-                const optstring = child.getTypedValueByName(asn1js.Utf8String, "optional0");
-                const optinteger = child.getTypedValueByName(asn1js.Integer, "optional1");
-                const optboolean = child.getTypedValueByName(asn1js.Boolean, "optional2");
+                const optstring = child.getTypedValueByName(asn1ts.Utf8String, "optional0");
+                const optinteger = child.getTypedValueByName(asn1ts.Integer, "optional1");
+                const optboolean = child.getTypedValueByName(asn1ts.Boolean, "optional2");
                 assert.equal(optstring?.getValue(), "optional0");
                 assert.equal(optinteger?.getValue(), 2);
                 assert.equal(optboolean?.getValue(), false);
@@ -146,7 +146,7 @@ context("validateSchema implementation tests", () => {
         assert.ok(sizebefore - 1 === values.length, "Element has not been removed (not found)");
         const ber = seq.toBER();
         const schema = getSequence(true, true, -1);
-        const result = asn1js.verifySchema(ber, schema);
+        const result = asn1ts.verifySchema(ber, schema);
         assert.equal(result.verified, false, "Schema validated but it should fail");
     });
 
@@ -163,7 +163,7 @@ context("validateSchema implementation tests", () => {
         }
         assert.ok(sizebefore - 1 === values.length, "Element has not been removed (not found)");
         const ber = seq.toBER();
-        const result = asn1js.verifySchema(ber, schema);
+        const result = asn1ts.verifySchema(ber, schema);
         assert.equal(result.verified, false, "Schema validated but it should fail");
     });
 
@@ -175,8 +175,8 @@ context("validateSchema implementation tests", () => {
         values.pop();
         assert.ok(sizebefore - 1 === values.length, "Element has not been removed");
         const ber = seq.toBER();
-        const options = new asn1js.VerifyOptions(true, false);
-        const result = asn1js.verifySchema(ber, schema, options);
+        const options = new asn1ts.VerifyOptions(true, false);
+        const result = asn1ts.verifySchema(ber, schema, options);
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if (!result.verified) {
             assert.equal(result.errors?.length, 1, "Should contain one error");
@@ -209,8 +209,8 @@ context("validateSchema implementation tests", () => {
         schemaChild2.valueBlock.value.pop();
         schema.valueBlock.value.push(schemaChild2);
 
-        const options = new asn1js.VerifyOptions(true, false);
-        const result = asn1js.verifySchema(ber, schema, options);
+        const options = new asn1ts.VerifyOptions(true, false);
+        const result = asn1ts.verifySchema(ber, schema, options);
 
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if (!result.verified) {
@@ -247,8 +247,8 @@ context("validateSchema implementation tests", () => {
         schemaChild2.valueBlock.value.pop();
         schema.valueBlock.value.push(schemaChild2);
 
-        const options = new asn1js.VerifyOptions(false, false);
-        const result = asn1js.verifySchema(ber, schema, options);
+        const options = new asn1ts.VerifyOptions(false, false);
+        const result = asn1ts.verifySchema(ber, schema, options);
 
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if (!result.verified) {
@@ -261,35 +261,35 @@ context("validateSchema implementation tests", () => {
     });
 
     it ("validate an object against a schema with embedded any", () => {
-          const payload = new asn1js.Sequence({
+          const payload = new asn1ts.Sequence({
             name: "payload",
             value: [
-                new asn1js.Utf8String({name: "string",  value: "string"  }),
-                new asn1js.Integer({name: "integer", value: 1 }),
-                new asn1js.Boolean({name: "boolean", value: true }),
+                new asn1ts.Utf8String({name: "string",  value: "string"  }),
+                new asn1ts.Integer({name: "integer", value: 1 }),
+                new asn1ts.Boolean({name: "boolean", value: true }),
             ]
         });
-        const data = new asn1js.Sequence({
+        const data = new asn1ts.Sequence({
             name: "body",
             value: [
-                new asn1js.Integer({value:1}),
+                new asn1ts.Integer({value:1}),
                 payload
             ]
         });
 
-        const schema = new asn1js.Sequence({
+        const schema = new asn1ts.Sequence({
             name: "sequence",
             value: [
-                new asn1js.Integer({name: "int"}),
-                new asn1js.Any({name: "any"})
+                new asn1ts.Integer({name: "int"}),
+                new asn1ts.Any({name: "any"})
             ]
         });
 
         const ber = data.toBER();
-        const result = asn1js.verifySchema(ber, schema);
+        const result = asn1ts.verifySchema(ber, schema);
         assert.ok(result.verified, "Schema verification failed");
-        if (result.verified && result.result instanceof asn1js.Sequence) {
-            const int = result.result.getTypedValueByName(asn1js.Integer, "int");
+        if (result.verified && result.result instanceof asn1ts.Sequence) {
+            const int = result.result.getTypedValueByName(asn1ts.Integer, "int");
             const any = result.result.getValueByName("any");
             assert.ok(int, "missing int value in result");
             assert.ok(any, "missing any value in result");

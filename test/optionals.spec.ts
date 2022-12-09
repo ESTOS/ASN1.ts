@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
-import * as asn1js from "../src";
+import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
 
 /**
@@ -13,29 +13,29 @@ import * as pvtsutils from "pvtsutils";
  * @param brokensorted to test invalid sorted optional values
  * @returns the asn1 sequence object
  */
-function getSequence(getschema: boolean, value0?: string, value1?: number, value2?: boolean, brokensorted?: boolean): asn1js.Sequence {
-    const seq = new asn1js.Sequence({
+function getSequence(getschema: boolean, value0?: string, value1?: number, value2?: boolean, brokensorted?: boolean): asn1ts.Sequence {
+    const seq = new asn1ts.Sequence({
         value: [
-            new asn1js.Utf8String({name: "string", ...(!getschema && { value: "string"}) }),
-            new asn1js.Boolean({name: "mytest", ...(!getschema && { value: true}) }),
+            new asn1ts.Utf8String({name: "string", ...(!getschema && { value: "string"}) }),
+            new asn1ts.Boolean({name: "mytest", ...(!getschema && { value: true}) }),
         ]
     });
 
     const value = seq.valueBlock.value;
     if(brokensorted) {
         if (getschema || value0 !== undefined)
-            value.push(new asn1js.Utf8String({name: "optional0", ...(!getschema && { value: value0 }), idBlock: {optionalID: 0}}));
+            value.push(new asn1ts.Utf8String({name: "optional0", ...(!getschema && { value: value0 }), idBlock: {optionalID: 0}}));
         if (getschema || value2 !== undefined)
-            value.push(new asn1js.Boolean({name: "optional2", ...(!getschema && { value: value2 }), idBlock: {optionalID: 2}}));
+            value.push(new asn1ts.Boolean({name: "optional2", ...(!getschema && { value: value2 }), idBlock: {optionalID: 2}}));
         if (getschema || value1 !== undefined)
-            value.push(new asn1js.Integer({name: "optional1", ...(!getschema && { value: value1 }), idBlock: {optionalID: 1}}));
+            value.push(new asn1ts.Integer({name: "optional1", ...(!getschema && { value: value1 }), idBlock: {optionalID: 1}}));
     } else {
         if (getschema || value0 !== undefined)
-            value.push(new asn1js.Utf8String({name: "optional0", ...(!getschema && { value: value0 }), idBlock: {optionalID: 0}}));
+            value.push(new asn1ts.Utf8String({name: "optional0", ...(!getschema && { value: value0 }), idBlock: {optionalID: 0}}));
         if (getschema || value1 !== undefined)
-            value.push(new asn1js.Integer({name: "optional1", ...(!getschema && { value: value1 }), idBlock: {optionalID: 1}}));
+            value.push(new asn1ts.Integer({name: "optional1", ...(!getschema && { value: value1 }), idBlock: {optionalID: 1}}));
         if (getschema || value2 !== undefined)
-            value.push(new asn1js.Boolean({name: "optional2", ...(!getschema && { value: value2 }), idBlock: {optionalID: 2}}));
+            value.push(new asn1ts.Boolean({name: "optional2", ...(!getschema && { value: value2 }), idBlock: {optionalID: 2}}));
     }
     return seq;
 }
@@ -45,25 +45,25 @@ function getSequence(getschema: boolean, value0?: string, value1?: number, value
  *
  * Loops a value from 0 to maximum
  *
- * value%3 == 0 -> asn1js.boolean { value: value%2 ? true : false }
- * value%3 == 1 -> asn1js.Integer { value: value}
- * value%3 == 2 -> asn1js.Utf8String { value: `${value}`}
+ * value%3 == 0 -> asn1ts.boolean { value: value%2 ? true : false }
+ * value%3 == 1 -> asn1ts.Integer { value: value}
+ * value%3 == 2 -> asn1ts.Utf8String { value: `${value}`}
  */
-function getLargeSequence(getschema: boolean, maxium: number): asn1js.Sequence {
-        const seq = new asn1js.Sequence({
+function getLargeSequence(getschema: boolean, maxium: number): asn1ts.Sequence {
+        const seq = new asn1ts.Sequence({
             value: [
-                new asn1js.Utf8String({name: "string", ...(!getschema && { value: "string"}) }),
-                new asn1js.Boolean({name: "mytest", ...(!getschema && { value: true}) }),
+                new asn1ts.Utf8String({name: "string", ...(!getschema && { value: "string"}) }),
+                new asn1ts.Boolean({name: "mytest", ...(!getschema && { value: true}) }),
             ]
         });
         for(let value = 0; value < maxium; value++) {
             const mode = value % 3;
             if (mode === 0)
-                seq.valueBlock.value.push(new asn1js.Boolean({name: `optional_${value}`, ...(!getschema && { value: value % 2 ? true : false }), idBlock: {optionalID: value}}));
+                seq.valueBlock.value.push(new asn1ts.Boolean({name: `optional_${value}`, ...(!getschema && { value: value % 2 ? true : false }), idBlock: {optionalID: value}}));
             else if (mode === 1)
-                seq.valueBlock.value.push(new asn1js.Integer({name: `optional_${value}`, ...(!getschema && { value: value }), idBlock: {optionalID: value}}));
+                seq.valueBlock.value.push(new asn1ts.Integer({name: `optional_${value}`, ...(!getschema && { value: value }), idBlock: {optionalID: value}}));
             else if (mode === 2)
-                seq.valueBlock.value.push(new asn1js.Utf8String({name: `optional_${value}`, ...(!getschema && { value: `${value}` }), idBlock: {optionalID: value}}));
+                seq.valueBlock.value.push(new asn1ts.Utf8String({name: `optional_${value}`, ...(!getschema && { value: `${value}` }), idBlock: {optionalID: value}}));
         }
         return seq;
 }
@@ -88,9 +88,9 @@ context("Optional parameter implementation tests", () => {
     it ("decode sequence with one optional set", () => {
         const buf = pvtsutils.Convert.FromHex(optional2Set);
         const schema = getSequence(true);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
-        const res2 = result.result.getTypedValueByName(asn1js.Boolean, "optional2");
+        const res2 = result.result.getTypedValueByName(asn1ts.Boolean, "optional2");
         assert.notEqual(res2, undefined, "Result undefined");
         if(res2)
             assert.equal(res2.getValue(), true, "Result not true");
@@ -106,11 +106,11 @@ context("Optional parameter implementation tests", () => {
     it ("decode sequence with all optionals set", () => {
         const buf = pvtsutils.Convert.FromHex(allOptionalsSet);
         const schema = getSequence(true);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
-        const res0 = result.result.getTypedValueByName(asn1js.Utf8String, "optional0");
-        const res1 = result.result.getTypedValueByName(asn1js.Integer, "optional1");
-        const res2 = result.result.getTypedValueByName(asn1js.Boolean, "optional2");
+        const res0 = result.result.getTypedValueByName(asn1ts.Utf8String, "optional0");
+        const res1 = result.result.getTypedValueByName(asn1ts.Integer, "optional1");
+        const res2 = result.result.getTypedValueByName(asn1ts.Boolean, "optional2");
         assert.notEqual(res0, undefined, "Result0 undefined");
         assert.notEqual(res1, undefined, "Result1 undefined");
         assert.notEqual(res2, undefined, "Result2 undefined");
@@ -132,23 +132,23 @@ context("Optional parameter implementation tests", () => {
     it ("decode a sequence with optional parameters > 31 (multiple tag number fields)", () => {
         const buf = pvtsutils.Convert.FromHex(multipleOptionalsSet);
         const schema = getLargeSequence(true, 40);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
         for(let value = 0; value < 40; value++) {
             const mode = value % 3;
             if (mode === 0) {
-                const property = result.result.getTypedValueByName(asn1js.Boolean, `optional_${value}`);
+                const property = result.result.getTypedValueByName(asn1ts.Boolean, `optional_${value}`);
                 assert.notEqual(property, undefined, "Missing value in result");
                 if (property)
                     assert.equal(property.getValue(), value % 2 ? true : false, "Value did not match the expected");
             } else if (mode === 1) {
-                const property = result.result.getTypedValueByName(asn1js.Integer, `optional_${value}`);
+                const property = result.result.getTypedValueByName(asn1ts.Integer, `optional_${value}`);
                 assert.notEqual(property, undefined, "Missing value in result");
                 if (property)
                     assert.equal(property.getValue(), value, "Value did not match the expected");
-              /**  value.push(new asn1js.Integer({name: `optional_${iOptional}`, ...(!getschema && { value: iOptional }), idBlock: {optionalID: iOptional}})); */
+              /**  value.push(new asn1ts.Integer({name: `optional_${iOptional}`, ...(!getschema && { value: iOptional }), idBlock: {optionalID: iOptional}})); */
             }else if (mode === 2) {
-                const property = result.result.getTypedValueByName(asn1js.Utf8String, `optional_${value}`);
+                const property = result.result.getTypedValueByName(asn1ts.Utf8String, `optional_${value}`);
                 assert.notEqual(property, undefined, "Missing value in result");
                 if (property)
                     assert.equal(property.getValue(), `${value}`, "Value did not match the expected");
@@ -160,7 +160,7 @@ context("Optional parameter implementation tests", () => {
     it ("access existing optional property by name", () => {
         const buf = pvtsutils.Convert.FromHex(optional2Set);
         const schema = getSequence(true);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
         const obj = result.result.getValueByName("optional2");
         assert.ok(obj !== undefined, "Object not found");
@@ -169,9 +169,9 @@ context("Optional parameter implementation tests", () => {
     it ("access existing optional property by name and type", () => {
         const buf = pvtsutils.Convert.FromHex(optional2Set);
         const schema = getSequence(true);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
-        const obj = result.result.getTypedValueByName(asn1js.Boolean, "optional2");
+        const obj = result.result.getTypedValueByName(asn1ts.Boolean, "optional2");
         assert.ok(obj !== undefined, "Object not found");
         if (obj)
             assert.equal(obj.getValue(), true, "Property not true");
@@ -180,7 +180,7 @@ context("Optional parameter implementation tests", () => {
     it ("access not existing optional property by name", () => {
         const buf = pvtsutils.Convert.FromHex(optional2Set);
         const schema = getSequence(true);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
         const obj = result.result.getValueByName("optional1");
         assert.equal(obj, undefined, "Object not undefined");
@@ -189,18 +189,18 @@ context("Optional parameter implementation tests", () => {
     it ("access not existing optional property by name and type by wrong name", () => {
         const buf = pvtsutils.Convert.FromHex(optional2Set);
         const schema = getSequence(true);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
-        const obj = result.result.getTypedValueByName(asn1js.Boolean, "optional1");
+        const obj = result.result.getTypedValueByName(asn1ts.Boolean, "optional1");
         assert.equal(obj, undefined, "Object not undefined");
     });
 
     it ("access not existing optional property by name and type by wrong type", () => {
         const buf = pvtsutils.Convert.FromHex(optional2Set);
         const schema = getSequence(true);
-        const result = asn1js.verifySchema(buf, schema);
+        const result = asn1ts.verifySchema(buf, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
-        const obj = result.result.getTypedValueByName(asn1js.Utf8String, "optional2");
+        const obj = result.result.getTypedValueByName(asn1ts.Utf8String, "optional2");
         assert.equal(obj, undefined, "Object not undefined");
     });
 
@@ -209,11 +209,11 @@ context("Optional parameter implementation tests", () => {
         const schema = getSequence(true, undefined, undefined, undefined, true);
         const data = getSequence(false, "string", 1, true, false);
         const encoded = data.toBER();
-        const result = asn1js.verifySchema(encoded, schema);
+        const result = asn1ts.verifySchema(encoded, schema);
         assert.ok(result.verified, "Could not verify encoded data with schema");
-        const obj1 = result.result.getTypedValueByName(asn1js.Utf8String, "optional0");
-        const obj2 = result.result.getTypedValueByName(asn1js.Integer, "optional1");
-        const obj3 = result.result.getTypedValueByName(asn1js.Boolean, "optional2");
+        const obj1 = result.result.getTypedValueByName(asn1ts.Utf8String, "optional0");
+        const obj2 = result.result.getTypedValueByName(asn1ts.Integer, "optional1");
+        const obj3 = result.result.getTypedValueByName(asn1ts.Boolean, "optional2");
         assert.notEqual(obj1, undefined, "Object not undefined");
         if(obj1)
             assert.equal(obj1.getValue(), "string", "wrong value");

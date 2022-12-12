@@ -46,6 +46,21 @@ export class BaseBlock<T extends ValueBlock = ValueBlock, J extends ValueBlockJs
   public lenBlock: LocalLengthBlock;
   public valueBlock: T;
   public name: string;
+
+  /*
+    The property choiceName is filled if the value has been taken from a certain choice option
+    value CHOICE
+    {
+      stringdata UTF8String,
+      binarydata OCTET STRING,
+	    integerdata INTEGER
+	  }
+    After validating the schema the choice property is accessible by "value" thus the choice option is burried and no longer visible
+    Therefore a second name is needed to show the choice selection after validation.
+    If the choice is a top level element choiceName and name point to the same
+  */
+  public choiceName?: string;
+
   public optional: boolean;
   public primitiveSchema?: BaseBlock;
 

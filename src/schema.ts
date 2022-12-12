@@ -240,6 +240,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
         const errors = compareSchemaInternal(root, schema, options, newContext, inputData);
         if (errors.ok) {
           inputData.name = schema.name;
+          inputData.choiceName = schema.name;
           inputData.optional = schema.optional;
           return errors;
         } else if (bContextSpecific) {

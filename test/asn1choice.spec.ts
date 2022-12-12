@@ -19,20 +19,18 @@ function getChoice(getschema: boolean, bAddString: boolean, bAddBoolean: boolean
     if(getschema) {
         const choice = new asn1ts.Choice({name: "choice"});
         if (bAddString)
-            choice.value.push(new asn1ts.Utf8String());
+            choice.value.push(new asn1ts.Utf8String({name: "stringdata"}));
         if (bAddBoolean)
-            choice.value.push(new asn1ts.Boolean());
+            choice.value.push(new asn1ts.Boolean({name: "booleandata"}));
         if (bAddInteger)
-            choice.value.push(new asn1ts.Integer());
+            choice.value.push(new asn1ts.Integer({name: "integerdata"}));
         const seq = new asn1ts.Sequence({
             name: "base",
             value: [choice]
         });
         return seq;
     } else {
-        const seq = new asn1ts.Sequence({
-            name: "base"
-        });
+        const seq = new asn1ts.Sequence();
         if (bAddString)
             seq.valueBlock.value.push(new asn1ts.Utf8String({value: "optionalstring" }));
         if (bAddBoolean)
@@ -53,6 +51,7 @@ context("Asn1Choice implementation tests", () => {
         assert.ok(result.verified, "Schema verification failed");
         const value = result.result.getTypedValueByName(asn1ts.Utf8String, "choice");
         assert.ok(value, "Property not found");
+        assert.equal(value.choiceName, "stringdata");
         assert.equal(value.getValue(), "optionalstring");
     });
 
@@ -71,39 +70,34 @@ context("Asn1Choice implementation tests", () => {
         }
     });
 
-    it("test choice on root level (using a constructed item that embeds the choice)", () => {
+    it("test choice on root level", () => {
         /** All choices would match the asn1 type but the type exposed the optional context-specific */
         /** Thus the context needs to be found by id and not by matching schema */
-        const schema = new asn1ts.Constructed({
-            name: "constructed",
-            idBlock: {
-                tagClass: ETagClass.CONTEXT_SPECIFIC,
-            },
-            value: [new asn1ts.Choice({
-                value: [
-                    new asn1ts.Sequence({name: "first",
-                         idBlock: {optionalID: 1},
-                         value: [
-                            new asn1ts.Utf8String({name: "first"}),
-                            new asn1ts.Boolean({name: "first", optional: true})
-                        ]
-                    }),
-                    new asn1ts.Sequence({name: "second",
-                         idBlock: {optionalID: 2},
-                         value: [
-                            new asn1ts.Utf8String({name: "second"}),
-                            new asn1ts.Integer({name: "second", optional: true})
-                        ]
-                    }),
-                    new asn1ts.Sequence({name: "third",
-                         idBlock: {optionalID: 3},
-                         value: [
-                            new asn1ts.Utf8String({name: "third"}),
-                            new asn1ts.Utf8String({name: "third", optional: true})
-                        ]
-                    }),
-                ]
-            })]
+        const schema = new asn1ts.Choice({
+            name: "choice",
+            value: [
+                new asn1ts.Sequence({name: "firstoption",
+                     idBlock: {optionalID: 1},
+                     value: [
+                        new asn1ts.Utf8String({name: "firststring"}),
+                        new asn1ts.Boolean({name: "firstboolean", optional: true})
+                    ]
+                }),
+                new asn1ts.Sequence({name: "secondoption",
+                     idBlock: {optionalID: 2},
+                     value: [
+                        new asn1ts.Utf8String({name: "secondstring"}),
+                        new asn1ts.Integer({name: "secondinteger", optional: true})
+                    ]
+                }),
+                new asn1ts.Sequence({name: "thirdoption",
+                     idBlock: {optionalID: 3},
+                     value: [
+                        new asn1ts.Utf8String({name: "thirdstring1"}),
+                        new asn1ts.Utf8String({name: "thirdstring2", optional: true})
+                    ]
+                }),
+            ]
         });
         const seq = new asn1ts.Constructed({
             name: "constructed",
@@ -124,10 +118,11 @@ context("Asn1Choice implementation tests", () => {
         const result = asn1ts.verifySchema(data, schema, undefined, context);
         assert.equal(result.verified, true, "Schema verification failed");
         if (result.verified) {
-            assert.equal(result.result.name, "second", "Choice option not found");
-            const utf8 = result.result.getTypedValueByName(asn1ts.Utf8String, "second");
-            assert.ok(utf8, "Sequence value not found");
-            assert.equal(utf8.getValue(), "teststring", "Wrong value found");
+            assert.equal(result.result.name, "secondoption");
+            assert.equal(result.result.choiceName, "secondoption");
+            const string = result.result.getTypedValueByName(asn1ts.Utf8String, "secondstring");
+            assert.ok(string);
+            assert.equal(string.getValue(), "teststring", "Wrong value found");
         }
     });
 

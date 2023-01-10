@@ -3,16 +3,17 @@ import * as pvtsutils from "pvtsutils";
 import { IS_CONSTRUCTED, ID_BLOCK, FROM_BER, TO_BER, TAG_CLASS, TAG_NUMBER, IS_HEX_ONLY, VALUE_HEX_VIEW } from "./internals/constants";
 import { Any } from "./Any";
 import { Choice } from "./Choice";
-import { Repeated } from "./Repeated";
 import { Sequence } from "./Sequence";
-import { getTypeForIDBlock, localFromBER, TnewAsnType } from "./parser";
-import { AsnType, ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { getTypeForIDBlock, localFromBER } from "./parser";
+import { AsnType, ETagClass, typeStore } from "./TypeStore";
 import { ILocalConstructedValueBlock } from "./internals/LocalConstructedValueBlock";
 import { LocalIdentificationBlock } from "./internals/LocalIdentificationBlock";
 import { LocalLengthBlock } from "./internals/LocalLengthBlock";
 import { BaseBlock } from "./BaseBlock";
+import { SequenceOf } from "./SequenceOf";
+import { SetOf } from "./SetOf";
 
-export type AsnSchemaType = AsnType | Any | Choice | Repeated;
+export type AsnSchemaType = AsnType | Any | Choice | SequenceOf | SetOf;
 
 export interface CompareSchemaSuccess {
   verified: true;
@@ -113,6 +114,7 @@ export enum ESchemaError {
   /** If you add new Values !!! Add them to the getTextForError as well !!! */
 }
 
+/* istanbul ignore next */
 function getTextForError(error: ESchemaError): string {
   switch (error) {
     case ESchemaError.NO_ERROR:
@@ -256,12 +258,8 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
   //#endregion
 
    //#region Special case for Repeated schema element type
-  else if (inputSchema instanceof Repeated) {
-    /**
-     * We iterate over the value fields and validate whether the schema matches the value data
-     */
-    if (inputData.idBlock.tagClass !== ETagClass.UNIVERSAL
-      || inputData.idBlock.tagNumber !== EUniversalTagNumber.Sequence) {
+  else if (inputSchema instanceof SequenceOf || inputSchema instanceof SetOf) {
+    if (!inputSchema.idBlock.isIdenticalType(inputData.idBlock)) {
       errors.push(new SchemaError(ESchemaError.INVALID_ASN1DATA, context));
       return errors;
     }
@@ -472,7 +470,8 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
     let maxLength = Math.max(inputSchema.valueBlock.value.length, inputValue.length);
 
     if (maxLength > 0) {
-      if (inputSchema.valueBlock.value[0] instanceof Repeated) {
+      const element = inputSchema.valueBlock.value[0];
+      if (element instanceof SequenceOf || element instanceof SetOf) {
         maxLength = inputValue.length; /** TODO debug it */
       }
     }
@@ -542,11 +541,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
                 bFound = true;
                 schema = check;
                 /** As we have a context specific attribute the type comes from the schema field */
-                let newType: TnewAsnType | undefined;
-                if (schema instanceof Repeated)
-                  newType = typeStore.Sequence;
-                else
-                  newType = getTypeForIDBlock(schema.idBlock);
+                const newType = getTypeForIDBlock(schema.idBlock);
                 if (newType) {
                   /** Create the new object matching the type of the scheme for the context spcific parameter from the input */
                   const contextualElement = new newType();

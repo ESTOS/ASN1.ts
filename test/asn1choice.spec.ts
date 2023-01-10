@@ -2,7 +2,7 @@
 import * as assert from "assert";
 import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
-import { SchemaContext } from "../src";
+import { ESchemaError, SchemaContext } from "../src";
 import { ETagClass } from "../src/TypeStore";
 
 /**
@@ -15,7 +15,6 @@ import { ETagClass } from "../src/TypeStore";
  * @returns an asn1 sequence object containing the choice
  */
 function getChoice(getschema: boolean, bAddString: boolean, bAddBoolean: boolean, bAddInteger: boolean): asn1ts.AsnType {
-
     if(getschema) {
         const choice = new asn1ts.Choice({name: "choice"});
         if (bAddString)
@@ -70,6 +69,106 @@ context("Asn1Choice implementation tests", () => {
         }
     });
 
+    it("test context specific choice with correct repeated values", () => {
+        const schema = new asn1ts.Choice({
+            name: "choice",
+            value: [
+                new asn1ts.SequenceOf({value: new asn1ts.Integer, name: "integers1", idBlock: {optionalID: 1} }),
+                new asn1ts.SequenceOf({value: new asn1ts.Utf8String, name: "strings1", idBlock: {optionalID: 2} }),
+                new asn1ts.SetOf({value: new asn1ts.Integer, name: "integers2", idBlock: {optionalID: 3} }),
+                new asn1ts.SetOf({value: new asn1ts.Utf8String, name: "strings2", idBlock: {optionalID: 4} }),
+            ]
+        });
+        const seq = new asn1ts.Constructed({
+            name: "constructed",
+            idBlock: {
+                tagClass: ETagClass.CONTEXT_SPECIFIC,
+                tagNumber: 2,
+            },
+            value: [
+                new asn1ts.Utf8String({value:"1"}),
+                new asn1ts.Utf8String({value:"2"}),
+                new asn1ts.Utf8String({value:"3"})
+            ]
+        });
+        const data = seq.toBER();
+        const hex = pvtsutils.Convert.ToHex(data);
+
+        const context = new SchemaContext();
+        context.debug = true;
+
+        const result = asn1ts.verifySchema(data, schema, undefined, context);
+        assert.equal(result.verified, true, "Schema verification failed");
+        if (result.verified)
+            assert.equal(result.result.name, "strings1");
+    });
+
+    it("test context specific choice with wrong repeated values", () => {
+        const schema = new asn1ts.Choice({
+            name: "choice",
+            value: [
+                new asn1ts.SequenceOf({value: new asn1ts.Integer, name: "integers1", idBlock: {optionalID: 1} }),
+                new asn1ts.SequenceOf({value: new asn1ts.Utf8String, name: "strings1", idBlock: {optionalID: 2} }),
+                new asn1ts.SetOf({value: new asn1ts.Integer, name: "integers2", idBlock: {optionalID: 3} }),
+                new asn1ts.SetOf({value: new asn1ts.Utf8String, name: "strings2", idBlock: {optionalID: 4} }),
+            ]
+        });
+        const seq = new asn1ts.Constructed({
+            name: "constructed",
+            idBlock: {
+                tagClass: ETagClass.CONTEXT_SPECIFIC,
+                tagNumber: 2,
+            },
+            value: [
+                new asn1ts.Utf8String({value:"1"}),
+                new asn1ts.Utf8String({value:"2"}),
+                new asn1ts.Utf8String({value:"3"}),
+                new asn1ts.Integer({value: 4})
+            ]
+        });
+        const data = seq.toBER();
+        const hex = pvtsutils.Convert.ToHex(data);
+
+        const context = new SchemaContext();
+        context.debug = true;
+
+        const result = asn1ts.verifySchema(data, schema, undefined, context);
+        assert.equal(result.verified, false, "Schema verification failed");
+        if (!result.verified) {
+            assert.equal(result.errors?.length, 1);
+            if(result.errors) {
+                const error = result.errors[0];
+                assert.equal(error.error, ESchemaError.NO_MATCHING_DATA_FOR_CHOICE);
+            }
+        }
+    });
+
+    it("test regular choice with repeated values", () => {
+        const schema = new asn1ts.Choice({
+            value: [
+                new asn1ts.SetOf({value: new asn1ts.Utf8String, name: "strings1"}),
+                new asn1ts.SequenceOf({value: new asn1ts.Utf8String, name: "strings2"}),
+            ]
+        });
+        const seq = new asn1ts.Sequence({
+            value: [
+                new asn1ts.Utf8String({value:"1"}),
+                new asn1ts.Utf8String({value:"2"}),
+                new asn1ts.Utf8String({value:"3"})
+            ]
+        });
+        const data = seq.toBER();
+        const hex = pvtsutils.Convert.ToHex(data);
+
+        const context = new SchemaContext();
+        context.debug = true;
+
+        const result = asn1ts.verifySchema(data, schema, undefined, context);
+        assert.equal(result.verified, true, "Schema verification failed");
+        if (result.verified)
+            assert.equal(result.result.name, "strings2");
+    });
+
     it("test choice on root level", () => {
         /** All choices would match the asn1 type but the type exposed the optional context-specific */
         /** Thus the context needs to be found by id and not by matching schema */
@@ -113,7 +212,6 @@ context("Asn1Choice implementation tests", () => {
         const hex = pvtsutils.Convert.ToHex(data);
 
         const context = new SchemaContext();
-        context.debug = true;
 
         const result = asn1ts.verifySchema(data, schema, undefined, context);
         assert.equal(result.verified, true, "Schema verification failed");

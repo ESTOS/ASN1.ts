@@ -14,8 +14,8 @@ import { ETagClass } from "../src/TypeStore";
  * @param type the type of object we want to get a repeated schema for
  * @returns the repeated schema
  */
-function getRepeatedSchema(type: asn1ts.AsnType, params: asn1ts.RepeatedParams): asn1ts.Repeated {
-    return new asn1ts.Repeated({
+function getRepeatedSchema(type: asn1ts.AsnType, params: asn1ts.SequenceOfParams): asn1ts.SequenceOf {
+    return new asn1ts.SequenceOf({
         ...params,
         value: type
     });
@@ -118,5 +118,4 @@ context("Asn1Repeated implementation tests", () => {
             assert.equal(optional2.valueBlock.value.length, 1, "failed");
         }
     });
-
 });

@@ -50,7 +50,8 @@ export * from "./TIME";
 /** schema types */
 export * from "./Any";
 export * from "./Choice";
-export * from "./Repeated";
+export * from "./SequenceOf";
+export * from "./SetOf";
 
 /** special */
 export * from "./RawData";

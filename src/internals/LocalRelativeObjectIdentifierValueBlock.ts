@@ -1,9 +1,9 @@
-import { ViewWriter } from "../ViewWriter";
-import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock";
-import { EMPTY_BUFFER, EMPTY_STRING } from "./constants";
-import * as utils from "./utils";
-import { LocalRelativeSidValueBlockJson, LocalRelativeSidValueBlock } from "./LocalRelativeSidValueBlock";
-import { IStringConvertible } from "../types";
+import { ViewWriter } from "../ViewWriter.ts";
+import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock.ts";
+import { EMPTY_BUFFER, EMPTY_STRING } from "./constants.ts";
+import * as utils from "./utils.ts";
+import { LocalRelativeSidValueBlockJson, LocalRelativeSidValueBlock } from "./LocalRelativeSidValueBlock.ts";
+import { IStringConvertible } from "../types.ts";
 
 export interface ILocalRelativeObjectIdentifierValueBlock {
   value: string;

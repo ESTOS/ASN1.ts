@@ -1,9 +1,9 @@
 import * as pvtsutils from "pvtsutils";
 import * as pvutils from "pvutils";
-import { IBerConvertible } from "../types";
-import { EMPTY_BUFFER } from "./constants";
-import { LocalBaseBlock, LocalBaseBlockJson } from "./LocalBaseBlock";
-import { checkBufferParams } from "./utils";
+import { IBerConvertible } from "../types.ts";
+import { EMPTY_BUFFER } from "./constants.ts";
+import { LocalBaseBlock, LocalBaseBlockJson } from "./LocalBaseBlock.ts";
+import { checkBufferParams } from "./utils.ts";
 
 export interface ILocalLengthBlock {
   isIndefiniteForm: boolean;

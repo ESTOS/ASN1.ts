@@ -1,9 +1,9 @@
 import * as pvtsutils from "pvtsutils";
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { LocalRealValueBlockParams, LocalRealValueBlock, LocalRealValueBlockJson } from "./internals/LocalRealValueBlock";
-import { assertBigInt } from "./internals/utils";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
-import { ViewWriter } from "./ViewWriter";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { LocalRealValueBlockParams, LocalRealValueBlock, LocalRealValueBlockJson } from "./internals/LocalRealValueBlock.ts";
+import { assertBigInt } from "./internals/utils.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
+import { ViewWriter } from "./ViewWriter.ts";
 
 export interface RealParams extends BaseBlockParams, LocalRealValueBlockParams { }
 export type RealJson = BaseBlockJson<LocalRealValueBlockJson>;

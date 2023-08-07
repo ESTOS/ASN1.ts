@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as pvtsutils from "pvtsutils";
-import { IBerConvertible } from "./types";
-import { EMPTY_BUFFER, EMPTY_VIEW } from "./internals/constants";
-import { LocalBaseBlockConstructor } from "./internals/LocalBaseBlock";
-import { checkBufferParams } from "./internals/utils";
+import { IBerConvertible } from "./types.ts";
+import { EMPTY_BUFFER, EMPTY_VIEW } from "./internals/constants.ts";
+import { LocalBaseBlockConstructor } from "./internals/LocalBaseBlock.ts";
+import { checkBufferParams } from "./internals/utils.ts";
 
 export interface IHexBlock {
   isHexOnly: boolean;

@@ -1,6 +1,6 @@
 import * as pvtsutils from "pvtsutils";
-import { EMPTY_STRING, EMPTY_VIEW } from "./constants";
-import { IBaseIDs } from "./LocalIdentificationBlock";
+import { EMPTY_STRING, EMPTY_VIEW } from "./constants.ts";
+import { IBaseIDs } from "./LocalIdentificationBlock.ts";
 
 export interface ILocalBaseBlock {
   blockLength: number;

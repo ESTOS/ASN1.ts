@@ -1,7 +1,7 @@
-import { BaseBlock, BaseBlockParams } from "./BaseBlock";
-import { IStringConvertible } from "./types";
-import { EMPTY_STRING } from "./internals/constants";
-import { LocalStringValueBlock, LocalStringValueBlockJson, LocalStringValueBlockParams } from "./internals/LocalStringValueBlock";
+import { BaseBlock, BaseBlockParams } from "./BaseBlock.ts";
+import { IStringConvertible } from "./types.ts";
+import { EMPTY_STRING } from "./internals/constants.ts";
+import { LocalStringValueBlock, LocalStringValueBlockJson, LocalStringValueBlockParams } from "./internals/LocalStringValueBlock.ts";
 
 export interface BaseStringBlockParams extends BaseBlockParams, LocalStringValueBlockParams { }
 export type BaseStringBlockJson = LocalStringValueBlockJson;

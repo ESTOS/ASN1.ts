@@ -1,10 +1,10 @@
 import * as pvtsutils from "pvtsutils";
 import * as pvutils from "pvutils";
-import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { ValueBlockJson, ValueBlockParams } from "../ValueBlock";
-import { LocalBaseBlock } from "./LocalBaseBlock";
-import { EMPTY_BUFFER } from "./constants";
-import { checkBufferParams } from "./utils";
+import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock.ts";
+import { ValueBlockJson, ValueBlockParams } from "../ValueBlock.ts";
+import { LocalBaseBlock } from "./LocalBaseBlock.ts";
+import { EMPTY_BUFFER } from "./constants.ts";
+import { checkBufferParams } from "./utils.ts";
 
 export interface ILocalRelativeSidValueBlock {
   valueDec: number;

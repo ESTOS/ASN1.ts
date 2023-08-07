@@ -1,5 +1,5 @@
-import { LocalUniversalStringValueBlockParams, LocalUniversalStringValueBlock, LocalUniversalStringValueBlockJson } from "./internals/LocalUniversalStringValueBlockParams";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { LocalUniversalStringValueBlockParams, LocalUniversalStringValueBlock, LocalUniversalStringValueBlockJson } from "./internals/LocalUniversalStringValueBlockParams.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export type UniversalStringParams = LocalUniversalStringValueBlockParams;
 export type UniversalStringJson = LocalUniversalStringValueBlockJson;

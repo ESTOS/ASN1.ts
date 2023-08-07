@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { ViewWriter } from "../ViewWriter";
-import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { END_OF_CONTENT_NAME, OCTET_STRING_NAME } from "./constants";
-import { LocalConstructedValueBlockParams, LocalConstructedValueBlockJson, LocalConstructedValueBlock } from "./LocalConstructedValueBlock";
-import type { OctetString } from "../OctetString";
+import { ViewWriter } from "../ViewWriter.ts";
+import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock.ts";
+import { END_OF_CONTENT_NAME, OCTET_STRING_NAME } from "./constants.ts";
+import { LocalConstructedValueBlockParams, LocalConstructedValueBlockJson, LocalConstructedValueBlock } from "./LocalConstructedValueBlock.ts";
+import type { OctetString } from "../OctetString.ts";
 
 export interface ILocalOctetStringValueBlock {
   isConstructed: boolean;

@@ -1,8 +1,8 @@
-import { IAny, Any } from "./Any";
-import { BaseBlock } from "./BaseBlock";
-import { ILocalIdentificationBlockParams, LocalIdentificationBlock } from "./internals/LocalIdentificationBlock";
-import { SequenceOf } from "./SequenceOf";
-import { SetOf } from "./SetOf";
+import { IAny, Any } from "./Any.ts";
+import { BaseBlock } from "./BaseBlock.ts";
+import { ILocalIdentificationBlockParams, LocalIdentificationBlock } from "./internals/LocalIdentificationBlock.ts";
+import { SequenceOf } from "./SequenceOf.ts";
+import { SetOf } from "./SetOf.ts";
 
 export interface IChoice extends IAny {
   value: (BaseBlock | SequenceOf | SetOf | Choice)[];

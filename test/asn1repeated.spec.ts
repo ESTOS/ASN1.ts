@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
-import * as asn1ts from "../src";
+import * as asn1ts from "../src.ts";
 import * as pvtsutils from "pvtsutils";
-import { SchemaContext } from "../src";
-import { ILocalIdentificationBlockParams } from "../src/internals/LocalIdentificationBlock";
-import { localFromBER } from "../src/parser";
-import { ETagClass } from "../src/TypeStore";
+import { SchemaContext } from "../src.ts";
+import { ILocalIdentificationBlockParams } from "../src/internals/LocalIdentificationBlock.ts";
+import { localFromBER } from "../src/parser.ts";
+import { ETagClass } from "../src/TypeStore.ts";
 
 
 /**

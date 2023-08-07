@@ -1,6 +1,6 @@
-import { IAny, Any } from "./Any";
-import { ILocalIdentificationBlockParams, LocalIdentificationBlock } from "./internals/LocalIdentificationBlock";
-import { ETagClass, EUniversalTagNumber } from "./TypeStore";
+import { IAny, Any } from "./Any.ts";
+import { ILocalIdentificationBlockParams, LocalIdentificationBlock } from "./internals/LocalIdentificationBlock.ts";
+import { ETagClass, EUniversalTagNumber } from "./TypeStore.ts";
 
 export interface ISequenceOf extends IAny {
   value: Any;

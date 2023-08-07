@@ -1,7 +1,7 @@
 import * as pvtsutils from "pvtsutils";
-import { BaseBlockParams } from "../BaseBlock";
-import { BaseStringBlock } from "../BaseStringBlock";
-import { LocalSimpleStringValueBlock, LocalSimpleStringValueBlockJson, LocalSimpleStringValueBlockParams } from "./LocalSimpleStringValueBlock";
+import { BaseBlockParams } from "../BaseBlock.ts";
+import { BaseStringBlock } from "../BaseStringBlock.ts";
+import { LocalSimpleStringValueBlock, LocalSimpleStringValueBlockJson, LocalSimpleStringValueBlockParams } from "./LocalSimpleStringValueBlock.ts";
 
 export interface LocalSimpleStringBlockParams extends BaseBlockParams, LocalSimpleStringValueBlockParams { }
 export type LocalSimpleStringBlockJson = LocalSimpleStringValueBlockJson;

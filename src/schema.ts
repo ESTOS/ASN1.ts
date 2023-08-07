@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as pvtsutils from "pvtsutils";
-import { IS_CONSTRUCTED, ID_BLOCK, FROM_BER, TO_BER, TAG_CLASS, TAG_NUMBER, IS_HEX_ONLY, VALUE_HEX_VIEW } from "./internals/constants";
-import { Any } from "./Any";
-import { Choice } from "./Choice";
-import { Sequence } from "./Sequence";
-import { getTypeForIDBlock, localFromBER } from "./parser";
-import { AsnType, ETagClass, typeStore } from "./TypeStore";
-import { ILocalConstructedValueBlock } from "./internals/LocalConstructedValueBlock";
-import { LocalIdentificationBlock } from "./internals/LocalIdentificationBlock";
-import { LocalLengthBlock } from "./internals/LocalLengthBlock";
-import { BaseBlock } from "./BaseBlock";
-import { SequenceOf } from "./SequenceOf";
-import { SetOf } from "./SetOf";
+import { IS_CONSTRUCTED, ID_BLOCK, FROM_BER, TO_BER, TAG_CLASS, TAG_NUMBER, IS_HEX_ONLY, VALUE_HEX_VIEW } from "./internals/constants.ts";
+import { Any } from "./Any.ts";
+import { Choice } from "./Choice.ts";
+import { Sequence } from "./Sequence.ts";
+import { getTypeForIDBlock, localFromBER } from "./parser.ts";
+import { AsnType, ETagClass, typeStore } from "./TypeStore.ts";
+import { ILocalConstructedValueBlock } from "./internals/LocalConstructedValueBlock.ts";
+import { LocalIdentificationBlock } from "./internals/LocalIdentificationBlock.ts";
+import { LocalLengthBlock } from "./internals/LocalLengthBlock.ts";
+import { BaseBlock } from "./BaseBlock.ts";
+import { SequenceOf } from "./SequenceOf.ts";
+import { SetOf } from "./SetOf.ts";
 
 export type AsnSchemaType = AsnType | Any | Choice | SequenceOf | SetOf;
 

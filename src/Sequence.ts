@@ -1,5 +1,5 @@
-import { ConstructedParams, Constructed, ConstructedJson } from "./Constructed";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { ConstructedParams, Constructed, ConstructedJson } from "./Constructed.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export type SequenceParams = ConstructedParams;
 export type SequenceJson = ConstructedJson;

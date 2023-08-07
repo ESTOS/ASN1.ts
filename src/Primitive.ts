@@ -1,6 +1,6 @@
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { LocalPrimitiveValueBlock, LocalPrimitiveValueBlockJson, LocalPrimitiveValueBlockParams } from "./internals/LocalPrimitiveValueBlock";
-import { typeStore } from "./TypeStore";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { LocalPrimitiveValueBlock, LocalPrimitiveValueBlockJson, LocalPrimitiveValueBlockParams } from "./internals/LocalPrimitiveValueBlock.ts";
+import { typeStore } from "./TypeStore.ts";
 
 export interface PrimitiveParams extends BaseBlockParams, LocalPrimitiveValueBlockParams { }
 export type PrimitiveJson = BaseBlockJson<LocalPrimitiveValueBlockJson>;

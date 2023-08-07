@@ -1,6 +1,6 @@
 import * as pvutils from "pvutils";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
-import { IUTCTime, UTCTimeParams, UTCTimeJson, UTCTime, DateStringEncoding } from "./UTCTime";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
+import { IUTCTime, UTCTimeParams, UTCTimeJson, UTCTime, DateStringEncoding } from "./UTCTime.ts";
 
 export interface IGeneralizedTime extends IUTCTime {
   millisecond: number;

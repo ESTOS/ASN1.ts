@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock";
-import { EMPTY_STRING } from "./constants";
-import { LocalUtf8StringValueBlockParams, LocalUtf8StringValueBlockJson } from "./LocalUtf8StringValueBlock";
+import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock.ts";
+import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock.ts";
+import { EMPTY_STRING } from "./constants.ts";
+import { LocalUtf8StringValueBlockParams, LocalUtf8StringValueBlockJson } from "./LocalUtf8StringValueBlock.ts";
 
 export interface ILocalStringValueBlock {
   value: string;

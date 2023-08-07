@@ -1,12 +1,12 @@
 import * as pvtsutils from "pvtsutils";
-import { LocalBaseBlockJson } from "./LocalBaseBlock";
-import { EMPTY_BUFFER, END_OF_CONTENT_NAME } from "./constants";
-import type { BaseBlock } from "../BaseBlock";
-import { ValueBlock, ValueBlockParams } from "../ValueBlock";
-import { ViewWriter } from "../ViewWriter";
-import { localFromBER } from "../parser";
-import { checkBufferParams } from "./utils";
-import type { Any } from "../Any";
+import { LocalBaseBlockJson } from "./LocalBaseBlock.ts";
+import { EMPTY_BUFFER, END_OF_CONTENT_NAME } from "./constants.ts";
+import type { BaseBlock } from "../BaseBlock.ts";
+import { ValueBlock, ValueBlockParams } from "../ValueBlock.ts";
+import { ViewWriter } from "../ViewWriter.ts";
+import { localFromBER } from "../parser.ts";
+import { checkBufferParams } from "./utils.ts";
+import type { Any } from "../Any.ts";
 
 export type ConstructedItem = BaseBlock | Any;
 

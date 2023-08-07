@@ -2,7 +2,7 @@
 import * as assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
-import * as asn1ts from "../src";
+import * as asn1ts from "../src.ts";
 
 context("ASN.1:2008 TestSuite Tests", () => {
   const testDir = `${__dirname}/../node_modules/asn1-test-suite/suite`;

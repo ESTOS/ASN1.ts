@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
-import * as asn1ts from "../src";
+import * as asn1ts from "../src.ts";
 import * as pvtsutils from "pvtsutils";
-import { ESchemaError, SchemaContext } from "../src";
-import { ETagClass } from "../src/TypeStore";
+import { ESchemaError, SchemaContext } from "../src.ts";
+import { ETagClass } from "../src/TypeStore.ts";
 
 /**
  * Get a sequence with optional parameters

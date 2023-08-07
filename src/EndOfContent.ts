@@ -1,7 +1,7 @@
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { END_OF_CONTENT_NAME } from "./internals/constants";
-import { LocalEndOfContentValueBlock } from "./internals/LocalEndOfContentValueBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { END_OF_CONTENT_NAME } from "./internals/constants.ts";
+import { LocalEndOfContentValueBlock } from "./internals/LocalEndOfContentValueBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export type EndOfContentParams = BaseBlockParams;
 export type EndOfContentJson = BaseBlockJson;

@@ -1,5 +1,5 @@
-import { LocalSimpleStringBlockParams, LocalSimpleStringBlock, LocalSimpleStringBlockJson } from "./internals/LocalSimpleStringBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { LocalSimpleStringBlockParams, LocalSimpleStringBlock, LocalSimpleStringBlockJson } from "./internals/LocalSimpleStringBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export type NumericStringParams = LocalSimpleStringBlockParams;
 export type NumericStringJson = LocalSimpleStringBlockJson;

@@ -1,6 +1,6 @@
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { LocalObjectIdentifierValueBlockParams, LocalObjectIdentifierValueBlock, LocalObjectIdentifierValueBlockJson } from "./internals/LocalObjectIdentifierValueBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { LocalObjectIdentifierValueBlockParams, LocalObjectIdentifierValueBlock, LocalObjectIdentifierValueBlockJson } from "./internals/LocalObjectIdentifierValueBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export interface ObjectIdentifierParams extends BaseBlockParams, LocalObjectIdentifierValueBlockParams { }
 export interface ObjectIdentifierJson extends BaseBlockJson<LocalObjectIdentifierValueBlockJson> {

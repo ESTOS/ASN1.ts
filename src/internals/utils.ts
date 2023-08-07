@@ -1,6 +1,6 @@
 /** Utility functions */
 
-import type { LocalBaseBlock } from "./LocalBaseBlock";
+import type { LocalBaseBlock } from "./LocalBaseBlock.ts";
 
 /**
  * Throws an exception if BigInt is not supported

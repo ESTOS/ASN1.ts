@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { HexBlock, HexBlockJson, HexBlockParams } from "../HexBlock";
-import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock";
+import { HexBlock, HexBlockJson, HexBlockParams } from "../HexBlock.ts";
+import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock.ts";
 
 export interface LocalPrimitiveValueBlockParams extends HexBlockParams, ValueBlockParams { }
 export interface LocalPrimitiveValueBlockJson extends HexBlockJson, ValueBlockJson { }

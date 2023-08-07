@@ -1,7 +1,7 @@
-import { BaseBlockJson } from "./BaseBlock";
-import { BaseStringBlockParams } from "./BaseStringBlock";
-import { LocalUtf8StringValueBlockParams, LocalUtf8StringValueBlock, LocalUtf8StringValueBlockJson } from "./internals/LocalUtf8StringValueBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { BaseBlockJson } from "./BaseBlock.ts";
+import { BaseStringBlockParams } from "./BaseStringBlock.ts";
+import { LocalUtf8StringValueBlockParams, LocalUtf8StringValueBlock, LocalUtf8StringValueBlockJson } from "./internals/LocalUtf8StringValueBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export interface Utf8StringParams extends BaseStringBlockParams, LocalUtf8StringValueBlockParams { }
 export type Utf8StringJson = BaseBlockJson<LocalUtf8StringValueBlockJson>;

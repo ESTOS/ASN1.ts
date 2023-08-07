@@ -1,6 +1,6 @@
 import * as pvtsutils from "pvtsutils";
-import { IBerConvertible } from "./types";
-import { EMPTY_VIEW } from "./internals/constants";
+import { IBerConvertible } from "./types.ts";
+import { EMPTY_VIEW } from "./internals/constants.ts";
 
 export interface IRawData {
   data: ArrayBuffer;

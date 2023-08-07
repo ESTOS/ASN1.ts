@@ -1,5 +1,5 @@
-import { IntegerParams, Integer, IntegerJson } from "./Integer";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { IntegerParams, Integer, IntegerJson } from "./Integer.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export type EnumeratedParams = IntegerParams;
 export type EnumeratedJson = IntegerJson;

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as pvtsutils from "pvtsutils";
 import * as pvutils from "pvutils";
-import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { ETagClass, EUniversalTagNumber, getTagClassAsText, getTagNumberAsText } from "../TypeStore";
-import { EMPTY_BUFFER, EMPTY_VIEW } from "./constants";
-import { LocalBaseBlock, LocalBaseBlockJson } from "./LocalBaseBlock";
-import { checkBufferParams } from "./utils";
+import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock.ts";
+import { ETagClass, EUniversalTagNumber, getTagClassAsText, getTagNumberAsText } from "../TypeStore.ts";
+import { EMPTY_BUFFER, EMPTY_VIEW } from "./constants.ts";
+import { LocalBaseBlock, LocalBaseBlockJson } from "./LocalBaseBlock.ts";
+import { checkBufferParams } from "./utils.ts";
 
 export interface IBaseIDs {
   /** The class of the asn1 object */

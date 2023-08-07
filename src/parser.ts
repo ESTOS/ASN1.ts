@@ -1,11 +1,11 @@
 import * as pvtsutils from "pvtsutils";
-import { ValueBlock } from "./ValueBlock";
-import { BaseBlock } from "./BaseBlock";
-import { LocalBaseBlock } from "./internals/LocalBaseBlock";
-import { AsnType, ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
-import { checkBufferParams } from "./internals/utils";
-import { ILocalIdentificationBlock } from "./internals/LocalIdentificationBlock";
-import { IHexBlock } from "./HexBlock";
+import { ValueBlock } from "./ValueBlock.ts";
+import { BaseBlock } from "./BaseBlock.ts";
+import { LocalBaseBlock } from "./internals/LocalBaseBlock.ts";
+import { AsnType, ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
+import { checkBufferParams } from "./internals/utils.ts";
+import { ILocalIdentificationBlock } from "./internals/LocalIdentificationBlock.ts";
+import { IHexBlock } from "./HexBlock.ts";
 
 export interface FromBerResult {
   offset: number;

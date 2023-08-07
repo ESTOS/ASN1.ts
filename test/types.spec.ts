@@ -1,6 +1,6 @@
 import * as assert from "assert";
 import * as pvtsutils from "pvtsutils";
-import * as asn1ts from "../src";
+import * as asn1ts from "../src.ts";
 
 context("ASN types", () => {
 

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as pvutils from "pvutils";
-import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock";
-import { powers2, digitsString } from "./constants";
-import { getNumberParts, getSignedFromUnsigned } from "./utils";
+import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock.ts";
+import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock.ts";
+import { powers2, digitsString } from "./constants.ts";
+import { getNumberParts, getSignedFromUnsigned } from "./utils.ts";
 
 function viewAdd(first: Uint8Array, second: Uint8Array): Uint8Array {
   //#region Initial variables

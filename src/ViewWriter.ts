@@ -1,4 +1,4 @@
-import * as utils from "./internals/utils";
+import * as utils from "./internals/utils.ts";
 
 export class ViewWriter {
 

@@ -1,7 +1,7 @@
-import { ViewWriter } from "./ViewWriter";
-import { ValueBlock, ValueBlockJson } from "./ValueBlock";
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { ViewWriter } from "./ViewWriter.ts";
+import { ValueBlock, ValueBlockJson } from "./ValueBlock.ts";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export type NullParams = BaseBlockParams;
 export type NullJson = BaseBlockJson<ValueBlockJson>;

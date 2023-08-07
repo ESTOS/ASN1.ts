@@ -1,8 +1,8 @@
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { LocalBaseBlock } from "./internals/LocalBaseBlock";
-import { LocalConstructedValueBlock, LocalConstructedValueBlockJson, LocalConstructedValueBlockParams } from "./internals/LocalConstructedValueBlock";
-import { IBaseIDs } from "./internals/LocalIdentificationBlock";
-import { AsnType, typeStore } from "./TypeStore";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { LocalBaseBlock } from "./internals/LocalBaseBlock.ts";
+import { LocalConstructedValueBlock, LocalConstructedValueBlockJson, LocalConstructedValueBlockParams } from "./internals/LocalConstructedValueBlock.ts";
+import { IBaseIDs } from "./internals/LocalIdentificationBlock.ts";
+import { AsnType, typeStore } from "./TypeStore.ts";
 
 export interface ConstructedParams extends BaseBlockParams, LocalConstructedValueBlockParams { }
 export type ConstructedJson = BaseBlockJson<LocalConstructedValueBlockJson>;

@@ -1,9 +1,9 @@
 import * as pvtsutils from "pvtsutils";
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { LocalIntegerValueBlockParams, LocalIntegerValueBlock, LocalIntegerValueBlockJson } from "./internals/LocalIntegerValueBlock";
-import { assertBigInt } from "./internals/utils";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
-import { ViewWriter } from "./ViewWriter";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { LocalIntegerValueBlockParams, LocalIntegerValueBlock, LocalIntegerValueBlockJson } from "./internals/LocalIntegerValueBlock.ts";
+import { assertBigInt } from "./internals/utils.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
+import { ViewWriter } from "./ViewWriter.ts";
 
 export interface IntegerParams extends BaseBlockParams, LocalIntegerValueBlockParams { }
 export type IntegerJson = BaseBlockJson<LocalIntegerValueBlockJson>;

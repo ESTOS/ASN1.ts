@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as pvtsutils from "pvtsutils";
 import * as pvutils from "pvutils";
-import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock";
-import { EMPTY_BUFFER } from "./constants";
-import * as utils from "./utils";
+import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock.ts";
+import { ValueBlock, ValueBlockJson, ValueBlockParams } from "../ValueBlock.ts";
+import { EMPTY_BUFFER } from "./constants.ts";
+import * as utils from "./utils.ts";
 
 export interface ILocalSidValueBlock {
   valueDec: number;

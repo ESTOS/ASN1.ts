@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as pvtsutils from "pvtsutils";
-import { ViewWriter } from "../ViewWriter";
-import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock";
-import { BIT_STRING_NAME, EMPTY_BUFFER, END_OF_CONTENT_NAME } from "./constants";
-import { LocalConstructedValueBlockParams, LocalConstructedValueBlockJson, LocalConstructedValueBlock } from "./LocalConstructedValueBlock";
-import { localFromBER } from "../parser";
-import { checkBufferParams } from "./utils";
-import type { BitString } from "../BitString";
+import { ViewWriter } from "../ViewWriter.ts";
+import { HexBlockJson, HexBlockParams, HexBlock } from "../HexBlock.ts";
+import { BIT_STRING_NAME, EMPTY_BUFFER, END_OF_CONTENT_NAME } from "./constants.ts";
+import { LocalConstructedValueBlockParams, LocalConstructedValueBlockJson, LocalConstructedValueBlock } from "./LocalConstructedValueBlock.ts";
+import { localFromBER } from "../parser.ts";
+import { checkBufferParams } from "./utils.ts";
+import type { BitString } from "../BitString.ts";
 
 export interface ILocalBitStringValueBlock {
   unusedBits: number;

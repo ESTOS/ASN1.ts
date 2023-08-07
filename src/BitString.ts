@@ -1,9 +1,9 @@
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { Constructed } from "./Constructed";
-import { BIT_STRING_NAME } from "./internals/constants";
-import { LocalBitStringValueBlockParams, LocalBitStringValueBlock, LocalBitStringValueBlockJson } from "./internals/LocalBitStringValueBlock";
-import { IBaseIDs } from "./internals/LocalIdentificationBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { Constructed } from "./Constructed.ts";
+import { BIT_STRING_NAME } from "./internals/constants.ts";
+import { LocalBitStringValueBlockParams, LocalBitStringValueBlock, LocalBitStringValueBlockJson } from "./internals/LocalBitStringValueBlock.ts";
+import { IBaseIDs } from "./internals/LocalIdentificationBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export interface BitStringParams extends BaseBlockParams, LocalBitStringValueBlockParams { }
 export type BitStringJson = BaseBlockJson<LocalBitStringValueBlockJson>;

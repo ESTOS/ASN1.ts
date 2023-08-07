@@ -1,5 +1,5 @@
-import { ValueBlock } from "../ValueBlock";
-import { EMPTY_BUFFER } from "./constants";
+import { ValueBlock } from "../ValueBlock.ts";
+import { EMPTY_BUFFER } from "./constants.ts";
 
 export class LocalEndOfContentValueBlock extends ValueBlock {
 

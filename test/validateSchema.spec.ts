@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
-import * as asn1ts from "../src";
+import * as asn1ts from "../src.ts";
 import * as pvtsutils from "pvtsutils";
-import { HexBlockParams } from "../src";
-import { ILocalIdentificationBlock } from "../src/internals/LocalIdentificationBlock";
+import { HexBlockParams } from "../src.ts";
+import { ILocalIdentificationBlock } from "../src/internals/LocalIdentificationBlock.ts";
 
 /**
  * Converts an array buffer to hex notation

@@ -1,4 +1,4 @@
-import { EMPTY_STRING } from "./internals/constants";
+import { EMPTY_STRING } from "./internals/constants.ts";
 
 export interface IAny {
   name: string;

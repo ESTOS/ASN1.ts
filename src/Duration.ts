@@ -1,5 +1,5 @@
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
-import { Utf8StringParams, Utf8String, Utf8StringJson } from "./Utf8String";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
+import { Utf8StringParams, Utf8String, Utf8StringJson } from "./Utf8String.ts";
 
 export type DurationParams = Utf8StringParams;
 export type DurationJson = Utf8StringJson;

@@ -10,6 +10,9 @@
     "noImplicitOverride": true,
     "skipLibCheck": true,
     "noErrorTruncation": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "declaration": true
   }
 }

@@ -1,4 +1,4 @@
-import { ILocalStringValueBlock, LocalStringValueBlockParams, LocalStringValueBlockJson, LocalStringValueBlock } from "./LocalStringValueBlock";
+import { ILocalStringValueBlock, LocalStringValueBlockParams, LocalStringValueBlockJson, LocalStringValueBlock } from "./LocalStringValueBlock.ts";
 
 export type ILocalSimpleStringValueBlock = ILocalStringValueBlock;
 export type LocalSimpleStringValueBlockParams = LocalStringValueBlockParams;

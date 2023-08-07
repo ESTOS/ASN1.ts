@@ -1,10 +1,10 @@
 import * as pvtsutils from "pvtsutils";
 import * as pvutils from "pvutils";
-import { BaseBlockJson, StringEncoding } from "./BaseBlock";
-import { LocalSimpleStringValueBlockJson } from "./internals/LocalSimpleStringValueBlock";
-import { IDateConvertible } from "./types";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
-import { VisibleStringParams, VisibleString } from "./VisibleString";
+import { BaseBlockJson, StringEncoding } from "./BaseBlock.ts";
+import { LocalSimpleStringValueBlockJson } from "./internals/LocalSimpleStringValueBlock.ts";
+import { IDateConvertible } from "./types.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
+import { VisibleStringParams, VisibleString } from "./VisibleString.ts";
 
 export interface IUTCTime {
   year: number;

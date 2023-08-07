@@ -1,7 +1,7 @@
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { LocalBooleanValueBlockParams, LocalBooleanValueBlock, LocalBooleanValueBlockJson } from "./internals/LocalBooleanValueBlock";
-import { IBaseIDs } from "./internals/LocalIdentificationBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { LocalBooleanValueBlockParams, LocalBooleanValueBlock, LocalBooleanValueBlockJson } from "./internals/LocalBooleanValueBlock.ts";
+import { IBaseIDs } from "./internals/LocalIdentificationBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export interface BooleanParams extends BaseBlockParams, LocalBooleanValueBlockParams { }
 export type BooleanJson = BaseBlockJson<LocalBooleanValueBlockJson>;

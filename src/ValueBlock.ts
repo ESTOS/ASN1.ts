@@ -1,6 +1,6 @@
-import { IBerConvertible } from "./types";
-import * as internals from "./internals/LocalBaseBlock";
-import { ViewWriter } from "./ViewWriter";
+import { IBerConvertible } from "./types.ts";
+import * as internals from "./internals/LocalBaseBlock.ts";
+import { ViewWriter } from "./ViewWriter.ts";
 
 export type IValueBlock = internals.ILocalBaseBlock;
 export type ValueBlockParams = internals.LocalBaseBlockParams;

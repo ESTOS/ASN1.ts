@@ -1,13 +1,13 @@
 import * as pvtsutils from "pvtsutils";
 import * as pvutils from "pvutils";
-import { IBerConvertible } from "./types";
-import { LocalBaseBlockJson, LocalBaseBlockParams, LocalBaseBlock } from "./internals/LocalBaseBlock";
-import { IBaseIDs, LocalIdentificationBlock, LocalIdentificationBlockJson, ILocalIdentificationBlockParams } from "./internals/LocalIdentificationBlock";
-import { LocalLengthBlock, LocalLengthBlockJson, LocalLengthBlockParams } from "./internals/LocalLengthBlock";
-import { ViewWriter } from "./ViewWriter";
-import { ValueBlock, ValueBlockJson } from "./ValueBlock";
-import { EMPTY_BUFFER, EMPTY_STRING } from "./internals/constants";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { IBerConvertible } from "./types.ts";
+import { LocalBaseBlockJson, LocalBaseBlockParams, LocalBaseBlock } from "./internals/LocalBaseBlock.ts";
+import { IBaseIDs, LocalIdentificationBlock, LocalIdentificationBlockJson, ILocalIdentificationBlockParams } from "./internals/LocalIdentificationBlock.ts";
+import { LocalLengthBlock, LocalLengthBlockJson, LocalLengthBlockParams } from "./internals/LocalLengthBlock.ts";
+import { ViewWriter } from "./ViewWriter.ts";
+import { ValueBlock, ValueBlockJson } from "./ValueBlock.ts";
+import { EMPTY_BUFFER, EMPTY_STRING } from "./internals/constants.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export interface IBaseBlock {
   name: string;

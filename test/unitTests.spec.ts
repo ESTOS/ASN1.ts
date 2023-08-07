@@ -1,7 +1,7 @@
 import * as assert from "assert";
-import * as asn1ts from "../src";
-import { BaseBlock } from "../src";
-import { checkBufferParams } from "../src/internals/utils";
+import * as asn1ts from "../src.ts";
+import { BaseBlock } from "../src.ts";
+import { checkBufferParams } from "../src/internals/utils.ts";
 
 context("Unit tests", () => {
 

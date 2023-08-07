@@ -1,6 +1,6 @@
-import { LocalBmpStringValueBlockParams, LocalBmpStringValueBlock, LocalBmpStringValueBlockJson } from "./internals/LocalBmpStringValueBlock";
-import { IBaseIDs } from "./internals/LocalIdentificationBlock";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { LocalBmpStringValueBlockParams, LocalBmpStringValueBlock, LocalBmpStringValueBlockJson } from "./internals/LocalBmpStringValueBlock.ts";
+import { IBaseIDs } from "./internals/LocalIdentificationBlock.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export type BmpStringParams = LocalBmpStringValueBlockParams;
 export type BmpStringJson = LocalBmpStringValueBlockJson;

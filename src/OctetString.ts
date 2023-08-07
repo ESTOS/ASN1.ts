@@ -1,10 +1,10 @@
 import * as pvtsutils from "pvtsutils";
-import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock";
-import { Constructed } from "./Constructed";
-import { LocalOctetStringValueBlockParams, LocalOctetStringValueBlock, LocalOctetStringValueBlockJson } from "./internals/LocalOctetStringValueBlock";
-import { OCTET_STRING_NAME } from "./internals/constants";
-import { localFromBER } from "./parser";
-import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore";
+import { BaseBlock, BaseBlockJson, BaseBlockParams } from "./BaseBlock.ts";
+import { Constructed } from "./Constructed.ts";
+import { LocalOctetStringValueBlockParams, LocalOctetStringValueBlock, LocalOctetStringValueBlockJson } from "./internals/LocalOctetStringValueBlock.ts";
+import { OCTET_STRING_NAME } from "./internals/constants.ts";
+import { localFromBER } from "./parser.ts";
+import { ETagClass, EUniversalTagNumber, typeStore } from "./TypeStore.ts";
 
 export interface OctetStringParams extends BaseBlockParams, LocalOctetStringValueBlockParams { }
 export type OctetStringJson = BaseBlockJson<LocalOctetStringValueBlockJson>;

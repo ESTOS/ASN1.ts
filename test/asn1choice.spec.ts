@@ -4,6 +4,10 @@ import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
 import { ESchemaError, SchemaContext } from "../src";
 import { ETagClass } from "../src/TypeStore";
+import { Sequence } from "../build";
+import { ROSEInvoke, ROSEMessage } from "./SNACCROSE";
+import { ROSEMessage_Converter } from "./SNACCROSE_Converter";
+import { ConverterErrors } from "./TSConverterBase";
 
 /**
  * Get a sequence with optional parameters
@@ -42,6 +46,35 @@ function getChoice(getschema: boolean, bAddString: boolean, bAddBoolean: boolean
 
 
 context("Asn1Choice implementation tests", () => {
+
+    it("Validate empty ROSEInvoke", () => {
+        // ROSEMessage containing a ROSEInvoke (invokeID1, operationID 4100) with an empty argument
+        // This is how we encode it
+        const msg = new ROSEMessage();
+        msg.invoke = new ROSEInvoke({
+            operationID: 4100,
+            invokeID: 1,
+            linked_ID: 2,
+            argument: new Sequence()
+        });
+        const errors = new ConverterErrors();
+        const asn1Encoded = ROSEMessage_Converter.toBER(msg, errors) as asn1ts.Sequence;
+        const payload = new Uint8Array(asn1Encoded.toBER());
+        const hexPayLoad = pvtsutils.Convert.ToHex(payload); // expected a109020101020210043000
+
+        const data = pvtsutils.Convert.FromHex(hexPayLoad);
+        const schema = ROSEMessage.getASN1Schema();
+        const result = asn1ts.verifySchema(data, schema);
+        assert.ok(result.verified, "Schema verification failed");
+        const invokeID = result.result.getTypedValueByName(asn1ts.Integer, "invokeID");
+        const operationID = result.result.getTypedValueByName(asn1ts.Integer, "operationID");
+        const linked_ID = result.result.getTypedValueByName(asn1ts.Integer, "linked_ID");
+        const argument = result.result.getTypedValueByName(asn1ts.Sequence, "argument");
+        assert.equal(invokeID.getValue(), 1);
+        assert.equal(operationID.getValue(), 4100);
+        assert.equal(linked_ID.getValue(), 2);
+        assert.notEqual(argument, undefined);
+    });
     it("validate a sequence against a matching schema", () => {
         const seq = getChoice(false, true, false, false);
         const data = seq.toBER();

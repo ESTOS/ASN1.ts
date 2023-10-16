@@ -38,6 +38,7 @@
     "url": "git://github.com/ESTOS/ASN1.ts.git"
   },
   "dependencies": {
+    "jest": "^29.7.0",
     "pvtsutils": "^1.3.2",
     "pvutils": "^1.1.3",
     "tslib": "^2.4.1"

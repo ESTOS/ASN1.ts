@@ -4,7 +4,6 @@ import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
 import { ESchemaError, SchemaContext } from "../src";
 import { ETagClass } from "../src/TypeStore";
-import { Sequence } from "../build";
 import { ROSEInvoke, ROSEMessage } from "./SNACCROSE";
 import { ROSEMessage_Converter } from "./SNACCROSE_Converter";
 import { ConverterErrors } from "./TSConverterBase";
@@ -55,7 +54,7 @@ context("Asn1Choice implementation tests", () => {
             operationID: 4100,
             invokeID: 1,
             linked_ID: 2,
-            argument: new Sequence()
+            argument: new asn1ts.Sequence()
         });
         const errors = new ConverterErrors();
         const asn1Encoded = ROSEMessage_Converter.toBER(msg, errors) as asn1ts.Sequence;

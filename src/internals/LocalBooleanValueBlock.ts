@@ -78,18 +78,3 @@ export class LocalBooleanValueBlock extends HexBlock(ValueBlock) implements ILoc
     };
   }
 }
-
-export interface LocalBooleanValueBlock {
-  /**
-   * @deprecated since version 3.0.0
-   */
-  // @ts-ignore
-  valueBeforeDecode: ArrayBuffer;
-  /**
-   * Binary data in ArrayBuffer representation
-   *
-   * @deprecated since version 3.0.0
-   */
-  // @ts-ignore
-  valueHex: ArrayBuffer;
-}

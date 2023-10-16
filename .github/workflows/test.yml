@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [18.x, 19.x, 20.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -35,6 +35,9 @@ jobs:
 
       - name: Run linter
         run: npm run lint
+
+      - name: Build
+        run: npm run
 
       - name: Run test with coverage
         run: npm run coverage

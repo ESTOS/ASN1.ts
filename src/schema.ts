@@ -93,9 +93,9 @@ export enum ESchemaError {
   MISSING_CONSTRUCTED_FLAG_IN_SCHEMA = 7,
   /** Mismatching constructed flag between asn1 and schema */
   MISMATCHING_CONSTRUCTED_FLAG = 8,
-  /** The schema attribute has no constructed flag */
+  /** Missing is hex only flag in schems */
   MISSING_ISHEXONLY_FLAG_IN_SCHEMA = 9,
-  /** Mismatching constructed flag between asn1 and schema */
+  /** Mismatching is hex only flag between asn1 and schema */
   MISMATCHING_ISHEXONLY_FLAG = 10,
   /** The schema attribute has hexview flag */
   MISSING_HEXVIEW_IN_SCHEMA = 11,
@@ -110,7 +110,10 @@ export enum ESchemaError {
   /** Failed to match asn1 data with choice from the schema */
   NO_MATCHING_DATA_FOR_CHOICE = 17,
   /** The ASN1 structure is larger than the schema */
-  ASN1_IS_LARGER_THAN_SCHEMA = 18
+  ASN1_IS_LARGER_THAN_SCHEMA = 18,
+  /** Data and schema are not pointing to the same context specific entry */
+  MISMATCHING_CONTEXT_SPECIFIC_ID = 19
+
   /** If you add new Values !!! Add them to the getTextForError as well !!! */
 }
 
@@ -136,9 +139,9 @@ function getTextForError(error: ESchemaError): string {
     case ESchemaError.MISMATCHING_CONSTRUCTED_FLAG:
       return "Mismatching constructed flag between asn1 and schema";
     case ESchemaError.MISSING_ISHEXONLY_FLAG_IN_SCHEMA:
-      return "The schema attribute has no constructed flag";
+      return "Missing is hex only flag in schems";
     case ESchemaError.MISMATCHING_ISHEXONLY_FLAG:
-      return "Mismatching constructed flag between asn1 and schema";
+      return "Mismatching is hex only flag between asn1 and schema";
     case ESchemaError.MISSING_HEXVIEW_IN_SCHEMA:
       return "The schema attribute has hexview flag";
     case ESchemaError.MISMATCHING_HEX_VIEW_LENGTH:
@@ -153,6 +156,8 @@ function getTextForError(error: ESchemaError): string {
       return "Failed to match asn1 data with choice from the schema";
     case ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA:
       return "The ASN1 structure is larger than the schema";
+    case ESchemaError.MISMATCHING_CONTEXT_SPECIFIC_ID:
+      return "Mismatching context specific id between schema and data";
     default:
       return `Unknown error: ${error}`;
   }
@@ -233,10 +238,12 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
       const schema = inputSchema.value[j];
       if ((bContextSpecific && inputData.idBlock.tagNumber === schema.idBlock.optionalID) || !bContextSpecific) {
         const savedTagClass = inputData.idBlock.tagClass;
-        const savedTagNumebr = inputData.idBlock.tagNumber;
+        const savedTagNumber = inputData.idBlock.tagNumber;
+        const savedOptionalID = inputData.idBlock.optionalID;
         if (bContextSpecific) {
             inputData.idBlock.tagClass = schema.idBlock.tagClass;
             inputData.idBlock.tagNumber = schema.idBlock.tagNumber;
+            inputData.idBlock.optionalID = schema.idBlock.optionalID;
         }
         const newContext = context.recurse(schema);
         const errors = compareSchemaInternal(root, schema, options, newContext, inputData);
@@ -247,7 +254,8 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
           return errors;
         } else if (bContextSpecific) {
             inputData.idBlock.tagClass = savedTagClass;
-            inputData.idBlock.tagNumber = savedTagNumebr;
+            inputData.idBlock.tagNumber = savedTagNumber;
+            inputData.idBlock.optionalID = savedOptionalID;
         }
       }
     }
@@ -414,6 +422,11 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
       errors.push(new SchemaError(ESchemaError.MISMATCHING_TAG_NUMBER, context));
       return errors;
     }
+  } else if(inputSchema.idBlock.optionalID !== inputData.idBlock.optionalID) {
+    // If the tag and the class are matching we need to ensure that the schema is matching the optionalID flags from the data
+    // IF that ist the case the data should have been encoded context specific to point to that field
+    errors.push(new SchemaError(ESchemaError.MISMATCHING_CONTEXT_SPECIFIC_ID, context));
+    return errors;
   }
 
   //#endregion
@@ -496,6 +509,9 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
       errors.push(new SchemaError(ESchemaError.MISMATCHING_OBJECT_LENGTH, context));
       return errors;
     }
+
+    // To match the input data with the schema we first need to match the mandatory attributes and then the optionals...
+
     /** Helper variable to improve searching for context specific optional attributes */
     /** The variable stores the last value where we found the last optional param */
     let nextOptional = 0;

@@ -1,9 +1,17 @@
 {
+  "name": "@estos/asn1ts",
+  "version": "3.1.12",
+  "license": "BSD-3-Clause",
   "author": {
-    "email": "jan@estos.de",
-    "name": "Jan Fellner"
+    "name": "estos GmbH",
+    "email": "info@estos.de",
+    "url": "https://www.estos.de"
   },
   "contributors": [
+    {
+      "email": "jan@estos.de",
+      "name": "Jan Fellner"
+    },
     {
       "email": "yury@strozhevsky.com",
       "name": "Yury Strozhevsky"
@@ -66,7 +74,6 @@
   "main": "build/index.js",
   "module": "build/index.es.js",
   "types": "build/index.d.ts",
-  "name": "@estos/asn1ts",
   "files": [
     "build",
     "LICENSE",
@@ -79,7 +86,5 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint --fix . --ext .ts",
     "coverage": "nyc npm test"
-  },
-  "version": "3.1.11",
-  "license": "BSD-3-Clause"
+  }
 }

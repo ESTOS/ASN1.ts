@@ -316,18 +316,3 @@ export class LocalIdentificationBlock extends HexBlock(LocalBaseBlock) implement
     return this.tagClass === other.tagClass && this.tagNumber === other.tagNumber;
   }
 }
-
-export interface LocalIdentificationBlock {
-  /**
-   * @deprecated since version 3.0.0
-   */
-  /** @ts-ignore */
-  valueBeforeDecode: ArrayBuffer;
-  /**
-   * Binary data in ArrayBuffer representation
-   *
-   * @deprecated since version 3.0.0
-   */
-  /** @ts-ignore */
-  valueHex: ArrayBuffer;
-}

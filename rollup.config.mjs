@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import typescript from "rollup-plugin-typescript2";
 import dts from "rollup-plugin-dts";
-import pkg from "./package.json" assert { type: 'json' };
+import pkg from "./package.json" assert { type: "json" };
 
 const __dirname = path.resolve();
 const LICENSE = fs.readFileSync("LICENSE", { encoding: "utf-8" });

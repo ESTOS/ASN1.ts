@@ -18,7 +18,7 @@ export class Extension extends BaseBlock<ValueBlock, ValueBlockJson> {
   public static override defaultIDs = {tagClass: ETagClass.UNIVERSAL, tagNumber: EUniversalTagNumber.Extension};
 
   constructor() {
-    super({idBlock: Extension.defaultIDs}, ValueBlock);
+    super({idBlock: Extension.defaultIDs, optional: true}, ValueBlock);
 
   }
 

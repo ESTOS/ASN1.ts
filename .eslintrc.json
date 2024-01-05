@@ -8,7 +8,8 @@
   "plugins": [
     "@typescript-eslint",
     "deprecation",
-    "import"
+    "import",
+    "unused-imports"
   ],
   "extends": [
     "eslint:recommended",
@@ -62,6 +63,7 @@
           }
         ]
       }
-    ]
+    ],
+    "unused-imports/no-unused-imports": "error"
   }
 }

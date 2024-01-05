@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
 import * as asn1ts from "../src";
-import * as pvtsutils from "pvtsutils";
 
 context("Simple examples from the readme.md", () => {
     it ("How to create a simple ASN structures", () => {

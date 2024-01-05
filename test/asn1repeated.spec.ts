@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert";
 import * as asn1ts from "../src";
-import * as pvtsutils from "pvtsutils";
-import { SchemaContext } from "../src";
-import { ILocalIdentificationBlockParams } from "../src/internals/LocalIdentificationBlock";
-import { localFromBER } from "../src/parser";
-import { ETagClass } from "../src/TypeStore";
-
 
 /**
  * Gets a repeated schema

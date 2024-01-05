@@ -7,12 +7,15 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "deprecation"
+    "deprecation",
+    "import",
+    "unused-imports"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript"
   ],
   "ignorePatterns": [
     "build/**/*.ts",
@@ -49,6 +52,18 @@
     "@typescript-eslint/semi": 2,
     "@typescript-eslint/quotes": 2,
     "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/triple-slash-reference": 0
+    "@typescript-eslint/triple-slash-reference": 0,
+    "import/no-restricted-paths": [
+      "error",
+      {
+        "zones": [
+          {
+            "target": "**/*",
+            "from": "build"
+          }
+        ]
+      }
+    ],
+    "unused-imports/no-unused-imports": "error"
   }
 }

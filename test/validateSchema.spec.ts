@@ -16,32 +16,46 @@ function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
 }
 
 /**
+ * Defines whether we want to get the schema definiton or a data strucutre
+ * for the schema we define whether it shall contain the Extension that allows a strucutre to be larger than expected
+ */
+enum EGetSchemaOption {
+    plain,
+    extendable
+}
+
+/**
  * Gets a sample sequence with some optional parmeters for tests
  *
- * @param getschema true to get the schema for the verification
+ * @param schemaOption true to get the schema for the verification
  * @param addoptionals true to add optionals to the sequence
  * @param recursive the sequence is embedded as sequence into another if you specify a recurive amount (1 means the root sequence contains another in the valueblock, if the value is negative the sequence is added optionally)
  * @param idblock the idblock if we are recursing and the sequence shall get added optionally
  * @returns the asn1 sequence object
  */
-function getSequence(getschema: boolean, addoptionals?: boolean, recurive?: number, idBlock?: Partial<ILocalIdentificationBlock> & HexBlockParams): asn1ts.Sequence {
+function getSequence(schemaOption: EGetSchemaOption | false, addoptionals?: boolean, recurive?: number, idBlock?: Partial<ILocalIdentificationBlock> & HexBlockParams): asn1ts.Sequence {
+    const getData = schemaOption === false;
+
     const seq = new asn1ts.Sequence({
         name: "sequence",
         idBlock: idBlock,
         value: [
-            new asn1ts.Utf8String({name: "string", ...(!getschema && { value: "string" }) }),
-            new asn1ts.Integer({name: "integer", ...(!getschema && { value: 1 }) }),
-            new asn1ts.Boolean({name: "boolean", ...(!getschema && { value: true }) }),
+            new asn1ts.Utf8String({name: "string", ...(getData && { value: "string" }) }),
+            new asn1ts.Integer({name: "integer", ...(getData && { value: 1 }) }),
+            new asn1ts.Boolean({name: "boolean", ...(getData && { value: true }) }),
         ]
     });
 
     const value = seq.valueBlock.value;
 
     if(addoptionals) {
-        value.push(new asn1ts.Utf8String({name: "optional0",  ...(!getschema && { value: "optional0" }), idBlock: {optionalID: 0}}));
-        value.push(new asn1ts.Integer({name: "optional1",  ...(!getschema && { value: 2 }), idBlock: {optionalID: 1}}));
-        value.push(new asn1ts.Boolean({name: "optional2",  ...(!getschema && { value: false }), idBlock: {optionalID: 2}}));
+        value.push(new asn1ts.Utf8String({name: "optional0",  ...(getData && { value: "optional0" }), idBlock: {optionalID: 0}}));
+        value.push(new asn1ts.Integer({name: "optional1",  ...(getData && { value: 2 }), idBlock: {optionalID: 1}}));
+        value.push(new asn1ts.Boolean({name: "optional2",  ...(getData && { value: false }), idBlock: {optionalID: 2}}));
     }
+
+    if(schemaOption === EGetSchemaOption.extendable)
+        value.push(new asn1ts.Extension());
 
     if (recurive) {
         let idBlock: Partial<ILocalIdentificationBlock> & HexBlockParams | undefined = undefined;
@@ -51,7 +65,7 @@ function getSequence(getschema: boolean, addoptionals?: boolean, recurive?: numb
             idBlock = { optionalID: addoptionals ? 3 : 0 };
             recurive++;
         }
-        value.push(getSequence(getschema, addoptionals, recurive, idBlock));
+        value.push(getSequence(schemaOption, addoptionals, recurive, idBlock));
     }
 
     return seq;
@@ -73,38 +87,75 @@ context("validateSchema implementation tests", () => {
     it ("validate plain object against schema with optional params", () => {
         const seq = getSequence(false, true, -2);
         const ber = seq.toBER();
-        const schema = getSequence(true, true, -2);
+        const schema = getSequence(EGetSchemaOption.plain, true, -2);
         const result = asn1ts.verifySchema(ber, schema);
         assert.equal(result.verified, true, "Schema validation failed");
     });
 
-    it ("validate an object with a smaller schema, flagged as is allowed", () => {
-        const seq = getSequence(false, true, -2);
+    it ("validate an object matching the schema where the extension in the schema has not been set", () => {
+        const seq = getSequence(false, false, -2);
         const ber = seq.toBER();
-        const schema = getSequence(true, false, -2);
-        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true, true));
+        const schema = getSequence(EGetSchemaOption.plain, false, -2);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
         assert.equal(result.verified, true, "Schema validation failed but should have succeeded");
     });
 
-    it ("validate an object with a smaller schema, flagged as is not allowed", () => {
+    it ("validate an object matching the schema where the extension in the schema has been set", () => {
+        const seq = getSequence(false, false, -2);
+        const ber = seq.toBER();
+        const schema = getSequence(EGetSchemaOption.extendable, false, -2);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
+        assert.equal(result.verified, true, "Schema validation failed but should have succeeded");
+    });
+
+    it ("validate an object larget than the schema where the extension in the schema has not been set", () => {
         const seq = getSequence(false, true, -2);
         const ber = seq.toBER();
-        const schema = getSequence(true, false, -2);
-        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true, false));
+        const schema = getSequence(EGetSchemaOption.plain, false, -2);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
         assert.equal(result.verified, false, "Schema validation succeeded but should have failed");
-        if (!result.verified) {
-            assert.equal(result.errors?.length, 1, "Should contain one error");
-            if (result.errors) {
-                assert.equal(result.errors[0].error, 18, "Wrong error code");
-                assert.equal(result.errors[0].context, "sequence:UNIVERSAL-Sequence", "Wrong error context");
-            }
+        if(result.verified === false) {
+            assert.equal(result.errors?.length, 1);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA);
+        }
+    });
+
+    it ("validate an object larget than the schema where the extension in the schema has been set", () => {
+        const seq = getSequence(false, true, -2);
+        const ber = seq.toBER();
+        const schema = getSequence(EGetSchemaOption.extendable, false, -2);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
+        assert.equal(result.verified, true, "Schema validation failed but should have succeeded");
+    });
+
+    it ("validate an object smaller than the schema where the extension in the schema has not been set", () => {
+        const seq = getSequence(false, false);
+        const ber = seq.toBER();
+        const schema = getSequence(EGetSchemaOption.plain, false, 1);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
+        assert.equal(result.verified, false, "Schema validation succeeded but should have failed");
+        if(result.verified === false) {
+            assert.equal(result.errors?.length, 1);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_OBJECT_LENGTH);
+        }
+    });
+
+    it ("validate an object smaller than the schema where the extension in the schema has been set", () => {
+        const seq = getSequence(false, false);
+        const ber = seq.toBER();
+        const schema = getSequence(EGetSchemaOption.extendable, false, 1);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
+        assert.equal(result.verified, false, "Schema validation succeeded but should have failed");
+        if(result.verified === false) {
+            assert.equal(result.errors?.length, 1);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_OBJECT_LENGTH);
         }
     });
 
     it ("validate an recursive object with optional params against a matching schema and retriev the child sequence", () => {
         const seq = getSequence(false, true, -1);
         const ber = seq.toBER();
-        const schema = getSequence(true, true, -1);
+        const schema = getSequence(EGetSchemaOption.plain, true, -1);
         const result = asn1ts.verifySchema(ber, schema);
         assert.ok(result.verified, "Schema validation failed");
         const sequence = result.result;
@@ -145,14 +196,18 @@ context("validateSchema implementation tests", () => {
         }
         assert.ok(sizebefore - 1 === values.length, "Element has not been removed (not found)");
         const ber = seq.toBER();
-        const schema = getSequence(true, true, -1);
+        const schema = getSequence(EGetSchemaOption.plain, true, -1);
         const result = asn1ts.verifySchema(ber, schema);
         assert.equal(result.verified, false, "Schema validated but it should fail");
+        if(result.verified === false) {
+            assert.equal(result.errors?.length, 1);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_TAG_NUMBER);
+        }
     });
 
     it ("validate an object with a schema where an in between element is missing", () => {
         const seq = getSequence(false, false, 0);
-        const schema = getSequence(true, false, 0);
+        const schema = getSequence(EGetSchemaOption.plain, false, 0);
         const values = schema.valueBlock.value;
         const sizebefore = values.length;
         for (const value of values) {
@@ -165,25 +220,27 @@ context("validateSchema implementation tests", () => {
         const ber = seq.toBER();
         const result = asn1ts.verifySchema(ber, schema);
         assert.equal(result.verified, false, "Schema validated but it should fail");
+        if(result.verified === false) {
+            assert.equal(result.errors?.length, 2);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_TAG_NUMBER);
+            assert.equal(result.errors?.at(1)?.error, asn1ts.ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA);
+        }
     });
 
     it ("validate an object with a schema where the last elemet is missing", () => {
         const seq = getSequence(false, false, 0);
-        const schema = getSequence(true, false, 0);
+        const schema = getSequence(EGetSchemaOption.plain, false, 0);
         const values = schema.valueBlock.value;
         const sizebefore = values.length;
         values.pop();
         assert.ok(sizebefore - 1 === values.length, "Element has not been removed");
         const ber = seq.toBER();
-        const options = new asn1ts.VerifyOptions(true, false);
-        const result = asn1ts.verifySchema(ber, schema, options);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if (!result.verified) {
-            assert.equal(result.errors?.length, 1, "Should contain one error");
-            if (result.errors) {
-                assert.equal(result.errors[0].error, 18, "Wrong error code");
-                assert.equal(result.errors[0].context, "sequence:UNIVERSAL-Boolean", "Wrong error context");
-            }
+            assert.equal(result.errors?.length, 1);
+            assert.equal(result.errors?.at(0)?.error, 18);
+            assert.equal(result.errors?.at(0)?.context, "sequence:UNIVERSAL-Boolean");
         }
     });
 
@@ -209,18 +266,15 @@ context("validateSchema implementation tests", () => {
         schemaChild2.valueBlock.value.pop();
         schema.valueBlock.value.push(schemaChild2);
 
-        const options = new asn1ts.VerifyOptions(true, false);
-        const result = asn1ts.verifySchema(ber, schema, options);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(true));
 
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if (!result.verified) {
-            assert.equal(result.errors?.length, 2, "Should contain two error");
-            if (result.errors) {
-                assert.equal(result.errors[0].error, 18, "Wrong error code");
-                assert.equal(result.errors[0].context, "sequence:child1:UNIVERSAL-Boolean", "Wrong error context");
-                assert.equal(result.errors[1].error, 18, "Wrong error code");
-                assert.equal(result.errors[1].context, "sequence:child2:UNIVERSAL-Boolean", "Wrong error context");
-            }
+            assert.equal(result.errors?.length, 2);
+            assert.equal(result.errors?.at(0)?.error, 18);
+            assert.equal(result.errors?.at(0)?.context, "sequence:child1:UNIVERSAL-Boolean");
+            assert.equal(result.errors?.at(1)?.error, 18);
+            assert.equal(result.errors?.at(1)?.context, "sequence:child2:UNIVERSAL-Boolean");
         }
     });
 
@@ -247,16 +301,13 @@ context("validateSchema implementation tests", () => {
         schemaChild2.valueBlock.value.pop();
         schema.valueBlock.value.push(schemaChild2);
 
-        const options = new asn1ts.VerifyOptions(false, false);
-        const result = asn1ts.verifySchema(ber, schema, options);
+        const result = asn1ts.verifySchema(ber, schema, new asn1ts.VerifyOptions(false));
 
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if (!result.verified) {
-            assert.equal(result.errors?.length, 1, "Should contain two error");
-            if (result.errors) {
-                assert.equal(result.errors[0].error, 18, "Wrong error code");
-                assert.equal(result.errors[0].context, "sequence:child1:UNIVERSAL-Boolean", "Wrong error context");
-            }
+            assert.equal(result.errors?.length, 1);
+            assert.equal(result.errors?.at(0)?.error, 18);
+            assert.equal(result.errors?.at(0)?.context, "sequence:child1:UNIVERSAL-Boolean");
         }
     });
 

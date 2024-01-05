@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"tslint.enable": false,
+		"eslint.enable": true,
+		"javascript.preferences.quoteStyle": "double",
+		"typescript.preferences.quoteStyle": "double",
+		"editor.tabCompletion": "on",
+		"eslint.alwaysShowStatus": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		}
+	}
+}

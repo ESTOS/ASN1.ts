@@ -12,6 +12,7 @@ import { LocalLengthBlock } from "./internals/LocalLengthBlock";
 import { BaseBlock } from "./BaseBlock";
 import { SequenceOf } from "./SequenceOf";
 import { SetOf } from "./SetOf";
+import { Extension } from "./Extension";
 
 export type AsnSchemaType = AsnType | Any | Choice | SequenceOf | SetOf;
 
@@ -30,14 +31,11 @@ export interface CompareSchemaFail {
  * Allows to configure laxer or stricter parsing
  */
 export class VerifyOptions {
-  constructor(continueOnError = true, allowLargerThanSchema = false) {
+  constructor(continueOnError = true) {
     this.continueOnError = continueOnError;
-    this.allowLargerThanSchema = allowLargerThanSchema;
   }
   /** Parsing continues on an error, the errorlist contains all errors */
   public continueOnError: boolean;
-  /** If the asn1 object is larger than the schema, this is not an error */
-  public allowLargerThanSchema: boolean;
 }
 
 /**
@@ -529,14 +527,18 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
         let inputObject = inputValue[i - admission];
         let schema = inputSchema.valueBlock.value[i];
 
+        if (Extension.typeGuard(schema)) {
+          // As soon as we face the extension attribute we can no further decode the incoming object
+          // The schema ends here and the incoming playload may be larger but not relevant to the one providing the schema
+          break;
+        }
+
         const newContext = context.recurse(schema);
+
         if (!schema) {
-          /** The input object exists but is not reference in the schema. */
-          if (!options.allowLargerThanSchema) {
-            /** This is not allowed, let´s throw an error */
-            newContext.path += inputObject.idBlock.getDebug("-");
-            errors.push(new SchemaError(ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA, newContext));
-          }
+          /** This is not allowed, let´s throw an error */
+          newContext.path += inputObject.idBlock.getDebug("-");
+          errors.push(new SchemaError(ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA, newContext));
           return errors;
         }
 
@@ -580,7 +582,7 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
                   /** Now we need to calculate the offset of the payload inside the source elements, It´s the source idblock length + the source len block length */
                   const offset = inputObject.lenBlock.blockLength + inputObject.idBlock.blockLength;
                   const decoded = contextualElement.fromBER(contextualElement.valueBeforeDecodeView, offset, contextualElement.valueBeforeDecodeView.length);
-                  if (decoded) {
+                  if (decoded >= 0) {
                     inputObject = contextualElement;
                     inputValue[i - admission] = contextualElement;
                   }

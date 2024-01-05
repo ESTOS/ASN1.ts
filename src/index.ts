@@ -13,6 +13,7 @@ export * from "./EndOfContent";
 
 /** common */
 export * from "./Null";
+export * from "./Extension";
 export * from "./Boolean";
 export * from "./OctetString";
 export * from "./BitString";

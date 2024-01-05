@@ -32,6 +32,7 @@ import type { UTCTime } from "./UTCTime";
 import type { Utf8String } from "./Utf8String";
 import type { VideotexString } from "./VideotexString";
 import type { VisibleString } from "./VisibleString";
+import { Extension } from "./Extension";
 
 export type AsnType = BaseBlock | EndOfContent | AsnBoolean | Integer | Real | BitString | OctetString | Null | ObjectIdentifier | Enumerated | Utf8String | RelativeObjectIdentifier | TIME | Sequence | Set | NumericString | PrintableString | TeletexString | VideotexString | IA5String | UTCTime | GeneralizedTime | GraphicString | VisibleString | GeneralString | UniversalString | CharacterString | BmpString | DATE | TimeOfDay | DateTime | Duration | Constructed | Primitive;
 
@@ -69,6 +70,7 @@ export interface TypeStore {
   Utf8String: typeof Utf8String;
   VideotexString: typeof VideotexString;
   VisibleString: typeof VisibleString;
+  Extension: typeof Extension;
 }
 
 export enum ETagClass {
@@ -115,7 +117,9 @@ export enum EUniversalTagNumber {
   DATE = 31,
   TimeOfDay = 32,
   DateTime = 33,
-  Duration = 34
+  Duration = 34,
+  /** The extension element marks that a schema may contain more attributes than specifieid, thus it defines whether parsing complains about further elements in the schema or not */
+  Extension = 35
 }
 
 /* istanbul ignore next */
@@ -199,6 +203,8 @@ export function getTagNumberAsText(tagNumber: EUniversalTagNumber): string {
       return "DateTime";
     case EUniversalTagNumber.Duration:
       return "Duration";
+    case EUniversalTagNumber.Extension:
+      return "Extension";
     default:
       return `TAGNUMBER(${tagNumber})`;
   }

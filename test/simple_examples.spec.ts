@@ -18,7 +18,8 @@ context("Simple examples from the readme.md", () => {
         const encoded = seq.toBER();
 
         // 300e0c06737472696e670201010101ff
-        console.log(Buffer.from(new Uint8Array(encoded)).toString("hex"));
+        const HexEncoded = Buffer.from(new Uint8Array(encoded)).toString("hex");
+        assert.equal(HexEncoded, "300e0c06737472696e670201010101ff");
     });
 
     it ("How to validate data against a scheme", () => {
@@ -46,15 +47,11 @@ context("Simple examples from the readme.md", () => {
 
         // Verify the data against the schema
         const result = asn1ts.verifySchema(encoded, scheme);
+        assert.equal(result.verified, true);
         if (result.verified) {
             // Schema has been verified, let´s get the property "integer_value"
             const asn1tsInteger = result.result.getTypedValueByName(asn1ts.Integer, "integer_value");
-            if (asn1tsInteger) {
-                // 1
-                console.log(asn1tsInteger.getValue());
-            }
-        } else {
-            console.log(result.errors);
+            assert.equal(asn1tsInteger.getValue(), 1);
         }
     });
 
@@ -84,15 +81,11 @@ context("Simple examples from the readme.md", () => {
 
         // Verify the data against the schema
         const result = asn1ts.verifySchema(encoded, scheme);
+        assert.equal(result.verified, true);
         if (result.verified) {
             // Schema has been verified, let´s get the property "integer_value"
             const asn1tsInteger = result.result.getTypedValueByName(asn1ts.Integer, "integer_value");
-            if (asn1tsInteger) {
-                // 2
-                console.log(asn1tsInteger.getValue());
-            }
-        } else {
-            console.log(result.errors);
+            assert.equal(asn1tsInteger.getValue(), 2);
         }
     });
 

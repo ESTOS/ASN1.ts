@@ -25,6 +25,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.8.6",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
@@ -33,10 +34,10 @@
     "eslint": "^8.31.0",
     "eslint-plugin-deprecation": "^2.0.0",
     "mocha": "^10.2.0",
+    "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
     "rollup": "^4.1.4",
     "rollup-plugin-dts": "^6.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
@@ -85,6 +86,8 @@
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint --fix . --ext .ts",
+    "relint": "run-s lintclear lint",
+    "lintclear": "del /s .eslintcache",
     "coverage": "nyc npm test"
   }
 }

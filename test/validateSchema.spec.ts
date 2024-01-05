@@ -4,7 +4,6 @@ import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
 import { HexBlockParams } from "../src";
 import { ILocalIdentificationBlock } from "../src/internals/LocalIdentificationBlock";
-import { ESchemaError, SchemaError } from "../build";
 
 /**
  * Converts an array buffer to hex notation
@@ -117,7 +116,7 @@ context("validateSchema implementation tests", () => {
         assert.equal(result.verified, false, "Schema validation succeeded but should have failed");
         if(result.verified === false) {
             assert.equal(result.errors?.length, 1);
-            assert.equal(result.errors?.at(0)?.error, ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA);
         }
     });
 
@@ -137,7 +136,7 @@ context("validateSchema implementation tests", () => {
         assert.equal(result.verified, false, "Schema validation succeeded but should have failed");
         if(result.verified === false) {
             assert.equal(result.errors?.length, 1);
-            assert.equal(result.errors?.at(0)?.error, ESchemaError.MISMATCHING_OBJECT_LENGTH);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_OBJECT_LENGTH);
         }
     });
 
@@ -149,7 +148,7 @@ context("validateSchema implementation tests", () => {
         assert.equal(result.verified, false, "Schema validation succeeded but should have failed");
         if(result.verified === false) {
             assert.equal(result.errors?.length, 1);
-            assert.equal(result.errors?.at(0)?.error, ESchemaError.MISMATCHING_OBJECT_LENGTH);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_OBJECT_LENGTH);
         }
     });
 
@@ -202,7 +201,7 @@ context("validateSchema implementation tests", () => {
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if(result.verified === false) {
             assert.equal(result.errors?.length, 1);
-            assert.equal(result.errors?.at(0)?.error, ESchemaError.MISMATCHING_TAG_NUMBER);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_TAG_NUMBER);
         }
     });
 
@@ -223,8 +222,8 @@ context("validateSchema implementation tests", () => {
         assert.equal(result.verified, false, "Schema validated but it should fail");
         if(result.verified === false) {
             assert.equal(result.errors?.length, 2);
-            assert.equal(result.errors?.at(0)?.error, ESchemaError.MISMATCHING_TAG_NUMBER);
-            assert.equal(result.errors?.at(1)?.error, ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA);
+            assert.equal(result.errors?.at(0)?.error, asn1ts.ESchemaError.MISMATCHING_TAG_NUMBER);
+            assert.equal(result.errors?.at(1)?.error, asn1ts.ESchemaError.ASN1_IS_LARGER_THAN_SCHEMA);
         }
     });
 

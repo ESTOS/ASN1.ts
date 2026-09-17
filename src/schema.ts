@@ -542,7 +542,12 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
           return errors;
         }
 
-        if (inputObject.idBlock.tagClass === 3 && inputObject.idBlock.tagNumber >= 0) {
+        // Match wire TLV against the schema member at sequence index i before optionalID lookup.
+        // Otherwise a later context tag can bind to an earlier optional slot that shares the same
+        // optionalID but was omitted on the wire (e.g. ROSEReject: sessionID [1] absent, reject [1] present).
+        let recursive_errors = compareSchemaInternal(root, schema, options, newContext, inputObject);
+
+        if (recursive_errors.failed && inputObject.idBlock.tagClass === ETagClass.CONTEXT_SPECIFIC && inputObject.idBlock.tagNumber >= 0) {
           let maxOptional = maxLength;
           let bFound = false;
 
@@ -552,7 +557,11 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
           for(let iLoop = 0; iLoop < iMax; iLoop++) {
             /** This is a context specific property (optional property) */
             /** the type comes from the target field with optionalID === tagNumber */
-            for (let j = nextOptional; j < maxOptional; j++) {
+            // First pass: do not scan schema indices below i — those optionals were already skipped
+            // via admission when absent on the wire. Second pass (iLoop > 0) still scans from 0 for
+            // schemas whose optionalID members are not sorted 0..n.
+            const optionalSearchStart = iLoop === 0 ? Math.max(nextOptional, i) : nextOptional;
+            for (let j = optionalSearchStart; j < maxOptional; j++) {
               const check = inputSchema.valueBlock.value[j];
               if (check.idBlock.optionalID === inputObject.idBlock.tagNumber) {
                 nextOptional = j + 1;
@@ -604,9 +613,10 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
               }
             }
           }
+          // optionalID reassignment can change schema/inputObject; re-compare after a match.
+          if (bFound)
+            recursive_errors = compareSchemaInternal(root, schema, options, context.recurse(schema), inputObject);
         }
-
-        const recursive_errors = compareSchemaInternal(root, schema, options, newContext, inputObject);
         if(recursive_errors.failed) {
           if (inputSchema.valueBlock.value[i].optional)
             admission++;

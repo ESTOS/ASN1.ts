@@ -4,9 +4,30 @@ import * as asn1ts from "../src";
 import * as pvtsutils from "pvtsutils";
 import { ESchemaError, SchemaContext } from "../src";
 import { ETagClass } from "../src/TypeStore";
-import { ROSEInvoke, ROSEMessage } from "./SNACCROSE";
-import { ROSEMessage_Converter } from "./SNACCROSE_Converter";
-import { ConverterErrors } from "./TSConverterBase";
+
+/**
+ * Minimal CHOICE/SEQUENCE schema for a context-tagged invoke-shaped payload.
+ * Mirrors a common ROSE wire layout but stays local to asn1ts tests (no esnacc stubs).
+ */
+function getInvokeShapedMessageSchema(): asn1ts.Choice {
+    return new asn1ts.Choice({
+        name: "message",
+        value: [
+            new asn1ts.Sequence({
+                name: "invoke",
+                idBlock: { optionalID: 1 },
+                value: [
+                    new asn1ts.Utf8String({ name: "sessionID", idBlock: { optionalID: 1 } }),
+                    new asn1ts.Integer({ name: "invokeID" }),
+                    new asn1ts.Integer({ name: "linked_ID", idBlock: { optionalID: 0 } }),
+                    new asn1ts.Utf8String({ name: "operationName", idBlock: { optionalID: 2 } }),
+                    new asn1ts.Integer({ name: "operationID" }),
+                    new asn1ts.Sequence({ name: "argument", optional: true }),
+                ],
+            }),
+        ],
+    });
+}
 
 /**
  * Get a sequence with optional parameters
@@ -46,23 +67,11 @@ function getChoice(getschema: boolean, bAddString: boolean, bAddBoolean: boolean
 
 context("Asn1Choice implementation tests", () => {
 
-    it("Validate empty ROSEInvoke", () => {
-        // ROSEMessage containing a ROSEInvoke (invokeID1, operationID 4100) with an empty argument
-        // This is how we encode it
-        const msg = new ROSEMessage();
-        msg.invoke = new ROSEInvoke({
-            operationID: 4100,
-            invokeID: 1,
-            linked_ID: 2,
-            argument: new asn1ts.Sequence()
-        });
-        const errors = new ConverterErrors();
-        const asn1Encoded = ROSEMessage_Converter.toBER(msg, errors) as asn1ts.Sequence;
-        const payload = new Uint8Array(asn1Encoded.toBER());
-        const hexPayLoad = pvtsutils.Convert.ToHex(payload); // expected a109020101020210043000
-
-        const data = pvtsutils.Convert.FromHex(hexPayLoad);
-        const schema = ROSEMessage.getASN1Schema();
+    it("verify context-tagged invoke-shaped sequence with mixed optionals", () => {
+        // Context [1] SEQUENCE: invokeID=1, linked_ID [0]=2, operationID=4100, empty argument.
+        // Captured BER (no snacc compiler stubs required).
+        const data = pvtsutils.Convert.FromHex("a10c020101800102020210043000");
+        const schema = getInvokeShapedMessageSchema();
         const result = asn1ts.verifySchema(data, schema);
         assert.ok(result.verified, "Schema verification failed");
         const invokeID = result.result.getTypedValueByName(asn1ts.Integer, "invokeID");

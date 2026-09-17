@@ -312,10 +312,12 @@ context("validateSchema implementation tests", () => {
     });
 
     it ("names sequence member at index when earlier optional shares context tag", () => {
-        // Regression for verifySchema member naming (asn1ts >= 3.2.4).
+        // Regression for verifySchema member naming (asn1ts >= 3.2.4) and INTEGER CHOICE
+        // promotion/decode (asn1ts >= 3.2.5).
         // Wire: mandatory INTEGER + context [1] INTEGER (3006020101810101).
         // Schema: optional [1] at index 0 (omitted on wire), mandatory at 1, CHOICE arm [1] at 2.
-        // Before the fix, optionalID lookup bound tag [1] to index 0 and left index 2 unnamed.
+        // Before 3.2.4, optionalID lookup bound tag [1] to index 0 and left index 2 unnamed.
+        // Before 3.2.5, the CHOICE arm stayed a Primitive: typeGuard passed but getValue() was null.
         // Same shape as ROSEReject without sessionID but with reject.invokeProblem on the wire.
         const schema = new asn1ts.Sequence({
             name: "outer",
@@ -333,13 +335,13 @@ context("validateSchema implementation tests", () => {
         const ber = pvtsutils.Convert.FromHex("3006020101810101");
         const result = asn1ts.verifySchema(ber, schema);
         assert.ok(result.verified, "Schema verification failed");
-        if (result.verified && result.result instanceof asn1ts.Sequence) {
-            const laterChoice = result.result.getValueByName("laterChoice");
-            assert.ok(laterChoice, "laterChoice must be named after verifySchema");
-            assert.equal(laterChoice.name, "laterChoice");
-            if (laterChoice instanceof asn1ts.Choice)
-                assert.equal(laterChoice.choiceName, "armOne");
-        }
+        assert.ok(result.result instanceof asn1ts.Sequence, "verified result must be a Sequence");
+        const laterChoice = result.result.getValueByName("laterChoice");
+        assert.ok(laterChoice, "laterChoice must be named after verifySchema");
+        assert.ok(laterChoice instanceof asn1ts.Integer, "CHOICE INTEGER arm must be promoted from Primitive to Integer");
+        assert.equal(laterChoice.name, "laterChoice");
+        assert.equal(laterChoice.choiceName, "armOne");
+        assert.equal(laterChoice.getValue(), 1);
     });
 
     it ("validate an object against a schema with embedded any", () => {

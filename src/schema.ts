@@ -13,8 +13,64 @@ import { BaseBlock } from "./BaseBlock";
 import { SequenceOf } from "./SequenceOf";
 import { SetOf } from "./SetOf";
 import { Extension } from "./Extension";
+import { Integer } from "./Integer";
 
 export type AsnSchemaType = AsnType | Any | Choice | SequenceOf | SetOf;
+
+/**
+ * Promote a verified generic Primitive to the schema's concrete INTEGER type.
+ *
+ * verifySchema validates wire bytes against the schema but does not always replace the decoded
+ * node's runtime class. Two sequence-member match paths behave differently:
+ *
+ * 1. optionalID remapping (context-tagged members, see loop below): when tag [n] does not match
+ *    the member at sequence index i, we locate the schema field whose optionalID === n, then
+ *    construct a fresh typed node via getTypeForIDBlock + fromBER. Callers receive Integer,
+ *    Utf8String, etc. with a populated valueBlock.
+ *
+ * 2. Positional match or CHOICE arm retag: compareSchemaInternal retags idBlock on the existing
+ *    decoded node (universal tag/class from the matched schema arm) but leaves its constructor
+ *    unchanged. IMPLICIT INTEGER CHOICE arms therefore remain Primitive with payload in
+ *    valueHexView. Integer.typeGuard passes after retagging, yet Primitive.getValue() is always
+ *    null — a silent footgun for ROSE reject decoding and similar callers.
+ *
+ * Called once per successfully matched sequence member, before name/optional are stamped from
+ * the schema. Only promotes when the matched schema (or resolved CHOICE arm) is Integer and the
+ * wire payload is non-empty. Copies idBlock and any name/choiceName/optional already on the node
+ * so annotations applied in the success branch stay consistent.
+ *
+ * @returns inputObject when no promotion applies; otherwise a new Integer sharing the wire bytes.
+ */
+function coerceVerifiedPrimitiveValue(inputObject: AsnType, inputSchema: AsnSchemaType): AsnType {
+  if (!(inputObject instanceof typeStore.Primitive))
+    return inputObject;
+
+  // inputSchema may be the CHOICE wrapper; the winning arm name is on inputObject after retag.
+  let schemaType: AsnSchemaType | undefined;
+  if (inputSchema instanceof Choice) {
+    const armName = inputObject.choiceName;
+    if (!armName)
+      return inputObject;
+    schemaType = inputSchema.value.find((arm) => arm.name === armName);
+  } else {
+    schemaType = inputSchema;
+  }
+
+  if (!schemaType || !(schemaType instanceof Integer))
+    return inputObject;
+
+  const valueHexView = inputObject.valueBlock.valueHexView;
+  if (valueHexView.length === 0)
+    return inputObject;
+
+  // Re-decode INTEGER bytes into a typed node; Integer.getValue() can then materialize _value.
+  const typed = new Integer({ valueHex: valueHexView.slice().buffer });
+  typed.idBlock = inputObject.idBlock;
+  typed.name = inputObject.name;
+  typed.choiceName = inputObject.choiceName;
+  typed.optional = inputObject.optional;
+  return typed;
+}
 
 export interface CompareSchemaSuccess {
   verified: true;
@@ -547,6 +603,8 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
         // optionalID but was omitted on the wire (e.g. ROSEReject: sessionID [1] absent, reject [1] present).
         let recursive_errors = compareSchemaInternal(root, schema, options, newContext, inputObject);
 
+        // Path (1): context tag did not match schema member at index i — remap via optionalID and
+        // rebuild a typed node (see coerceVerifiedPrimitiveValue for path (2) when index match succeeds).
         if (recursive_errors.failed && inputObject.idBlock.tagClass === ETagClass.CONTEXT_SPECIFIC && inputObject.idBlock.tagNumber >= 0) {
           let maxOptional = maxLength;
           let bFound = false;
@@ -625,6 +683,13 @@ function compareSchemaInternal(root: AsnType, inputSchema: AsnSchemaType, option
           else
             errors.push(...recursive_errors);
         } else {
+          // Path (2) above: positional/CHOICE match verified but may still be Primitive — promote
+          // before stamping schema.name so getValueByName and Integer.getValue() work on the tree.
+          const coerced = coerceVerifiedPrimitiveValue(inputObject, schema);
+          if (coerced !== inputObject) {
+            inputObject = coerced;
+            inputValue[i - admission] = inputObject;
+          }
           inputObject.name = schema.name;
           inputObject.optional = schema.optional;
         }

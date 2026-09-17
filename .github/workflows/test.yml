@@ -8,7 +8,16 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 19.x, 20.x]
+        include:
+          - node-version: 18.x
+          - node-version: 20.x
+          # Node 22+ enables experimental TypeScript stripping; disable it so mocha/ts-node can load test/*.ts.
+          - node-version: 22.x
+            node-options: --no-experimental-strip-types
+          - node-version: 24.x
+            node-options: --no-experimental-strip-types
+          - node-version: 26.x
+            node-options: --no-experimental-strip-types
 
     steps:
       - uses: actions/checkout@v3
@@ -37,10 +46,12 @@ jobs:
         run: npm run lint
 
       - name: Build
-        run: npm run
+        run: npm run build
 
       - name: Run test with coverage
         run: npm run coverage
+        env:
+          NODE_OPTIONS: ${{ matrix.node-options }}
 
       - name: Coveralls
         uses: coverallsapp/github-action@master

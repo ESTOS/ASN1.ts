@@ -311,6 +311,37 @@ context("validateSchema implementation tests", () => {
         }
     });
 
+    it ("names sequence member at index when earlier optional shares context tag", () => {
+        // Regression for verifySchema member naming (asn1ts >= 3.2.4).
+        // Wire: mandatory INTEGER + context [1] INTEGER (3006020101810101).
+        // Schema: optional [1] at index 0 (omitted on wire), mandatory at 1, CHOICE arm [1] at 2.
+        // Before the fix, optionalID lookup bound tag [1] to index 0 and left index 2 unnamed.
+        // Same shape as ROSEReject without sessionID but with reject.invokeProblem on the wire.
+        const schema = new asn1ts.Sequence({
+            name: "outer",
+            value: [
+                new asn1ts.Utf8String({ name: "earlierOptional", idBlock: { optionalID: 1 } }),
+                new asn1ts.Integer({ name: "mandatory" }),
+                new asn1ts.Choice({
+                    name: "laterChoice",
+                    value: [
+                        new asn1ts.Integer({ name: "armOne", idBlock: { optionalID: 1 } }),
+                    ],
+                }),
+            ],
+        });
+        const ber = pvtsutils.Convert.FromHex("3006020101810101");
+        const result = asn1ts.verifySchema(ber, schema);
+        assert.ok(result.verified, "Schema verification failed");
+        if (result.verified && result.result instanceof asn1ts.Sequence) {
+            const laterChoice = result.result.getValueByName("laterChoice");
+            assert.ok(laterChoice, "laterChoice must be named after verifySchema");
+            assert.equal(laterChoice.name, "laterChoice");
+            if (laterChoice instanceof asn1ts.Choice)
+                assert.equal(laterChoice.choiceName, "armOne");
+        }
+    });
+
     it ("validate an object against a schema with embedded any", () => {
           const payload = new asn1ts.Sequence({
             name: "payload",
